@@ -1,0 +1,27 @@
+.err-wrapper {
+    min-width: 90%;
+    min-height: 90%;
+    margin: 0;
+}
+
+.img-wrapper {
+    width: 100%;
+    height:100%;
+    padding: 0;
+    align-content: center;
+    text-align: center;
+    position: absolute;
+    display: block;
+}
+
+.err-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.err-h1,
+.err-sub {
+    text-align: center;
+    color: var(--main-light)
+}
