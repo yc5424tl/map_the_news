@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from map_the_news.mtn_web import views
+from mtn_web import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),

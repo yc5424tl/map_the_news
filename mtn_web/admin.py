@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from map_the_news.mtn_web.models import Source, Post, QueryResultSet, Article, Comment, Category
+from mtn_web.models import Source, Post, QueryResultSet, Article, Comment, Category
 
 
 @admin.register(Article)

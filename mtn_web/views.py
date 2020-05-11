@@ -18,13 +18,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from map_the_news.mtn_web.constructor import Constructor
-from map_the_news.mtn_web.forms import CustomUserCreationForm, NewQueryForm, NewPostForm, EditPostForm, EditCommentForm, NewCommentForm
-from map_the_news.mtn_web.geo_data_mgr import GeoDataManager
-from map_the_news.mtn_web.geo_map_mgr import GeoMapManager
-from map_the_news.mtn_web.models import QueryResultSet, Source, Post, Comment, Category
-from map_the_news.mtn_web.query_mgr import Query
-
+from mtn_web.constructor import Constructor
+from mtn_web.forms import CustomUserCreationForm, NewQueryForm, NewPostForm, EditPostForm, EditCommentForm, NewCommentForm
+from mtn_web.geo_data_mgr import GeoDataManager
+from mtn_web.geo_map_mgr import GeoMapManager
+from mtn_web.models import QueryResultSet, Source, Post, Comment, Category
+from mtn_web.query_mgr import Query
 
 
 logging.basicConfig(filename='news_map.log', level=logging.INFO)
@@ -33,6 +32,7 @@ logger = Logger(__name__)
 constructor = Constructor()
 geo_data_mgr = GeoDataManager()
 geo_map_mgr = GeoMapManager()
+
 
 @transaction.atomic
 def index(request) -> render:

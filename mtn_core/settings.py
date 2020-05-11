@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'mtn_web.apps.MtnWebConfig',
+    'mtn_user.apps.MtnUserConfig',
     'storages',
 ]
+
+AUTH_USER_MODEL = 'mtn_user.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,7 +63,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'map_the_news.urls'
+ROOT_URLCONF = 'mtn_core.urls'
 
 TEMPLATES = [
     {
@@ -208,4 +211,5 @@ if os.getenv('DEBUG') == 'TRUE':
         'SQL_WARNING_THRESHOLD': 100,
     }
 
-from map_the_news.mtn_core.logger import LOGGING
+from mtn_core.logger import LOGGING
+

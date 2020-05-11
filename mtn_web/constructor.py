@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime
 from dateutil.parser import parse
-from map_the_news.mtn_web.models import Article, QueryResultSet, Source
+from mtn_web.models import Article, QueryResultSet, Source
 
 api_key = os.getenv('NEWS_API_KEY_2')
 logger = logging.getLogger(__name__)

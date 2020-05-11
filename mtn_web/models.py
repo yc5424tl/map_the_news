@@ -6,8 +6,6 @@ from django.conf import settings
 from django.db import models
 
 
-
-
 class QueryResultSet(models.Model):
     query_types         = ( ('headlines', 'Headlines'), ('all', 'All') )
     argument           = models.CharField(max_length=500)

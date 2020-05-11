@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 
-from map_the_news.mtn_web.models import Post, Comment, QueryResultSet
+from mtn_web.models import Post, Comment, QueryResultSet
 
 
 class CustomUserCreationForm(UserCreationForm):

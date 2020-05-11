@@ -9,7 +9,7 @@ import pandas as pd
 import pycountry
 
 from django.conf import settings
-from map_the_news.mtn_web.geo_data_mgr import GeoDataManager
+from mtn_web.geo_data_mgr import GeoDataManager
 
 
 
