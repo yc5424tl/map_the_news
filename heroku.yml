@@ -1,3 +1,4 @@
 build:
   docker:
+    release: python3 manage.py migrate --noinput
     web: Dockerfile
