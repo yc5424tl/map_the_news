@@ -34,10 +34,10 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'map_the_news.mtn_web.views.handler404'
-handler500 = 'map_the_news.mtn_web.views.handler500'
+handler404 = 'mtn_web.views.handler404'
+handler500 = 'mtn_web.views.handler500'
 
-# if os.environ.get('DEBUG') == 'TRUE':
-#     import debug_toolbar
-#     urlpatterns.append(path(r'__debug__', include(debug_toolbar.urls)))
+if os.environ.get('DEBUG') == 'TRUE':
+    import debug_toolbar
+    urlpatterns.append(path(r'__debug__', include(debug_toolbar.urls)))
 

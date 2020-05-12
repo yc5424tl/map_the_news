@@ -1,15 +1,16 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-from mtn_web.models import Post, Comment, QueryResultSet
+from mtn_web.models import Post, Comment, Result
 
 
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
+        model = get_user_model()
+        fields = ('username', 'email', 'first_name', 'middle_initial', 'last_name')
 
 
 class NewPostForm(forms.ModelForm):
@@ -30,27 +31,20 @@ class NewCommentForm(forms.ModelForm):
         model = Comment
         fields = ('body',)
 
-    body = forms.CharField(widget=forms.Textarea(
-        attrs={''
-               'cols':75,
-               'rows':12,
-               'class': 'resizable',
-               'required': True}),
-        label=''
-    )
+    body = forms.CharField(widget=forms.Textarea( attrs={'cols':75, 'rows':12, 'class': 'resizable', 'required': True} ), label='')
 
 
 class NewQueryForm(forms.ModelForm):
 
     class Meta:
-        model = QueryResultSet
+        model = Result
         fields = ('argument', 'query_type')
 
 
-class SaveQueryForm(forms.ModelForm):
+class SaveResultForm(forms.ModelForm):
     #  add option to publish in this form
     class Meta:
-        model = QueryResultSet
+        model = Result
         fields = ('public',)
 
 
@@ -74,7 +68,7 @@ class EditCommentForm(forms.ModelForm):
 class LoginForm(forms.ModelForm):
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ['email']
 
 
@@ -88,12 +82,13 @@ class LogoutForm(forms.ModelForm):
 class NewUserForm(UserCreationForm):
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ['email',]
 
 
 class UpdateUserForm(UserChangeForm):
-    model = User
+
+    model = get_user_model()
     fields = ['email']
 
 

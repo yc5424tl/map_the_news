@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime
 from dateutil.parser import parse
-from mtn_web.models import Article, QueryResultSet, Source
+from mtn_web.models import Article, Result, Source
 
 api_key = os.getenv('NEWS_API_KEY_2')
 logger = logging.getLogger(__name__)
@@ -10,38 +10,38 @@ logger = logging.getLogger(__name__)
 
 class Constructor:
 
-    def new_article(self, response_data, query_set: QueryResultSet) -> Article or False:
-        source = self.verify_source(response_data['source']['name'])
-        date_published = self.verify_date(response_data['publishedAt'])
+    def new_article(self, api_response, result: Result) -> Article or False:
+        source = self.verify_source(api_response['source']['name'])
+        date_published = self.verify_date(api_response['publishedAt'])
         try:
-            description = self.verify_str(response_data['description']) if response_data['description'] is not None else 'Unavailable'
+            description = self.verify_str(api_response['description']) if api_response['description'] is not None else 'Unavailable'
         except UnicodeDecodeError as e:
-            logger.log(level=logging.DEBUG, msg=f'UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {response_data}')
+            logger.log(level=logging.DEBUG, msg=f'UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}')
             description = 'Unavailable'
         try:
-            title = self.verify_str(response_data['title'])
+            title = self.verify_str(api_response['title'])
             if title is None:
                 title = 'Unavailable'
         except UnicodeDecodeError as e:
             logger.log(level=logging.DEBUG, msg=f'UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}')
             title = 'Unavailable'
         try:
-            author = self.verify_str(response_data['author'])
+            author = self.verify_str(api_response['author'])
             if author is None:
                 author = 'Unavailable'
         except UnicodeEncodeError as e:
             logger.log(level=logging.DEBUG, msg=f'UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}')
             author = 'Unavailable'
         if source:
-            article_url = response_data['url']
-            image_url = response_data['urlToImage'] if response_data['urlToImage'] is not None else None
+            article_url = api_response['url']
+            image_url = api_response['urlToImage'] if api_response['urlToImage'] is not None else None
             new_article = Article(
                 article_url=article_url,
                 author=author,
                 date_published=date_published,
                 description=description,
                 image_url=image_url,
-                query=query_set,
+                result=result,
                 source=source,
                 title=title)
             new_article.save()
@@ -49,10 +49,10 @@ class Constructor:
         else:
             return False
 
-    def build_article_data(self, article_data_list:[{}], query_set: QueryResultSet) -> [Article]:
+    def build_article_data(self, article_data_list:[{}], result: Result) -> [Article]:
         article_list = []
         for article_data in article_data_list:
-            new_article = self.new_article(article_data, query_set)
+            new_article = self.new_article(article_data, result)
             if new_article:
                 article_list.append(new_article)
         return article_list

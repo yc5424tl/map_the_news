@@ -11,12 +11,7 @@ import pycountry
 from django.conf import settings
 from mtn_web.geo_data_mgr import GeoDataManager
 
-
-
 logger = logging.getLogger(__name__)
-
-SETTINGS_DIR = os.path.dirname(__file__)
-PROJECT_ROOT = os.path.abspath(os.path.dirname(SETTINGS_DIR))
 CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, 'geodjango_news_map_')
 
 

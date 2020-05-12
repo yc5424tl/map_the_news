@@ -127,13 +127,13 @@
                     <div class="col-12" id="user-recent-queries">
                         <h3 class="view-user-section-head">YOUR RECENT QUERIES</h3>
                         <ul>
-                            {% for query in queries %}
-                                {% if query %}
+                            {% for result in results %}
+                                {% if result %}
                                     <li>
-                                        Searched: {{ query.query_type }}
-                                        For: {{ query.argument }}
-                                        Date: {{ query.date_created }}
-                                        <a href="{% url 'view_query' query.pk %}">Details</a>
+                                        Searched: {{ result.query_type }}
+                                        For: {{ result.argument }}
+                                        Date: {{ result.date_created }}
+                                        <a href="{% url 'view_result' result.pk %}">Details</a>
                                     </li>
                                 {% endif %}
                             {% empty %}

@@ -6,8 +6,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     url(r'^query/new/$', views.new_query, name='new_query'),
-    url(r'^query/view/(?P<query_result_set_pk>\d+)$', views.view_query, name='view_query'),
-    url(r'^query/delete/(?P<query_pk>\d+)$', views.delete_query, name='delete_query'),
+    url(r'^query/view/(?P<result_pk>\d+)$', views.view_result, name='view_result'),
+    url(r'^query/delete/(?P<result_pk>\d+)$', views.delete_result, name='delete_result'),
 
     url(r'^post/new/$', views.new_post, name='new_post'),
     url(r'^post/view/(?P<post_pk>\d+)$', views.view_post, name='view_post'),
@@ -25,7 +25,7 @@ urlpatterns = [
 
     url(r'^sources/import/$', views.import_sources, name='import_sources'),
     url(r'^sources/$', views.view_sources, name='view_sources'),
-    url(r'^choro/view/(?P<query_pk>\d+)$', views.view_choro, name="view_choro")
+    url(r'^choro/view/(?P<result_pk>\d+)$', views.view_choro, name="view_choro")
 ]
 
 

@@ -7,7 +7,7 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/view_query.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_result.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -22,19 +22,19 @@
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Query: </td>
-                            <td class="view-query-details-row-data">{{ query.argument }}</td>
+                            <td class="view-query-details-row-data">{{ result.argument }}</td>
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Type: </td>
-                            <td class="view-query-details-row-data">{{ query.query_type|capfirst }}</td>
+                            <td class="view-query-details-row-data">{{ result.query_type|capfirst }}</td>
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Date: </td>
-                            <td class="view-query-details-row-data">{{ query.date_created_readable }}</td>
+                            <td class="view-query-details-row-data">{{ result.date_created_readable }}</td>
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Archived: </td>
-                            <td class="view-query-details-row-data">{{ query.archived }}</td>
+                            <td class="view-query-details-row-data">{{ result.archived }}</td>
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Article Count:</td>
@@ -49,7 +49,7 @@
 
                 {% if user.pk == query_author.id %}
 
-                    {% if query.archived is False %}
+                    {% if result.archived is False %}
                         <div id="post-query-container">
                             <form method="post" action="{% url 'new_post' %}" id="new-post-form">
                                 {% csrf_token %}
@@ -76,18 +76,18 @@
                                         <a href="#">
                                             <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
                                         </a>
-                                        <a href={% url 'delete_query' query.pk %}>
+                                        <a href={% url 'delete_result' result.pk %}>
                                             <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
                                         </a>
                                     </div>
                                 </div>
                                 <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                                <input type="hidden" name="query_pk" value="{{ query.pk }}">
+                                <input type="hidden" name="query_pk" value="{{ result.pk }}">
                             </form>
                         </div>
                     {% endif %}
 
-                    {% if query.archived is True %}
+                    {% if result.archived is True %}
                         <form method="post" action="{% url 'update_post' post.pk %}">
                             {% csrf_token %}
                             <div class="input-group">
@@ -104,7 +104,7 @@
                             </div>
                             <button type="submit" class="btn btn-default">Update Post</button>
                             <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                            <input type="hidden" name="query_pk" value="{{ query.pk }}">
+                            <input type="hidden" name="query_pk" value="{{ result.pk }}">
                         </form>
                         <form method="post" action="{% url 'delete_post' post.pk %}">
                             {% csrf_token %}
@@ -183,5 +183,5 @@
 
 {% block footer-scripts %}
     {{ block.super }}
-    <script src="{% static 'js/view_query.js' %}"></script>
+    <script src="{% static 'js/view_result.js' %}"></script>
 {% endblock %}

@@ -19,10 +19,10 @@
                 return template.content.childNodes;
             }
             $(document).ready(function() {
-                htmlToTemplate({{ query.choro_html|safe }}    {% comment %} DO  NOT TERMINATE PARENTHESIS {% endcomment %}
+                htmlToTemplate({{ result.choro_html|safe }}    {% comment %} DO  NOT TERMINATE PARENTHESIS {% endcomment %}
         </script>
     </head>
     <body>
-        {{ query.choropleth|safe }}
+        {{ result.choropleth|safe }}
     </body>
 </html>

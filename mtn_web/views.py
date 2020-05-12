@@ -6,11 +6,11 @@ from logging import Logger
 from typing import NoReturn
 import pycountry
 import requests
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
@@ -22,7 +22,7 @@ from mtn_web.constructor import Constructor
 from mtn_web.forms import CustomUserCreationForm, NewQueryForm, NewPostForm, EditPostForm, EditCommentForm, NewCommentForm
 from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager
-from mtn_web.models import QueryResultSet, Source, Post, Comment, Category
+from mtn_web.models import Result, Source, Post, Comment, Category
 from mtn_web.query_mgr import Query
 
 
@@ -83,47 +83,47 @@ def new_query(request:requests.request) -> render or redirect:
         return render(request, 'general/new_query.html', {'search_form': form})
     elif request.method == 'POST':
         if geo_data_mgr.verify_geo_data():
-            query_mgr = Query(arg=request.POST.get('argument'), focus=request.POST.get('_query_type'))
+            query_mgr = Query(arg=request.POST.get('argument'), focus=request.POST.get('query_type'))
             query_mgr.get_endpoint()
             query_data = query_mgr.execute_query()
             article_data = query_data[0]
             article_count = query_data[1]
-            query_set = QueryResultSet.objects.create(query_type=query_mgr.focus, argument=query_mgr.arg, data=article_data, author=request.user)
-            query_set.save()
-            article_list = constructor.build_article_data(article_data, query_set)
+            result = Result.objects.create(query_type=query_mgr.focus, argument=query_mgr.arg, data=article_data, author=request.user)
+            result.save()
+            article_list = constructor.build_article_data(article_data, result)
             # TODO get len of list for # of articles, in loop below map each to country
             for article in article_list:
-                code = geo_map_mgr.map_source(source_country=article.source_country)
-                geo_data_mgr.add_result(code)
+                country_code = geo_map_mgr.map_source(source_country=article.source_country)
+                geo_data_mgr.add_result(country_code)
             data_tup = geo_map_mgr.build_choropleth(query_mgr.arg, query_mgr.focus, geo_data_mgr)
             if data_tup is None:
                 return redirect('index', messages='build choropleth returned None')
             else:
-                qrs = QueryResultSet.objects.get(pk=query_set.pk)
-                global_map =            data_tup[0]
-                filename =              data_tup[1]
-                qrs._choro_html =       global_map.get_root().render()
-                qrs._filename =         filename
-                qrs._author =           User.objects.get(pk=request.user.pk)
-                qrs._choropleth =       global_map._repr_html_()
-                qrs._article_count =    article_count
-                qrs._article_data_len = len(article_data)
-                qrs.save()
-            return redirect('view_query', qrs.pk)
+                result = Result.objects.get(pk=result.pk)
+                global_map =               data_tup[0]
+                filename =                 data_tup[1]
+                result._choro_html =       global_map.get_root().render()
+                result._filename =         filename
+                result._author =           get_user_model().objects.get(pk=request.user.pk)
+                result._choropleth =       global_map._repr_html_()
+                result._article_count =    article_count
+                result._article_data_len = len(article_data)
+                result.save()
+            return redirect('view_result', result.pk)
         else: redirect('handler404', request)
 
 @login_required()
-def view_query(request, query_result_set_pk:int):
-    qrs = get_object_or_404(QueryResultSet, pk=query_result_set_pk)
-    return render(request, 'general/view_query.html', {
-        'query':            qrs,
-        'query_author':     qrs.author,
-        'articles':         qrs.articles.all(),
-        'choro_map':        qrs.choropleth,
-        'choro_html':       qrs.choro_html,
-        'filename':         qrs.filename,
-        'article_count':    qrs.article_count,
-        'article_data_len': qrs.article_data_len
+def view_result(request, result_pk:int):
+    result = get_object_or_404(Result, pk=result_pk)
+    return render(request, 'general/view_result.html', {
+        'result':           result,
+        'query_author':     result.author,
+        'articles':         result.articles.all(),
+        'choro_map':        result.choropleth,
+        'choro_html':       result.choro_html,
+        'filename':         result.filename,
+        'article_count':    result.article_count,
+        'article_data_len': result.article_data_len
     })
 
 @login_required()
@@ -150,77 +150,77 @@ def delete_comment(request, comment_pk:int):
         return redirect('view_post', post_pk)
 
 @login_required()
-def delete_query(request, query_pk:int):
-    QueryResultSet.objects.filter(pk=query_pk).delete()
-    messages.info(request, "Query Successfully Deleted")
-    return redirect('new_query')
+def delete_result(request, result_pk:int):
+    Result.objects.filter(pk=result_pk).delete()
+    messages.info(request, "Result Successfully Deleted")
+    return redirect('new_result')
 
 @login_required()
 def view_user(request, member_pk):
     try:
-        member = User.objects.get(pk=member_pk)
+        user = get_user_model().objects.get(pk=member_pk)
         try:
-            last_post = member.posts.order_by('-id')[0]
+            last_post = user.posts.order_by('-id')[0]
         except IndexError:
             last_post = None
         try:
-            recent_posts = member.posts.order_by('-id')[1:5]
+            recent_posts = user.posts.order_by('-id')[1:5]
         except IndexError:
             recent_posts = None
         try:
             recent_comments = None
-            has_comments = member.comments.all()[0]
+            has_comments = user.comments.all()[0]
             if has_comments:
-                recent_comments = member.comments.all()[0:5]
+                recent_comments = user.comments.all()[0:5]
         except IndexError:
             recent_comments = None
         try:
-            recent_queries = None
-            has_queries = member.queries.all()[0]
-            if has_queries:
-                recent_queries = member.queries.all()[1:5]
+            recent_results = None
+            has_results = user.results.all()[0]
+            if has_results:
+                recent_results = user.results.all()[1:5]
         except IndexError:
-            recent_queries = None
+            recent_results = None
         return render(request, 'general/view_user.html', {
-            'member': member,
+            'member': user,
             'posts': recent_posts,
             'comments': recent_comments,
             'last_post': last_post,
-            'queries': recent_queries
+            'queries': recent_results
         })
-    except User.DoesNotExist:
+    except settings.AUTH_USER_MODEL.DoesNotExist:
         raise Http404
 
 @login_required()
 def new_post(request):
     if request.method == 'GET':
         form = NewPostForm()
-        qrs_pk = form['query_pk'].value()
-        qrs = get_object_or_404(QueryResultSet, pk=qrs_pk)
+        result_pk = form['result_pk'].value()
+        result = get_object_or_404(Result, pk=result_pk)
         return render(request, 'general/new_post.html', {
             'form': form,
-            'query': qrs
+            'result': result
         })
     elif request.method == 'POST':
         form = NewPostForm(request.POST)
         if request.user.is_authenticated:
             try:
                 pk = request.user.pk
-                author = User.objects.get(pk=pk)
+                author = get_user_model().objects.get(pk=pk)
                 if form.is_valid():
-                    title = form.cleaned_data['_title']
+                    title = form.cleaned_data['title']
                     public = request.POST.get('save_radio')
-                    body = form.cleaned_data['_body']
-                    qrs_pk = request.POST.get('query_pk')
-                    qrs = QueryResultSet.objects.get(pk=qrs_pk)
-                    post = Post(title=title, public=public, body=body, query=qrs, author=author)
+                    body = form.cleaned_data['body']
+                    result_pk = request.POST.get('result_pk')
+                    result = Result.objects.get(pk=result_pk)
+                    post = Post(title=title, public=public, body=body, result=result, author=author)
                     post.save()
-                    qrs.archived = True
-                    qrs.save()
+                    result.archived = True
+                    result.save()
                     return redirect('view_post', post.pk)
                 else:
                     print('Errors = ' + form.errors) # TODO apply useful logic
-            except User.DoesNotExist:
+            except settings.AUTH_USER_MODEL.DoesNotExist:
                 raise Http404
     else:
         raise Http404
@@ -257,13 +257,13 @@ def view_post(request, post_pk):
         return redirect('post_details', post_pk=post_pk)
     else:
         post = Post.objects.get(pk=post_pk)
-        qrs = post.query
-        articles = post.query.articles.all()
+        result = post.result
+        articles = post.result.articles.all()
         if post.author.id == request.user.id:
             edit_post_form = EditPostForm(instance=Post) #Pre-populate form with the post's current field values
-            return render(request, 'general/view_post.html', {'post': post, 'edit_post_form': edit_post_form, 'query': qrs, 'articles': articles})
+            return render(request, 'general/view_post.html', {'post': post, 'edit_post_form': edit_post_form, 'result': result, 'articles': articles})
         else:
-            return render(request, 'general/view_post.html', {'post': post, 'query': qrs, 'articles': articles})
+            return render(request, 'general/view_post.html', {'post': post, 'result': result, 'articles': articles})
 
 def view_sources(request):
     source_dict_list = [{
@@ -319,7 +319,7 @@ def new_comment(request, post_pk):
     elif request.method == 'POST':
         c_post = Post.objects.get(pk=post_pk)
         c_body = request.POST.get('body')
-        c_author = User.objects.get(pk=request.user.pk)
+        c_author = get_user_model().objects.get(pk=request.user.pk)
         c = Comment.objects.create(post=c_post, body=c_body, author=c_author)
         c.save()
         return redirect('view_comment', c.pk)
@@ -370,9 +370,9 @@ def import_sources(request):
 
 #TODO def password_reset(request)
 
-def view_choro(request: requests.request, query_pk) -> render:
-    qrs = QueryResultSet.objects.get(pk=query_pk)
-    return render(request, 'general/view_choro.html', {'query': qrs})
+def view_choro(request: requests.request, result_pk) -> render:
+    result = Result.objects.get(pk=result_pk)
+    return render(request, 'general/view_choro.html', {'result': result})
 
 def handler404(request, exception):
     context = RequestContext(request)
