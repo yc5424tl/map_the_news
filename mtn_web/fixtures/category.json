@@ -1,48 +1,48 @@
 [
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 1,
     "fields": {
       "name": "BIZ"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 2,
     "fields": {
       "name": "ENT"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 3,
     "fields": {
       "name": "HLT"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 4,
     "fields": {
       "name": "SCI"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 5,
     "fields": {
       "name": "SPO"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 6,
     "fields": {
       "name": "TEC"
     }
   },
   {
-    "model": "category",
+    "model": "map_the_news.category",
     "pk": 7,
     "fields": {
       "name": "GEN"
