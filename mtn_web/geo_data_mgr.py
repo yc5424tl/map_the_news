@@ -47,7 +47,6 @@ class GeoDataManager:
         except KeyError or FileNotFoundError:
             self.result_dict = dict.fromkeys([k['id'] for k in json.load(self.json_data)['features']], 0)
 
-
     def add_result(self, a3_code:str) -> NoReturn:
         self.result_dict[a3_code] +=1
 

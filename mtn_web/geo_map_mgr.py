@@ -12,7 +12,7 @@ from django.conf import settings
 from mtn_web.geo_data_mgr import GeoDataManager
 
 logger = logging.getLogger(__name__)
-CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, 'geodjango_news_map_')
+CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, 'Choropleth_')
 
 
 class GeoMapManager:
@@ -51,7 +51,7 @@ class GeoMapManager:
         return global_map, filename if global_map and filename else None
 
     @staticmethod
-    def get_threshold(articles_per_country:[dict]) -> [int]:
+    def get_threshold(articles_per_country: [dict]) -> [int]:
         if articles_per_country.values.max() <= 16:
             threshold_scale = np.linspace(
                 articles_per_country.values.min(), articles_per_country.values.max(), 6, dtype=int).tolist()
@@ -69,7 +69,7 @@ class GeoMapManager:
         return threshold_scale
 
     @staticmethod
-    def choro_to_file(choro_html:str, filename:str) -> bool:
+    def choro_to_file(choro_html: str, filename: str) -> bool:
         try:
             with open(CHORO_MAP_ROOT+filename, "w") as file:
                 file.write(choro_html)
