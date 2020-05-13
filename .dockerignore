@@ -1,10 +1,11 @@
 .idea
-*.iml
 *.log
 .env
 *.css.map
 venv/
-.idea/**/workspace.xml
-.idea/**/dictionaries
 /mtn_web/migrations/
 /mtn_user/migrations/
+/notes.txt
+/wheel
+*.egg-info
+/build

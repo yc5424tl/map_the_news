@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'mtn_user.CustomUser'
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -190,11 +191,11 @@ if 'ON_HEROKU' in os.environ:
     django_heroku.settings(locals(), staticfiles=False)
 
 if os.getenv('DEBUG') == 'TRUE':
-    INTERNAL_IPS = ('127.0.0.1', 'localhost')
-    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolBarMiddleware')
+    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+    #MIDDLEWARE.append('debug_toolbar.middleware.DebugToolBarMiddleware')
     INSTALLED_APPS.append('debug_toolbar')
     DEBUG_TOOLBAR_PANELS = [
-        'debug_toolbar_panels.versions.VersionsPanel',
+        'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',
         'debug_toolbar.panels.headers.HeadersPanel',
