@@ -1,48 +1,48 @@
 [
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 1,
     "fields": {
       "name": "BIZ"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 2,
     "fields": {
       "name": "ENT"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 3,
     "fields": {
       "name": "HLT"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 4,
     "fields": {
       "name": "SCI"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 5,
     "fields": {
       "name": "SPO"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 6,
     "fields": {
       "name": "TEC"
     }
   },
   {
-    "model": "map_the_news.category",
+    "model": "mtn_web.Category",
     "pk": 7,
     "fields": {
       "name": "GEN"
