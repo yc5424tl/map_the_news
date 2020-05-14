@@ -11,10 +11,11 @@ ENV DEBUG 0
 COPY requirements.txt ./
 
 RUN \
-apt-get update && \
-apt-get install software-properties-common -y && \
-add-apt-repository ppa:ubuntugis/ppa -y && \
-apt-get update --allow-insecure-repositories && \
+#apt-get update && \
+#sudo apt-get install software-properties-common -y && \
+#add-apt-repository ppa:ubuntugis/ppa -y && \
+#apt-get update --allow-insecure-repositories && \
+apt-get update &&
 apt-get install -y \
     curl \
     python3 \
@@ -27,6 +28,7 @@ apt-get install -y \
     python3.7-dev \
     python3-gdal \
     python3-rtree && \
+pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2 && \
 pip3 install -r requirements.txt
 
 COPY . .
