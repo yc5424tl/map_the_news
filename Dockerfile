@@ -27,8 +27,6 @@ apt-get install -y \
     python3.7-dev \
     python3-gdal \
     python3-rtree && \
-export CPLUS_INCLUDE_PATH=/usr/include/gdal &&
-export C_INCLUDE_PATH=/usr/include/gdal &&
 pip3 install -r requirements.txt
 
 COPY . .
