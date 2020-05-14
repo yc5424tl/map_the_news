@@ -16,3 +16,8 @@ venv/
 /venv
 
 
+__pycache__/
+geo_data.txt
+mtn_core/__pycache__/
+mtn_user/__pycache__/
+mtn_web/__pycache__/
