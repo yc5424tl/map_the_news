@@ -11,6 +11,8 @@ ENV DEBUG 0
 COPY requirements.txt ./
 
 RUN
+apt-get update && \
+apt-get install software-properties-common -y && \
 add-apt-repository ppa:ubuntugis/ppa -y && \
 apt-get update && \
 apt-get install -y \
