@@ -16,7 +16,7 @@ apt-get install software-properties-common -y && \
 add-apt-repository ppa:ubuntugis/ppa -y && \
 apt-get update && \
 apt-get install -y \
-    curl
+    curl \
     python3 \
     python3-pip \
     gcc \
