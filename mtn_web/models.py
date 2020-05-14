@@ -5,8 +5,8 @@ from django.db import models
 
 
 class QueryTypeChoice(Enum):
-    HDL = 'headlines'
-    ALL = 'all'
+    HDL = "headlines"
+    ALL = "all"
 
 
 class Result(models.Model):
@@ -21,48 +21,58 @@ class Result(models.Model):
     filename = models.TextField(max_length=700, blank=True)
     filepath = models.TextField(max_length=1000, blank=True)
     public = models.BooleanField(default=False)
-    query_type = models.CharField(max_length=50, choices=[(tag, tag.value) for tag in QueryTypeChoice], default=QueryTypeChoice.ALL)
-    author = models.ForeignKey('mtn_user.CustomUser', on_delete=models.PROTECT, related_name='results')
+    query_type = models.CharField(
+        max_length=50,
+        choices=[(tag, tag.value) for tag in QueryTypeChoice],
+        default=QueryTypeChoice.ALL,
+    )
+    author = models.ForeignKey(
+        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="results"
+    )
     archived = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
     article_data_len = models.IntegerField(default=0)
 
     def __str__(self):
-        details = f'Argument: {self.argument}\n Query Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n' \
-                  f'Public: {self.public}\n Data[:500]: {self.data[:500]}\n ChoroHTML: {self.choro_html[:500]}'
+        details = (
+            f"Argument: {self.argument}\n Query Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n"
+            f"Public: {self.public}\n Data[:500]: {self.data[:500]}\n ChoroHTML: {self.choro_html[:500]}"
+        )
         if self.filename:
-            details = f'{details}\nFilename = {self.filename}'
+            details = f"{details}\nFilename = {self.filename}"
         return details
 
     @property
     def date_created_readable(self) -> str:
-        return f'{self.date_created.month}, {self.date_created.day}, {self.date_created.year}'
+        return f"{self.date_created.month}, {self.date_created.day}, {self.date_created.year}"
 
 
 class CategoryChoice(Enum):
-    BIZ = 'Business'
-    ENT = 'Entertainment'
-    HLT = 'Health'
-    SCI = 'Science'
-    SPO = 'Sports'
-    TEC = 'Technology'
-    GEN = 'General'
+    BIZ = "Business"
+    ENT = "Entertainment"
+    HLT = "Health"
+    SCI = "Science"
+    SPO = "Sports"
+    TEC = "Technology"
+    GEN = "General"
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, choices=[(tag, tag.value) for tag in CategoryChoice])
+    name = models.CharField(
+        max_length=50, choices=[(tag, tag.value) for tag in CategoryChoice]
+    )
 
 
 class Source(models.Model):
     name = models.CharField(max_length=500)
     country = models.CharField(max_length=3)
     language = models.CharField(max_length=100)
-    categories = models.ManyToManyField(Category, related_name='sources')
-    url = models.URLField(blank=True, default='', max_length=150)
+    categories = models.ManyToManyField(Category, related_name="sources")
+    url = models.URLField(blank=True, default="", max_length=150)
     verified = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f"{self.name}"
 
     @property
     def country_full_name(self) -> str:
@@ -85,12 +95,22 @@ class Article(models.Model):
     date_published = models.DateTimeField(default=None, null=True, blank=True)
     description = models.CharField(max_length=2500)
     image_url = models.URLField(max_length=1000, default=None, blank=True, null=True)
-    result = models.ForeignKey(Result, on_delete=models.CASCADE, related_name='articles', related_query_name='article')
-    source = models.ForeignKey(Source, on_delete=models.PROTECT, related_name='articles', related_query_name='article')
+    result = models.ForeignKey(
+        Result,
+        on_delete=models.CASCADE,
+        related_name="articles",
+        related_query_name="article",
+    )
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.PROTECT,
+        related_name="articles",
+        related_query_name="article",
+    )
     title = models.CharField(max_length=300)
 
     def __str__(self):
-        return f'{self.title}, {self.author}, {self.date_published}, {self.source.name}'
+        return f"{self.title}, {self.author}, {self.date_published}, {self.source.name}"
 
     @property
     def source_country(self) -> str:
@@ -98,10 +118,12 @@ class Article(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=300, default='', null=True, blank=True)
-    body = models.CharField(max_length=50000, default='', null=True, blank=True)
+    title = models.CharField(max_length=300, default="", null=True, blank=True)
+    body = models.CharField(max_length=50000, default="", null=True, blank=True)
     date_published = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey('mtn_user.CustomUser', on_delete=models.PROTECT, related_name='posts')
+    author = models.ForeignKey(
+        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="posts"
+    )
     date_last_edit = models.DateTimeField(auto_now_add=True)
     result = models.OneToOneField(Result, on_delete=models.PROTECT)
     public = models.BooleanField(default=False)
@@ -115,14 +137,17 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.PROTECT, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.PROTECT, related_name="comments")
     body = models.CharField(max_length=25000)
     date_published = models.DateTimeField(auto_now_add=True)
     date_last_edit = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey('mtn_user.CustomUser', on_delete=models.PROTECT, related_name='comments')
+    author = models.ForeignKey(
+        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="comments"
+    )
 
     def __str__(self) -> str:
         return f'Comment from {self.author.first_name} {self.author.last_name} on {self.date_published} to post "{self.post.title}", made {self.date_published}'
+
 
 # ======================================================================================#
 # enum help from

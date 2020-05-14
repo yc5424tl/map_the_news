@@ -9,3 +9,5 @@ venv/
 /wheel
 *.egg-info
 /build
+/static
+/media

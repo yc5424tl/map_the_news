@@ -16,7 +16,8 @@ apt-get install -y \
     python3-pip \
     gcc \
     libgdal20 \
-    libgdal-dev && \
+    libgdal-dev \
+    python3-gdal && \
 apt update && \
 apt install -y \
     gdal-bin \

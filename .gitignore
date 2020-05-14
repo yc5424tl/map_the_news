@@ -4,8 +4,15 @@
 *.css.map
 venv/
 /mtn_web/migrations/
-mtn_user/migrations/
+/mtn_user/migrations/
 /notes.txt
 /wheel
 *.egg-info
 /build
+/static
+/static/
+/media
+/media/
+/venv
+
+
