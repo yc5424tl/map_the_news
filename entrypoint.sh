@@ -11,8 +11,7 @@ python3 manage.py migrate mtn_user --noinput
 python3 manage.py migrate mtn_web --noinput
 python3 manage.py migrate sessions --noinput
 python3 manage.py migrate admin --noinput
-python3
-python3 manage.py ensure_adminuser --username=$"SU_USERNAME" --email=$"SU_EMAIL" --password=$"SU_PASSWORD"
-
+python3 manage.py ensure_adminuser --username=$SU_USERNAME --email=$SU_EMAIL --password=$SU_PASSWORD
+python3 manage.py ensure_sifter --username=$SIFTER_USER --email=$SIFTER_EMAIL --password=$SIFTER_PW
 echo 'Starting Server'
 gunicorn mtn_core.wsgi:application --bind 0.0.0.0:"${PORT}"
