@@ -272,7 +272,7 @@ def new_post(request):
 
 @login_required()
 def update_post(request, post_pk):
-    return render(request, "general/update_post.html")
+    return render(request, "general/update_post.html", {'post_pk': post_pk})
 
 
 @login_required()
