@@ -90,16 +90,16 @@ WSGI_APPLICATION = "mtn_core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": os.getenv("MTN_DB_NAME"),
-#         "USER": os.getenv("MTN_DB_USER"),
-#         "PASSWORD": os.getenv("MTN_DB_PW"),
-#         "HOST": os.getenv("MTN_DB_HOST"),
-#         "PORT": os.getenv("MTN_DB_PORT"),
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv("MTN_DB_NAME"),
+        "USER": os.getenv("MTN_DB_USER"),
+        "PASSWORD": os.getenv("MTN_DB_PW"),
+        "HOST": os.getenv("MTN_DB_HOST"),
+        "PORT": os.getenv("MTN_DB_PORT"),
+    }
+}
 DOCKER_POSTGRES = os.getenv('DOCKER_POSTGRES') == 'TRUE'
 
 if DOCKER_POSTGRES:
@@ -120,12 +120,10 @@ AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
 ]
 
 
