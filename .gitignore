@@ -14,7 +14,8 @@ venv/
 /media
 /media/
 /venv
-
+./latest.dump
+*.dump
 
 __pycache__/
 geo_data.txt
