@@ -14,5 +14,5 @@ class Command(BaseCommand):
         User = get_user_model()
         if not User.objects.filter(username=options['username']).exists():
             User.objects.create_user(username=options['username'],
-                                          email=options['email'],
-                                          password=options['password'])
+                                     email=options['email'],
+                                     password=options['password'])

@@ -47,19 +47,19 @@ class Result(models.Model):
         return f"{self.date_created.month}, {self.date_created.day}, {self.date_created.year}"
 
 
-class CategoryChoice(Enum):
-    BIZ = "Business"
-    ENT = "Entertainment"
-    HLT = "Health"
-    SCI = "Science"
-    SPO = "Sports"
-    TEC = "Technology"
-    GEN = "General"
-
-
 class Category(models.Model):
+
+    class CategoryChoice(Enum):
+        BIZ = "business"
+        ENT = "entertainment"
+        GEN = "general"
+        HLT = "health"
+        SCI = "science"
+        SPO = "sports"
+        TEC = "technology"
+
     name = models.CharField(
-        max_length=50, choices=[(tag, tag.value) for tag in CategoryChoice]
+        max_length=50, choices=CategoryChoice
     )
 
 
