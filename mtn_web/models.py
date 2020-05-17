@@ -2,6 +2,7 @@ from enum import Enum
 from typing import NoReturn
 import pycountry
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 
 class QueryTypeChoice(Enum):
@@ -27,7 +28,7 @@ class Result(models.Model):
         default=QueryTypeChoice.ALL,
     )
     author = models.ForeignKey(
-        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="results"
+        "mtn_web.User", on_delete=models.PROTECT, related_name="results"
     )
     archived = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
@@ -65,7 +66,7 @@ class Result(models.Model):
 
 class Category(models.Model):
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     # name = models.CharField(max_length=50, choices=CategoryChoices.choices)
 
@@ -156,7 +157,7 @@ class Post(models.Model):
     body = models.CharField(max_length=50000, default="", null=True, blank=True)
     date_published = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
-        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="posts"
+        "mtn_web.User", on_delete=models.PROTECT, related_name="posts"
     )
     date_last_edit = models.DateTimeField(auto_now_add=True)
     result = models.OneToOneField(Result, on_delete=models.PROTECT)
@@ -176,12 +177,15 @@ class Comment(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     date_last_edit = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(
-        "mtn_user.CustomUser", on_delete=models.PROTECT, related_name="comments"
+        "mtn_web.User", on_delete=models.PROTECT, related_name="comments"
     )
 
     def __str__(self) -> str:
         return f'Comment from {self.author.first_name} {self.author.last_name} on {self.date_published} to post "{self.post.title}", made {self.date_published}'
 
+
+class User(AbstractUser):
+    pass
 
 # ======================================================================================#
 # enum help from

@@ -126,12 +126,12 @@ def new_query(request: requests.request) -> render or redirect:
                 result = Result.objects.get(pk=result.pk)
                 global_map = data_tup[0]
                 filename = data_tup[1]
-                result._choro_html = global_map.get_root().render()
-                result._filename = filename
-                result._author = get_user_model().objects.get(pk=request.user.pk)
-                result._choropleth = global_map._repr_html_()
-                result._article_count = article_count
-                result._article_data_len = len(article_data)
+                result.choro_html = global_map.get_root().render()
+                result.filename = filename
+                result.author = get_user_model().objects.get(pk=request.user.pk)
+                result.choropleth = global_map._repr_html_()
+                result.article_count = article_count
+                result.article_data_len = len(article_data)
                 result.save()
             return redirect("view_result", result.pk)
         else:

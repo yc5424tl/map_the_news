@@ -31,7 +31,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", default=False)
+DEBUG = os.environ.get("DEBUG", default=False) == 'TRUE'
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -48,11 +48,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.admindocs",
     "mtn_web.apps.MtnWebConfig",
-    "mtn_user.apps.MtnUserConfig",
     "storages",
 ]
 
-AUTH_USER_MODEL = "mtn_user.CustomUser"
+AUTH_USER_MODEL = "mtn_web.User"
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
@@ -152,11 +151,11 @@ if USE_S3:
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_DEFAULT_ACL = "public-read"
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.us-east-2.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
     # s3 static settings
     STATIC_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}/{STATIC_LOCATION}/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
     STATICFILES_STORAGE = "mtn_core.storage_backends.StaticStorage"
     # s3 media settings
     MEDIA_LOCATION = "media"
