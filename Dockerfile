@@ -30,6 +30,8 @@ pip3 install -r requirements.txt
 
 COPY . .
 
+ENV SECRET_KEY=supserSecret123!
+
 RUN \
 python3 manage.py makemigrations mtn_web && \
 python3 manage.py makemigrations mtn_user && \
