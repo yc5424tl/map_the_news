@@ -53,19 +53,21 @@ class Result(models.Model):
 #         return [(choice.name, choice.value) for choice in cls]
 
 
-class CategoryChoices(models.TextChoices):
-    BUSINESS = 'BIZ', 'business'
-    ENTERTAINMENT = 'ENT', 'entertainment'
-    GENERAL = 'GEN', 'general'
-    HEALTH = 'HLT', 'health'
-    SCIENCE = 'SCI', 'science'
-    SPORTS = 'SPO', 'sports'
-    TECHNOLOGY = 'TEC', 'technology'
+# class CategoryChoices(models.TextChoices):
+#     BUSINESS = 'BIZ', 'business'
+#     ENTERTAINMENT = 'ENT', 'entertainment'
+#     GENERAL = 'GEN', 'general'
+#     HEALTH = 'HLT', 'health'
+#     SCIENCE = 'SCI', 'science'
+#     SPORTS = 'SPO', 'sports'
+#     TECHNOLOGY = 'TEC', 'technology'
 
 
 class Category(models.Model):
 
-    name = models.CharField(max_length=50, choices=CategoryChoices.choices)
+    name = models.CharField(max_length=50)
+
+    # name = models.CharField(max_length=50, choices=CategoryChoices.choices)
 
     # class Name(models.TextChoices):
     #     BUSINESS = 'BIZ', _('business')
