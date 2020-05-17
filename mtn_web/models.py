@@ -47,24 +47,25 @@ class Result(models.Model):
         return f"{self.date_created.month}, {self.date_created.day}, {self.date_created.year}"
 
 
-class ChoiceEnum(Enum):
-    @classmethod
-    def choices(cls):
-        return [(choice.name, choice.value) for choice in cls]
+# class ChoiceEnum(Enum):
+#     @classmethod
+#     def choices(cls):
+#         return [(choice.name, choice.value) for choice in cls]
+
+
+class CategoryChoices(models.TextChoices):
+    BUSINESS = 'BIZ', 'business'
+    ENTERTAINMENT = 'ENT', 'entertainment'
+    GENERAL = 'GEN', 'general'
+    HEALTH = 'HLT', 'health'
+    SCIENCE = 'SCI', 'science'
+    SPORTS = 'SPO', 'sports'
+    TECHNOLOGY = 'TEC', 'technology'
 
 
 class Category(models.Model):
 
-    class Categories(ChoiceEnum):
-        BIZ = 'business'
-        ENT = 'entertainment'
-        GEN = 'general'
-        HLT = 'health'
-        SCI = 'science'
-        SPO = 'sports'
-        TEC = 'technology'
-
-    name = models.CharField(max_length=50, choice=Categories.choices())
+    name = models.CharField(max_length=50, choices=CategoryChoices.choices)
 
     # class Name(models.TextChoices):
     #     BUSINESS = 'BIZ', _('business')
