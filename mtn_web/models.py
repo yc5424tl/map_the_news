@@ -49,18 +49,34 @@ class Result(models.Model):
 
 class Category(models.Model):
 
-    class CategoryChoice(Enum):
-        BIZ = "business"
-        ENT = "entertainment"
-        GEN = "general"
-        HLT = "health"
-        SCI = "science"
-        SPO = "sports"
-        TEC = "technology"
+    # class Name(models.TextChoices):
+    #     BUSINESS = 'BIZ', _('business')
+    #     ENTERTAINMENT = 'ENT', _('entertainment')
+    #     GENERAL = 'GEN', _('general')
+    #     HEALTH = 'HLT', _('health')
+    #     SCIENCE = 'SCI', _('science')
+    #     SPORTS = 'SPO', _('sports')
+    #     TECHNOLOGY = 'TEC', _('technology')
 
-    name = models.CharField(
-        max_length=50, choices=CategoryChoice
-    )
+    class Name:
+        BUSINESS = 'BIZ'
+        ENTERTAINMENT = 'ENT'
+        GENERAL = 'GEN'
+        HEALTH = 'HLT'
+        SCIENCE = 'SCI'
+        SPORTS = 'SPO'
+        TECHNOLOGY = 'TEC'
+        CHOICES = (
+            (BUSINESS, 'business'),
+            (ENTERTAINMENT, 'entertainment'),
+            (GENERAL, 'general'),
+            (HEALTH, 'health'),
+            (SCIENCE, 'science'),
+            (SPORTS, 'sports'),
+            (TECHNOLOGY, 'technology'),
+        )
+
+    name = models.CharField(max_length=50, choices=Name.CHOICES)
 
 
 class Source(models.Model):
