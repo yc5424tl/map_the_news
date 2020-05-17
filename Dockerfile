@@ -25,15 +25,18 @@ apt-get install -y \
     python3-gdal \
     python3-rtree && \
 pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2 && \
-pip3 install -r requirements.txt && \
+pip3 install -r requirements.txt
+
+
+COPY . .
+
+RUN \
 python3 manage.py makemigrations mtn_web && \
 python3 manage.py makemigrations mtn_user && \
 python3 manage.py migrate mtn_web --noinput && \
 python3 manage.py migrate mtn_user --noinput && \
 python3 manage.py migrate sessions --noinput && \
 python3 manage.py migrate admin --noinput
-
-COPY . .
 
 EXPOSE 8000
 
