@@ -47,7 +47,24 @@ class Result(models.Model):
         return f"{self.date_created.month}, {self.date_created.day}, {self.date_created.year}"
 
 
+class ChoiceEnum(Enum):
+    @classmethod
+    def choices(cls):
+        return [(choice.name, choice.value) for choice in cls]
+
+
 class Category(models.Model):
+
+    class Categories(ChoiceEnum):
+        BIZ = 'business'
+        ENT = 'entertainment'
+        GEN = 'general'
+        HLT = 'health'
+        SCI = 'science'
+        SPO = 'sports'
+        TEC = 'technology'
+
+    name = models.CharField(max_length=50, choice=Categories.choices())
 
     # class Name(models.TextChoices):
     #     BUSINESS = 'BIZ', _('business')
@@ -57,26 +74,24 @@ class Category(models.Model):
     #     SCIENCE = 'SCI', _('science')
     #     SPORTS = 'SPO', _('sports')
     #     TECHNOLOGY = 'TEC', _('technology')
-
-    class Name:
-        BUSINESS = 'BIZ'
-        ENTERTAINMENT = 'ENT'
-        GENERAL = 'GEN'
-        HEALTH = 'HLT'
-        SCIENCE = 'SCI'
-        SPORTS = 'SPO'
-        TECHNOLOGY = 'TEC'
-        CHOICES = (
-            (BUSINESS, 'business'),
-            (ENTERTAINMENT, 'entertainment'),
-            (GENERAL, 'general'),
-            (HEALTH, 'health'),
-            (SCIENCE, 'science'),
-            (SPORTS, 'sports'),
-            (TECHNOLOGY, 'technology'),
-        )
-
-    name = models.CharField(max_length=50, choices=Name.CHOICES)
+    # class Name(Enum):
+    #     BUSINESS = 'BIZ'
+    #     ENTERTAINMENT = 'ENT'
+    #     GENERAL = 'GEN'
+    #     HEALTH = 'HLT'
+    #     SCIENCE = 'SCI'
+    #     SPORTS = 'SPO'
+    #     TECHNOLOGY = 'TEC'
+    #     CHOICES = (
+    #         (BUSINESS, 'business'),
+    #         (ENTERTAINMENT, 'entertainment'),
+    #         (GENERAL, 'general'),
+    #         (HEALTH, 'health'),
+    #         (SCIENCE, 'science'),
+    #         (SPORTS, 'sports'),
+    #         (TECHNOLOGY, 'technology'),
+    #     )
+    # name = models.CharField(max_length=50, choices=Name.CHOICES)
 
 
 class Source(models.Model):
