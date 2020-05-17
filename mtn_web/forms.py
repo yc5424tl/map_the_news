@@ -9,7 +9,7 @@ from mtn_web.models import Post, Comment, Result
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = get_user_model()
-        fields = ("username", "email", "first_name", "middle_initial", "last_name")
+        fields = ("username", "email", "first_name", "last_name")
 
 
 class NewPostForm(forms.ModelForm):
