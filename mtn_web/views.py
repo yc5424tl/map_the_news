@@ -426,6 +426,8 @@ def delete_comment(request, comment_pk):
 def import_sources(request):
     if request.method == "POST":
         payload = json.loads(request.body)
+        print('PAYLOAD:')
+        print(payload)
         try:
             source_data = payload["sources"]
             for data in source_data:
