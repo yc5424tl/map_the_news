@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 
 class Constructor:
     def new_article(self, api_response, result: Result) -> Article or False:
-        source = self.verify_source(api_response["source"]["name"])
+        print(f'api_response["source"] = {api_response["source"]}')
+        if not self.verify_source(api_response["source"]["name"]):
+            print(f'API_RESPONSE[source] = {api_response["source"]}')
         date_published = self.verify_date(api_response["publishedAt"])
         try:
             description = (
