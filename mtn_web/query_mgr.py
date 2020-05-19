@@ -58,6 +58,7 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
+        print(f'response for query = {response.json()}')
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
         article_data = []
@@ -86,7 +87,7 @@ class Query:
         #             logger.log(level=logging.ERROR, msg=logger.exception(kE))
         #             continue
         #     print(f'len(article data)={len(article_data)} pages={pages} article_count={article_count}')
-
+        print(f'returning article_data from execute query:\n\n{article_data}')
         return article_data, article_count
 
     def to_file(self, data) -> bool:

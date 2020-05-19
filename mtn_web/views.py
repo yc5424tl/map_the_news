@@ -95,14 +95,18 @@ def new_query(request: requests.request) -> render or redirect:
         form = NewQueryForm()
         return render(request, "general/new_query.html", {"search_form": form})
     elif request.method == "POST":
+        print('new_query request method is POST')
         if geo_data_mgr.verify_geo_data():
+            print('geo_data_mgr.verify_geo_data == True')
             query_mgr = Query(
                 arg=request.POST.get("argument"), focus=request.POST.get("query_type")
             )
+            print(f'new_query argument = {request.POST.get("argument")}')
+            print(f'new_query focus = {request.POST.get("query_type")}')
             have_endpoint = query_mgr.get_endpoint()
             if have_endpoint is False:
                 messages.info(request, message='Unable to contact endpoint to complete your query.')
-                return redirect(new_query, request)
+                return render(new_query, request)
             query_data = query_mgr.execute_query()
             article_data = query_data[0]
             article_count = query_data[1]
@@ -138,6 +142,7 @@ def new_query(request: requests.request) -> render or redirect:
                 result.save()
             return redirect("view_result", result.pk)
         else:
+            print('geo_data_mgr.verify_geo_data == FALSE, rendering 404')
             redirect("handler404", request)
 
 
