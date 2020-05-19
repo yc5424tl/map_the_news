@@ -45,7 +45,7 @@ class GeoDataManager:
     def initialize_result_dict(self) -> NoReturn:
         try:
             print('opening file in initialize result dict')
-            file = open(static(f'js/{self.filename}'))
+            file = open('geo_data.txt')
 
             json_data = json.load(file)
             print(f'json_data from json.load(file) = {json_data}')
