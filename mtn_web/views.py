@@ -99,7 +99,10 @@ def new_query(request: requests.request) -> render or redirect:
             query_mgr = Query(
                 arg=request.POST.get("argument"), focus=request.POST.get("query_type")
             )
-            query_mgr.get_endpoint()
+            have_endpoint = query_mgr.get_endpoint()
+            if have_endpoint is False:
+                messages.info(request, message='Unable to contact endpoint to complete your query.')
+                return redirect(new_query, request)
             query_data = query_mgr.execute_query()
             article_data = query_data[0]
             article_count = query_data[1]
