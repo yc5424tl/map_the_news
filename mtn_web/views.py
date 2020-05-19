@@ -103,6 +103,7 @@ def new_query(request: requests.request) -> render or redirect:
             )
             print(f'new_query argument = {request.POST.get("argument")}')
             print(f'new_query focus = {request.POST.get("query_type")}')
+            print(f'type(focus) = {type(request.POST.get("query_type"))}')
             have_endpoint = query_mgr.get_endpoint()
             if have_endpoint is False:
                 messages.info(request, message='Unable to contact endpoint to complete your query.')

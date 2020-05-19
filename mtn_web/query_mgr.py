@@ -48,9 +48,9 @@ class Query:
         #         self.endpoint = "c"
         #         return False
         # else:
-        if self.focus == QueryTypeChoice.ALL:
+        if self.focus == 'QueryTypeChoice.ALL':
             self.endpoint = f"https://newsapi.org/v2/everything?q={self.arg}&apiKey={api_key}&pageSize=100"
-        elif self.focus == QueryTypeChoice.HDL:
+        elif self.focus == 'QueryTypeChoice.HDL':
             self.endpoint = f"https://newsapi.org/v2/top-headlines?q={self.arg}&apiKey={api_key}&pageSize=100"
         else:
             self.endpoint = None
