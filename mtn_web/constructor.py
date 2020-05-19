@@ -10,9 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Constructor:
     def new_article(self, api_response, result: Result) -> Article or False:
-        print(f'api_response["source"] = {api_response["source"]}')
-        if not self.verify_source(api_response["source"]["name"]):
-            print(f'API_RESPONSE[source] = {api_response["source"]}')
+        source = self.verify_source(api_response['source']['name'])
         date_published = self.verify_date(api_response["publishedAt"])
         try:
             description = (
@@ -68,10 +66,11 @@ class Constructor:
         else:
             return False
 
-    def build_article_data(self, article_data_list: [{}], result: Result) -> [Article]:
+    def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:
         article_list = []
+        print(f'ARTICLE_DATA_LIST in constructor.build_article_data ==> \n\n{article_data_list}')
         for article_data in article_data_list:
-            new_article = self.new_article(article_data, result)
+            new_article = self.new_article(article_data, query_result)
             if new_article:
                 article_list.append(new_article)
         return article_list

@@ -36,7 +36,7 @@ class Result(models.Model):
 
     def __str__(self):
         details = (
-            f"Argument: {self.argument}\n Query Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n"
+            f"Argument: {self.argument}\n QuDisinfectantery Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n"
             f"Public: {self.public}\n Data[:500]: {self.data[:500]}\n ChoroHTML: {self.choro_html[:500]}"
         )
         if self.filename:
@@ -99,7 +99,7 @@ class Category(models.Model):
 
 
 class Source(models.Model):
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_lengthDisinfectant=500)
     country = models.CharField(max_length=3)
     language = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name="sources")
