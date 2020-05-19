@@ -31,7 +31,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", default=False) == 'TRUE'
+DEBUG = os.environ.get("DEBUG", default=False) == "TRUE"
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -99,17 +99,17 @@ DATABASES = {
         "PORT": os.getenv("MTN_DB_PORT"),
     }
 }
-DOCKER_POSTGRES = os.getenv('DOCKER_POSTGRES') == 'TRUE'
+DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
 
 if DOCKER_POSTGRES:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'HOST': 'db',
-            'PORT': 5432,
-            'PASSWORD': 'sqlAdmin1234!',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "HOST": "db",
+            "PORT": 5432,
+            "PASSWORD": "sqlAdmin1234!",
         }
     }
 
@@ -119,10 +119,12 @@ AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 

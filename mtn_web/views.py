@@ -272,7 +272,7 @@ def new_post(request):
 
 @login_required()
 def update_post(request, post_pk):
-    return render(request, "general/update_post.html", {'post_pk': post_pk})
+    return render(request, "general/update_post.html", {"post_pk": post_pk})
 
 
 @login_required()
@@ -426,7 +426,7 @@ def delete_comment(request, comment_pk):
 def import_sources(request):
     if request.method == "POST":
         payload = json.loads(request.body)
-        print('PAYLOAD:')
+        print("PAYLOAD:")
         print(payload)
         try:
             source_data = payload["sources"]

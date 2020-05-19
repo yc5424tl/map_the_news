@@ -44,13 +44,23 @@ class GeoDataManager:
 
     def initialize_result_dict(self) -> NoReturn:
         try:
+            print('opening file in initialize result dict')
+            file = open(static(f'js/{self.filename}'))
+
+            json_data = json.load(file)
+            print(f'json_data from json.load(file) = {json_data}')
+            features = json_data['features']
+            print(f'features from json_data = {features}')
             self.result_dict = dict.fromkeys(
-                [
-                    k["id"]
-                    for k in json.load(open(static(f"js/{self.filename}")))["features"]
-                ],
-                0,
+                [k['id'] for k in features], 0,
             )
+            # self.result_dict = dict.fromkeys(
+            #     [
+            #         k["id"]
+            #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
+            #     ],
+            #     0,
+            # )
         except KeyError or FileNotFoundError:
             self.result_dict = dict.fromkeys(
                 [k["id"] for k in json.load(self.json_data)["features"]], 0

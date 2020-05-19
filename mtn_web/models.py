@@ -187,6 +187,7 @@ class Comment(models.Model):
 class User(AbstractUser):
     pass
 
+
 # ======================================================================================#
 # enum help from
 #   https://hackernoon.com/using-enum-as-model-field-choice-in-django-92d8b97aaa63
