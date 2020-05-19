@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 import requests
 from newsapi import NewsApiClient
+from .models import QueryTypeChoice
 
 logger = logging.getLogger(__name__)
 api_key = os.environ.get("NEWS_API_KEY_2")
@@ -47,9 +48,9 @@ class Query:
         #         self.endpoint = "c"
         #         return False
         # else:
-        if self.focus == "all":
+        if self.focus == QueryTypeChoice.ALL:
             self.endpoint = f"https://newsapi.org/v2/everything?q={self.arg}&apiKey={api_key}&pageSize=100"
-        elif self.focus == "headlines":
+        elif self.focus == QueryTypeChoice.HDL:
             self.endpoint = f"https://newsapi.org/v2/top-headlines?q={self.arg}&apiKey={api_key}&pageSize=100"
         else:
             self.endpoint = None
