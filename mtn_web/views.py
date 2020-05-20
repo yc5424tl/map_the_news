@@ -31,7 +31,7 @@ from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager
 from mtn_web.models import Result, Source, Post, Comment, Category
 from mtn_web.query_mgr import Query
-
+import psycopg2
 
 logging.basicConfig(filename="news_map.log", level=logging.INFO)
 logger = Logger(__name__)
@@ -87,6 +87,41 @@ def login_user(request: requests.request) -> render or redirect:
 def logout_user(request: requests.request) -> NoReturn:
     if request.user.is_authenticated:
         messages.info(request, "Logout Successful", extra_tags="alert")
+
+
+def get_category(cat_num: int):
+    cats = {1: 'business', 2:'entertainment', 3: 'health', 4: 'science', 5: 'sports', 6: 'technology', 7: 'general'}
+    return cats[cat_num]
+
+
+@login_required()
+def postgres(request):
+    if request.method == 'GET':
+        conn = psycopg2.connect(host=os.getenv('PG_HOST'),
+                                port='5432',
+                                database='sifter_data',
+                                user='postgres',
+                                password=os.getenv('PG_PW'))
+
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT source.name, source.country, source.language, source.id, source_categories.source_id, source_categories.category_id from source, source_categories where source.id = source_categories.source_id;")
+
+        for row in cur:
+            str_category = get_category(row['category_id'])
+            category = Category.objects.get_or_create(name=str_category)
+            source = Source.objects.get(name=row['name'])
+            if source:
+                source.categories.get_or_create(name=category)
+            if not source:
+                new_source = Source(
+                    name=row['name'],
+                    country=row['country'],
+                    language=row['language'],
+                )
+                new_source.categories.add(category)
+        conn.commit()
+        conn.close()
 
 
 @login_required()
