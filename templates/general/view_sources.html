@@ -62,7 +62,7 @@
                             <ul class="src-ul">
                                 {% for category in categories %}
                                     <li class="src-li">
-                                        <span class="src-header">{{ category.cat|capfirst }}</span>
+                                        <span class="src-header">{{ category.cat.name|capfirst }}</span>
                                         <ul>
                                             {% for source in category.src_list %}
                                                 <li>
