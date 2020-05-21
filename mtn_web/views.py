@@ -131,6 +131,7 @@ def postgres(request):
         return updates
     return 'Oh Hey There'
 
+
 @login_required()
 def new_query(request: requests.request) -> render or redirect:
     if request.method == "GET":
@@ -477,10 +478,18 @@ def delete_comment(request, comment_pk):
 def import_sources(request):
     if request.method == "POST":
         payload = json.loads(request.body)
-        print("PAYLOAD:")
-        print(payload)
+        print("\n\n=====================loads.PAYLOAD RECEIVED=======================\n\n:")
+        print(payload['sources'][:3])
+        print('\n\n')
+        if payload is None or '':
+            payload = json.load(request.body)
+            print('trying with json.load(payload)')
+            print('\n\n===================PAYLOAD RECEIVED===================\n\n')
+            print(payload['sources'][:3])
+            print('\n\n')
         try:
             source_data = payload["sources"]
+            count = 0
             for data in source_data:
                 source, s_created = Source.objects.get_or_create(
                     name=data["name"],
@@ -490,6 +499,9 @@ def import_sources(request):
                         "url": data["url"] if data["url"] else "",
                     },
                 )
+                print(f'source = {source}')
+                print(f's_created = {s_created}')
+                count+=1
                 for cat_name in data["categories"]:  # Source exists in DB
                     category, c_created = Category.objects.get_or_create(name=cat_name['name'])
                     try:
@@ -502,6 +514,7 @@ def import_sources(request):
                             f"\n CATCH-ALL EXCEPTION on has_category=record.categories.get(name=category.name)\n{e}"
                         )
             requests.get(os.getenv("STAY_ALIVE_URL"))
+            print(f'count = {count}')
             return HttpResponse(status=200)
         except (ValueError, BaseException) as e:
             sys.stdout.write(f'POST data has no key "sources". ERROR: {e}')
