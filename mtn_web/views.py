@@ -395,7 +395,7 @@ def view_sources(request):
     ]
     category_dict_list = [
         {
-            "cat": category.name.name,
+            "cat": category.name,
             "src_list": [
                 {
                     "name": source.name,
@@ -501,9 +501,10 @@ def import_sources(request):
                 )
                 print(f'source = {source}')
                 print(f's_created = {s_created}')
-                count+=1
+                count += 1
                 for cat_name in data["categories"]:  # Source exists in DB
-                    category, c_created = Category.objects.get_or_create(name=cat_name['name'])
+                    category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
+                    print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
                     try:
                         source.categories.get(name=category.name)
                     except ObjectDoesNotExist:
