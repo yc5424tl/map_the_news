@@ -395,7 +395,7 @@ def view_sources(request):
     ]
     category_dict_list = [
         {
-            "cat": category.name,
+            "cat": category.name.name,
             "src_list": [
                 {
                     "name": source.name,
