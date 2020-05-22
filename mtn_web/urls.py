@@ -29,7 +29,7 @@ urlpatterns = [
     url(r"^accounts/register/$", views.register_user, name="register_user"),
     url(r"^accounts/view/(?P<member_pk>\d+)$", views.view_user, name="view_user"),
     url(r"^sources/import/$", views.import_sources, name="import_sources"),
-    url(r"^sources/import/original/$", views.postgres, name="import_original"),
+    #  url(r"^sources/import/original/$", views.postgres, name="import_original"),
     url(r"^sources/$", views.view_sources, name="view_sources"),
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
 ]
