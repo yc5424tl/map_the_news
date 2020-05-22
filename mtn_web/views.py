@@ -94,42 +94,43 @@ def get_category(cat_num: int):
     return cats[cat_num]
 
 
-@login_required()
-def postgres(request):
-    if request.method == 'GET':
-        conn = psycopg2.connect(host=os.getenv('PG_HOST'),
-                                port='5432',
-                                database='sifter_data',
-                                user='postgres',
-                                password=os.getenv('PG_PW'))
-
-        cur = conn.cursor()
-        cur.execute(
-            "SELECT source.name, source.country, source.language, source.id, source_categories.source_id, source_categories.category_id from source, source_categories where source.id = source_categories.source_id;")
-
-        updates = {'categories': [], 'sources': []}
-        for row in cur:
-            str_category = get_category(row['category_id'])
-            category = Category.objects.get_or_create(name=str_category)
-            source = Source.objects.get(name=row['name'])
-            if source:
-                category = Source.categories.get(name=category)
-                if not category:
-                    source.categories.add(category)
-                    updates['categories'].append({source.name: category.name})
-                # source.categories.get_or_create(name=category)
-            if not source:
-                new_source = Source(
-                    name=row['name'],
-                    country=row['country'],
-                    language=row['language'],
-                )
-                new_source.categories.add(category)
-                updates['sources'].append({source.id: source.name})
-        conn.commit()
-        conn.close()
-        return updates
-    return 'Oh Hey There'
+# @login_required()
+# def postgres(request):
+#
+#     if request.method == 'GET':
+#         conn = psycopg2.connect(host=os.getenv('PG_HOST'),
+#                                 port='5432',
+#                                 database='sifter_data',
+#                                 user='postgres',
+#                                 password=os.getenv('PG_PW'))
+#
+#         cur = conn.cursor()
+#         cur.execute(
+#             "SELECT source.name, source.country, source.language, source.id, source_categories.source_id, source_categories.category_id from source, source_categories where source.id = source_categories.source_id;")
+#
+#         updates = {'categories': [], 'sources': []}
+#         for row in cur:
+#             str_category = get_category(row['category_id'])
+#             category = Category.objects.get_or_create(name=str_category)
+#             source = Source.objects.get(name=row['name'])
+#             if source:
+#                 category = Source.categories.get(name=category)
+#                 if not category:
+#                     source.categories.add(category)
+#                     updates['categories'].append({source.name: category.name})
+#                 # source.categories.get_or_create(name=category)
+#             if not source:
+#                 new_source = Source(
+#                     name=row['name'],
+#                     country=row['country'],
+#                     language=row['language'],
+#                 )
+#                 new_source.categories.add(category)
+#                 updates['sources'].append({source.id: source.name})
+#         conn.commit()
+#         conn.close()
+#         return updates
+#     return 'Oh Hey There'
 
 
 @login_required()
@@ -476,47 +477,49 @@ def delete_comment(request, comment_pk):
 
 @csrf_exempt
 def import_sources(request):
+    print('TOP OF IMPORT SOURCES')
     if request.method == "POST":
         payload = json.loads(request.body)
         print("\n\n=====================loads.PAYLOAD RECEIVED=======================\n\n:")
         print(payload)
         print('\n\n')
-        if payload is None or '':
+        if payload is None:
             payload = json.load(request.body)
             print('trying with json.load(payload)')
             print('\n\n===================PAYLOAD RECEIVED===================\n\n')
             print(payload['sources'][:3])
             print('\n\n')
         try:
-            source_data = payload["sources"]
-            count = 0
-            for data in source_data:
-                source, s_created = Source.objects.get_or_create(
-                    name=data["name"],
-                    defaults={
-                        "country": data["country"],
-                        "language": data["language"],
-                        "url": data["url"] if data["url"] else "",
-                    },
-                )
-                print(f'source = {source}')
-                print(f's_created = {s_created}')
-                count += 1
-                for cat_name in data["categories"]:  # Source exists in DB
-                    category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
-                    print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
-                    try:
-                        source.categories.get(name=category.name)
-                    except ObjectDoesNotExist:
-                        source.categories.add(category)
-                        source.save()
-                    except BaseException as e:
-                        sys.stdout.write(
-                            f"\n CATCH-ALL EXCEPTION on has_category=record.categories.get(name=category.name)\n{e}"
-                        )
-            requests.get(os.getenv("STAY_ALIVE_URL"))
-            print(f'count = {count}')
-            return HttpResponse(status=200)
+            if ['sources'] in payload:
+                source_data = payload["sources"]
+                count = 0
+                for data in source_data:
+                    source, s_created = Source.objects.get_or_create(
+                        name=data["name"],
+                        defaults={
+                            "country": data["country"],
+                            "language": data["language"],
+                            "url": data["url"] if data["url"] else "",
+                        },
+                    )
+                    print(f'source = {source}')
+                    print(f's_created = {s_created}')
+                    count += 1
+                    for cat_name in data["categories"]:  # Source exists in DB
+                        category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
+                        print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
+                        try:
+                            source.categories.get(name=category.name)
+                        except ObjectDoesNotExist:
+                            source.categories.add(category)
+                            source.save()
+                        except BaseException as e:
+                            sys.stdout.write(
+                                f"\n CATCH-ALL EXCEPTION on has_category=record.categories.get(name=category.name)\n{e}"
+                            )
+                requests.get(os.getenv("STAY_ALIVE_URL"))
+                print(f'count = {count}')
+                return HttpResponse(status=200)
         except (ValueError, BaseException) as e:
             sys.stdout.write(f'POST data has no key "sources". ERROR: {e}')
             requests.get(os.getenv("STAY_ALIVE_URL"))
