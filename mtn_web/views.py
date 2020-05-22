@@ -479,7 +479,7 @@ def import_sources(request):
     if request.method == "POST":
         payload = json.loads(request.body)
         print("\n\n=====================loads.PAYLOAD RECEIVED=======================\n\n:")
-        print(payload['sources'][:3])
+        print(payload)
         print('\n\n')
         if payload is None or '':
             payload = json.load(request.body)
