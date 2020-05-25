@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.admindocs",
     "mtn_web.apps.MtnWebConfig",
+    "mtn_sifter.apps.MtnSifterConfig",
+    "django_apscheduler",
     "storages",
 ]
 

@@ -3,7 +3,7 @@ version: '2'
 services:
   web:
     build:
-      context: https://github.com/yc5424tl/map_the_news.git#grey
+      context: https://github.com/yc5424tl/map_the_news.git#sifter
     command: python3 manage.py runserver 0.0.0.0:8990
     ports:
       - '8990:8990'

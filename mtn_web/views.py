@@ -505,6 +505,7 @@ def import_sources(request):
                 for cat_name in data["categories"]:  # Source exists in DB
                     category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
                     print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
+                    src_cat, sc_created = source.categories.get_or_create(name=category.name)
                     try:
                         source.categories.get(name=category.name)
                     except ObjectDoesNotExist:
