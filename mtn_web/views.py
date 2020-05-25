@@ -278,7 +278,7 @@ def view_user(request, member_pk):
                 "queries": recent_results,
             },
         )
-    except settings.AUTH_USER_MODEL.DoesNotExist:
+    except get_user_model().DoesNotExist:
         raise Http404
 
 
@@ -316,7 +316,7 @@ def new_post(request):
                     return redirect("view_post", post.pk)
                 else:
                     print("Errors = " + form.errors)  # TODO apply useful logic
-            except settings.AUTH_USER_MODEL.DoesNotExist:
+            except get_user_model().DoesNotExist:
                 raise Http404
     else:
         raise Http404
