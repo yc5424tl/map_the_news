@@ -102,7 +102,7 @@ def build_country_src_data(src_data, alpha2_code, src_cat):
             new_src = Source.objects.create(
                 name=article['source']['name'],
                 country=alpha2_code,
-                language=country_codes.get(alpha2_code).get('language')
+                language=api_country_codes.get(alpha2_code).get('language')
             )
             new_src.categories.add(cat)
             new_src.save()
