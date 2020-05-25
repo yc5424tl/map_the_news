@@ -46,7 +46,7 @@ def verify_base_src():
             with open(static('json/top_sources.json')) as json_data:
                 src_data = json.load(json_data)['sources']
                 for src in src_data:
-                    cat = Category.objects.get_or_create(name=src['category'])
+                    cat, created = Category.objects.get_or_create(name=src['category'])
                     new_src = Source.objects.create(
                         name=src['name'],
                         country=src['country'],
@@ -107,7 +107,7 @@ def build_country_src_data(src_data, alpha2_code, src_cat):
             new_src.categories.add(cat)
             new_src.save()
         else:
-            if cat not in src.categories:
+            if cat not in src.categories.all():
                 src.categories.add(cat)
                 src.save()
     return True
@@ -143,7 +143,7 @@ def build_top_src_data(src_data):
             new_src.categories.add(cat)
             new_src.save()
         else:
-            if cat not in src.categories:
+            if cat not in src.categories.all():
                 src.categories.add(cat)
                 src.save()
     return True
