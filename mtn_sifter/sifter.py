@@ -15,8 +15,8 @@ from threading import Timer
 
 logger = logging.getLogger(__name__)
 api_key = os.getenv('SIFTER_API_KEY')
-scheduler = BackgroundScheduler()
-register_events(scheduler)
+# scheduler = BackgroundScheduler()
+# register_events(scheduler)
 
 
 def sift():
@@ -61,9 +61,12 @@ def verify_base_src():
             src_data = req_top_src_data()
             if src_data:
                 build_top_src_data(src_data)
-                scheduler.pause()
-                t = Timer(360.0, scheduler.resume())
-                t.start()
+                # scheduler.pause()
+                # t = Timer(360.0, scheduler.resume())
+                # t.start()
+                return True
+            else:
+                return False
 
 
 def get_random_targets():
