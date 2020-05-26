@@ -74,7 +74,8 @@ class GeoDataManager:
 
     def initialize_result_dict(self) -> NoReturn:
         self.result_dict = dict.fromkeys(
-            [k["id"] for k in json.loads(self.json_data)["features"]], 0
+            [k["id"] for k in json_data["features"]], 0
+            # [k["id"] for k in json.loads(self.json_data)["features"]], 0
         )
         # try:
         #     # print('opening file in initialize result dict')
