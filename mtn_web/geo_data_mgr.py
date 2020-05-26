@@ -65,6 +65,8 @@ class GeoDataManager:
             #     ],
             #     0,
             # )
+
+
         except (KeyError, FileNotFoundError):
             self.result_dict = dict.fromkeys(
                 [k["id"] for k in json.load(self.json_data)["features"]], 0
