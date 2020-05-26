@@ -174,7 +174,7 @@ def new_query(request: requests.request) -> render or redirect:
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
             else:
-                result = Result.objects.get(pk=result.pk)
+                result = get_object_or_404(klass=Result, pk=result.pk)
                 global_map = data_tup[0]
                 filename = data_tup[1]
                 result.choro_html = global_map.get_root().render()
@@ -192,7 +192,7 @@ def new_query(request: requests.request) -> render or redirect:
 
 @login_required()
 def view_result(request, result_pk: int):
-    result = get_object_or_404(Result, pk=result_pk)
+    result = get_object_or_404(klass=Result, pk=result_pk)
     return render(
         request,
         "general/view_result.html",
@@ -245,14 +245,17 @@ def delete_result(request, result_pk: int):
 def view_user(request, member_pk):
     try:
         user = get_user_model().objects.get(pk=member_pk)
+
         try:
             last_post = user.posts.order_by("-id")[0]
         except IndexError:
             last_post = None
+
         try:
             recent_posts = user.posts.order_by("-id")[1:5]
         except IndexError:
             recent_posts = None
+
         try:
             recent_comments = None
             has_comments = user.comments.all()[0]
@@ -260,6 +263,7 @@ def view_user(request, member_pk):
                 recent_comments = user.comments.all()[0:5]
         except IndexError:
             recent_comments = None
+
         try:
             recent_results = None
             has_results = user.results.all()[0]
@@ -267,6 +271,7 @@ def view_user(request, member_pk):
                 recent_results = user.results.all()[1:5]
         except IndexError:
             recent_results = None
+
         return render(
             request,
             "general/view_user.html",
