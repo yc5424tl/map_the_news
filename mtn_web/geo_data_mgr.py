@@ -3,6 +3,7 @@ import logging
 from typing import NoReturn
 import requests
 from django.templatetags.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,8 @@ class GeoDataManager:
 
     def get_geo_data(self) -> bool:
         try:
-            with open(static("js/geo_data.json")) as json_file:
+            with open(staticfiles_storage.url('js/geo_data.json')) as json_file:
+            #with open(static("js/geo_data.json")) as json_file:
                 self.json_data = json_file
                 return True 
         except FileNotFoundError:
@@ -49,24 +51,22 @@ class GeoDataManager:
     def initialize_result_dict(self) -> NoReturn:
         try:
             # print('opening file in initialize result dict')
-            with open(static('js/geo_data.txt')) as file
-
-            json_data = json.load(file)
-            # print(f'json_data from json.load(file) = {json_data}')
-            features = json_data['features']
-            # print(f'features from json_data = {features}')
-            self.result_dict = dict.fromkeys(
-                [k['id'] for k in features], 0,
-            )
-            # self.result_dict = dict.fromkeys(
-            #     [
-            #         k["id"]
-            #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
-            #     ],
-            #     0,
-            # )
-
-
+            # with open(static('js/geo_data.txt')) as file:
+            with open(staticfiles_storage.url('js/geo_data.txt')) as file:
+                json_data = json.load(file)
+                # print(f'json_data from json.load(file) = {json_data}')
+                features = json_data['features']
+                # print(f'features from json_data = {features}')
+                self.result_dict = dict.fromkeys(
+                    [k['id'] for k in features], 0,
+                )
+                # self.result_dict = dict.fromkeys(
+                #     [
+                #         k["id"]
+                #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
+                #     ],
+                #     0,
+                # )
         except (KeyError, FileNotFoundError):
             self.result_dict = dict.fromkeys(
                 [k["id"] for k in json.load(self.json_data)["features"]], 0
@@ -81,6 +81,7 @@ class GeoDataManager:
                 self.json_data[key] = "CYP"
         return True
 
+    # TODO look at how to create files in s3 programatically
     def json_to_file(self) -> bool:
         with open(self.filename, "w") as outfile:
             json.dump(self.json_data, outfile)
