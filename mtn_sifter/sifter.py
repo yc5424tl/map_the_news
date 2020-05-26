@@ -8,15 +8,10 @@ from http import HTTPStatus
 import logging
 from django.templatetags.static import static
 import json
-from apscheduler.schedulers.background import BackgroundScheduler
-from django_apscheduler.jobstores import register_events
-from threading import Timer
 
 
 logger = logging.getLogger(__name__)
 api_key = os.getenv('SIFTER_API_KEY')
-# scheduler = BackgroundScheduler()
-# register_events(scheduler)
 
 
 def sift():

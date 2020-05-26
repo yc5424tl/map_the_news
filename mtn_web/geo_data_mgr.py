@@ -31,7 +31,7 @@ class GeoDataManager:
     def get_geo_data(self) -> bool:
         try:
             with open(staticfiles_storage.url('js/geo_data.json')) as json_file:
-            #with open(static("js/geo_data.json")) as json_file:
+                # with open(static("js/geo_data.json")) as json_file:
                 self.json_data = json_file
                 return True 
         except FileNotFoundError:
@@ -68,8 +68,9 @@ class GeoDataManager:
                 #     0,
                 # )
         except (KeyError, FileNotFoundError):
+            print(f'type(self.json_data) == {type(self.json_data)}')
             self.result_dict = dict.fromkeys(
-                [k["id"] for k in json.load(self.json_data)["features"]], 0
+                [k["id"] for k in json.loads(self.json_data)["features"]], 0
             )
 
     def add_result(self, a3_code: str) -> NoReturn:
