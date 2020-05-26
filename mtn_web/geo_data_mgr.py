@@ -17,40 +17,44 @@ class GeoDataManager:
     def verify_geo_data(self) -> bool:
         have_geo = self.check_geo_data()
         if have_geo:
-            have_json = self.json_to_file()
-            if have_json:
-                self.initialize_result_dict()
-                return True
+            # have_json = self.json_to_file()
+            # if have_json:
+            self.initialize_result_dict()
+            return True
         return False
 
     def check_geo_data(self) -> bool:
-        if self.json_data is None or self.req_data is None:
+        if self.json_data is None:
             return self.get_geo_data() and self.fix_cyprus_country_code()
 
     def get_geo_data(self) -> bool:
         try:
-            self.req_data = requests.get(
-                "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json"
-            )
-            if self.req_data.status_code == 200:
-                self.json_data = self.req_data.json()
-            else:
-                with open(static("js/geo_data.json")) as json_file:
-                    self.req_data = json_file
-            return True
-        except requests.exceptions.RequestException as e:
-            logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
-            return False
+            with open(static("js/geo_data.json")) as json_file:
+                self.json_data = json_file
+                return True 
+        except FileNotFoundError:
+            try:
+                self.req_data = requests.get(
+                    "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json"
+                )
+                if self.req_data.status_code == 200:
+                    self.json_data = self.req_data.json()
+                    return True
+                else:
+                    return False
+            except requests.exceptions.RequestException as e:
+                logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
+                return False
 
     def initialize_result_dict(self) -> NoReturn:
         try:
-            print('opening file in initialize result dict')
+            # print('opening file in initialize result dict')
             file = open('geo_data.txt')
 
             json_data = json.load(file)
-            print(f'json_data from json.load(file) = {json_data}')
+            # print(f'json_data from json.load(file) = {json_data}')
             features = json_data['features']
-            print(f'features from json_data = {features}')
+            # print(f'features from json_data = {features}')
             self.result_dict = dict.fromkeys(
                 [k['id'] for k in features], 0,
             )
