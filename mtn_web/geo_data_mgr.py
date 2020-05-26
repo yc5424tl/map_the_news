@@ -77,7 +77,9 @@ class GeoDataManager:
         self.result_dict[a3_code] += 1
 
     def fix_cyprus_country_code(self) -> bool:
-        for key in self.json_data:
+        print(f'type(self.json_data) = {type(self.json_data)}')
+        as_dict = json.loads(self.json_data)
+        for key in as_dict:
             if self.json_data[key] == "-99":
                 self.json_data[key] = "CYP"
         return True
