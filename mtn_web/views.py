@@ -1,23 +1,22 @@
-import json
+# import json
 import logging
-import os
-import sys
+# import os
+# import sys
 from logging import Logger
 from typing import NoReturn
 import pycountry
 import requests
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist
+# from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 from mtn_web.constructor import Constructor
 from mtn_web.forms import (
     CustomUserCreationForm,
@@ -27,17 +26,15 @@ from mtn_web.forms import (
     EditCommentForm,
     NewCommentForm,
 )
-# from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager, geo_data_mgr
 from mtn_web.models import Result, Source, Post, Comment, Category
 from mtn_web.query_mgr import Query
-import psycopg2
+
 
 logging.basicConfig(filename="news_map.log", level=logging.INFO)
 logger = Logger(__name__)
 
 constructor = Constructor()
-# geo_data_mgr = GeoDataManager()
 geo_map_mgr = GeoMapManager()
 
 
@@ -89,9 +86,9 @@ def logout_user(request: requests.request) -> NoReturn:
         messages.info(request, "Logout Successful", extra_tags="alert")
 
 
-def get_category(cat_num: int):
-    cats = {1: 'business', 2:'entertainment', 3: 'health', 4: 'science', 5: 'sports', 6: 'technology', 7: 'general'}
-    return cats[cat_num]
+# def get_category(cat_num: int):
+#     cats = {1: 'business', 2: 'entertainment', 3: 'health', 4: 'science', 5: 'sports', 6: 'technology', 7: 'general'}
+#     return cats[cat_num]
 
 
 # @login_required()
@@ -161,6 +158,8 @@ def new_query(request: requests.request) -> render or redirect:
                 author=request.user,
             )
             result.save()
+            print(f'result_type, result =>\n{type(result)},\n {result}')
+            print(f'result.pk = {result.pk}')
             article_list = constructor.build_article_data(article_data, result)
             # TODO get len of list for # of articles, in loop below map each to country
             for article in article_list:
@@ -168,9 +167,11 @@ def new_query(request: requests.request) -> render or redirect:
                     source_country=article.source_country
                 )
                 geo_data_mgr.add_result(country_code)
+            print('finished mapping articles')
             data_tup = geo_map_mgr.build_choropleth(
                 query_mgr.arg, query_mgr.focus, geo_data_mgr
             )
+            print(f'data_tup = {data_tup}')
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
             else:
@@ -479,58 +480,58 @@ def delete_comment(request, comment_pk):
     return redirect(request, last_url)
 
 
-@csrf_exempt
-def import_sources(request):
-    if request.method == "POST":
-        payload = json.loads(request.body)
-        print("\n\n=====================loads.PAYLOAD RECEIVED=======================\n\n:")
-        print(payload['sources'][:3])
-        print('\n\n')
-        if payload is None or '':
-            payload = json.load(request.body)
-            print('trying with json.load(payload)')
-            print('\n\n===================PAYLOAD RECEIVED===================\n\n')
-            print(payload['sources'][:3])
-            print('\n\n')
-        try:
-            source_data = payload["sources"]
-            count = 0
-            for data in source_data:
-                source, s_created = Source.objects.get_or_create(
-                    name=data["name"],
-                    defaults={
-                        "country": data["country"],
-                        "language": data["language"],
-                        "url": data["url"] if data["url"] else "",
-                    },
-                )
-                print(f'source = {source}')
-                print(f's_created = {s_created}')
-                count += 1
-                for cat_name in data["categories"]:  # Source exists in DB
-                    category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
-                    print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
-                    src_cat, sc_created = source.categories.get_or_create(name=category.name)
-                    try:
-                        source.categories.get(name=category.name)
-                    except ObjectDoesNotExist:
-                        source.categories.add(category)
-                        source.save()
-                    except BaseException as e:
-                        sys.stdout.write(
-                            f"\n CATCH-ALL EXCEPTION on has_category=record.categories.get(name=category.name)\n{e}"
-                        )
-            requests.get(os.getenv("STAY_ALIVE_URL"))
-            print(f'count = {count}')
-            return HttpResponse(status=200)
-        except (ValueError, BaseException) as e:
-            sys.stdout.write(f'POST data has no key "sources". ERROR: {e}')
-            requests.get(os.getenv("STAY_ALIVE_URL"))
-            return HttpResponse(status=204)
-    else:
-        sys.stdout.write(f"USER NOT AUTHENTICATED, STOPPING SOURCES IMPORT")
-        requests.get(os.getenv("STAY_ALIVE_URL"))
-        return HttpResponse(status=401)
+# @csrf_exempt
+# def import_sources(request):
+#     if request.method == "POST":
+#         payload = json.loads(request.body)
+#         print("\n\n=====================loads.PAYLOAD RECEIVED=======================\n\n:")
+#         print(payload['sources'][:3])
+#         print('\n\n')
+#         if payload is None or '':
+#             payload = json.load(request.body)
+#             print('trying with json.load(payload)')
+#             print('\n\n===================PAYLOAD RECEIVED===================\n\n')
+#             print(payload['sources'][:3])
+#             print('\n\n')
+#         try:
+#             source_data = payload["sources"]
+#             count = 0
+#             for data in source_data:
+#                 source, s_created = Source.objects.get_or_create(
+#                     name=data["name"],
+#                     defaults={
+#                         "country": data["country"],
+#                         "language": data["language"],
+#                         "url": data["url"] if data["url"] else "",
+#                     },
+#                 )
+#                 print(f'source = {source}')
+#                 print(f's_created = {s_created}')
+#                 count += 1
+#                 for cat_name in data["categories"]:  # Source exists in DB
+#                     category, c_created = Category.objects.get_or_create(name=cat_name['name']['name'])
+#                     print(f'\n\ncat_name[name][name] in import sources == {cat_name["name"]["name"]}\n\n')
+#                     src_cat, sc_created = source.categories.get_or_create(name=category.name)
+#                     try:
+#                         source.categories.get(name=category.name)
+#                     except ObjectDoesNotExist:
+#                         source.categories.add(category)
+#                         source.save()
+#                     except BaseException as e:
+#                         sys.stdout.write(
+#                             f"\n CATCH-ALL EXCEPTION on has_category=record.categories.get(name=category.name)\n{e}"
+#                         )
+#             requests.get(os.getenv("STAY_ALIVE_URL"))
+#             print(f'count = {count}')
+#             return HttpResponse(status=200)
+#         except (ValueError, BaseException) as e:
+#             sys.stdout.write(f'POST data has no key "sources". ERROR: {e}')
+#             requests.get(os.getenv("STAY_ALIVE_URL"))
+#             return HttpResponse(status=204)
+#     else:
+#         sys.stdout.write(f"USER NOT AUTHENTICATED, STOPPING SOURCES IMPORT")
+#         requests.get(os.getenv("STAY_ALIVE_URL"))
+#         return HttpResponse(status=401)
 
 
 # TODO def password_reset(request)

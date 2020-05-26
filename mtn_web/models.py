@@ -12,15 +12,15 @@ class QueryTypeChoice(Enum):
 
 class Result(models.Model):
     argument = models.CharField(max_length=500)
-    choropleth = models.TextField(max_length=2000000, blank=True)
-    choro_html = models.TextField(max_length=200000, blank=True)
-    data = models.CharField(max_length=200000, blank=True)
+    choropleth = models.TextField(max_length=2000000, blank=True, null=True)
+    choro_html = models.TextField(max_length=200000, blank=True, null=True)
+    data = models.CharField(max_length=200000, default='', blank=True)
     date_created = models.DateField(auto_now_add=True)
     date_last_modified = models.DateField(default=None, null=True, blank=True)
     date_range_end = models.DateField(default=None, null=True, blank=True)
     date_range_start = models.DateField(default=None, null=True, blank=True)
-    filename = models.TextField(max_length=700, blank=True)
-    filepath = models.TextField(max_length=1000, blank=True)
+    filename = models.TextField(max_length=700, blank=True, null=True)
+    filepath = models.TextField(max_length=1000, blank=True, null=True)
     public = models.BooleanField(default=False)
     query_type = models.CharField(
         max_length=50,
