@@ -17,6 +17,8 @@ from mtn_web.geo_data_mgr import GeoDataManager
 logger = logging.getLogger(__name__)
 CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 
+geo_data_mgr = GeoDataManager()
+
 
 class GeoMapManager:
     @staticmethod
@@ -28,19 +30,19 @@ class GeoMapManager:
         )
 
     def build_choropleth(
-        self, argument, focus, geo_data_mgr: GeoDataManager
+        self, argument, focus, geo_data_manager: GeoDataManager
     ) -> (folium.Map, str) or None:
         try:
             geo_data_url = staticfiles_storage.url('js/geo_data.json')
             world_df = gp.read_file(geo_data_url)
             global_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=3)
-            articles_per_country = pd.Series(geo_data_mgr.result_dict)
+            articles_per_country = pd.Series(geo_data_manager.result_dict)
             world_df["article_count"] = world_df["id"].map(articles_per_country)
             world_df.head()
             world_df.plot(column="article_count")
             threshold_scale = self.get_threshold(articles_per_country)
             folium.Choropleth(
-                geo_data=geo_data_mgr.json_data,
+                geo_data=geo_data_manager.json_data,
                 name="choropleth",
                 data=world_df,
                 columns=["id", "article_count"],
@@ -64,7 +66,7 @@ class GeoMapManager:
             global_map.save(CHORO_MAP_ROOT + filename)
             return global_map, filename if global_map and filename else None
    
-        except (requests.exceptions.RequestException, FileNotFoundError) as e:
+        except FileNotFoundError as e:
             logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
             return None
 

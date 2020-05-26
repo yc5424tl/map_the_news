@@ -27,8 +27,8 @@ from mtn_web.forms import (
     EditCommentForm,
     NewCommentForm,
 )
-from mtn_web.geo_data_mgr import GeoDataManager
-from mtn_web.geo_map_mgr import GeoMapManager
+# from mtn_web.geo_data_mgr import GeoDataManager
+from mtn_web.geo_map_mgr import GeoMapManager, geo_data_mgr
 from mtn_web.models import Result, Source, Post, Comment, Category
 from mtn_web.query_mgr import Query
 import psycopg2
@@ -37,7 +37,7 @@ logging.basicConfig(filename="news_map.log", level=logging.INFO)
 logger = Logger(__name__)
 
 constructor = Constructor()
-geo_data_mgr = GeoDataManager()
+# geo_data_mgr = GeoDataManager()
 geo_map_mgr = GeoMapManager()
 
 
@@ -94,42 +94,42 @@ def get_category(cat_num: int):
     return cats[cat_num]
 
 
-@login_required()
-def postgres(request):
-    if request.method == 'GET':
-        conn = psycopg2.connect(host=os.getenv('PG_HOST'),
-                                port='5432',
-                                database='sifter_data',
-                                user='postgres',
-                                password=os.getenv('PG_PW'))
-
-        cur = conn.cursor()
-        cur.execute(
-            "SELECT source.name, source.country, source.language, source.id, source_categories.source_id, source_categories.category_id from source, source_categories where source.id = source_categories.source_id;")
-
-        updates = {'categories': [], 'sources': []}
-        for row in cur:
-            str_category = get_category(row['category_id'])
-            category = Category.objects.get_or_create(name=str_category)
-            source = Source.objects.get(name=row['name'])
-            if source:
-                category = Source.categories.get(name=category)
-                if not category:
-                    source.categories.add(category)
-                    updates['categories'].append({source.name: category.name})
-                # source.categories.get_or_create(name=category)
-            if not source:
-                new_source = Source(
-                    name=row['name'],
-                    country=row['country'],
-                    language=row['language'],
-                )
-                new_source.categories.add(category)
-                updates['sources'].append({source.id: source.name})
-        conn.commit()
-        conn.close()
-        return updates
-    return 'Oh Hey There'
+# @login_required()
+# def postgres(request):
+#     if request.method == 'GET':
+#         conn = psycopg2.connect(host=os.getenv('PG_HOST'),
+#                                 port='5432',
+#                                 database='sifter_data',
+#                                 user='postgres',
+#                                 password=os.getenv('PG_PW'))
+#
+#         cur = conn.cursor()
+#         cur.execute(
+#             "SELECT source.name, source.country, source.language, source.id, source_categories.source_id, source_categories.category_id from source, source_categories where source.id = source_categories.source_id;")
+#
+#         updates = {'categories': [], 'sources': []}
+#         for row in cur:
+#             str_category = get_category(row['category_id'])
+#             category = Category.objects.get_or_create(name=str_category)
+#             source = Source.objects.get(name=row['name'])
+#             if source:
+#                 category = Source.categories.get(name=category)
+#                 if not category:
+#                     source.categories.add(category)
+#                     updates['categories'].append({source.name: category.name})
+#                 # source.categories.get_or_create(name=category)
+#             if not source:
+#                 new_source = Source(
+#                     name=row['name'],
+#                     country=row['country'],
+#                     language=row['language'],
+#                 )
+#                 new_source.categories.add(category)
+#                 updates['sources'].append({source.id: source.name})
+#         conn.commit()
+#         conn.close()
+#         return updates
+#     return 'Oh Hey There'
 
 
 @login_required()
@@ -184,7 +184,7 @@ def new_query(request: requests.request) -> render or redirect:
                 result.article_count = article_count
                 result.article_data_len = len(article_data)
                 result.save()
-            return redirect("view_result", result.pk)
+                return redirect("view_result", result.pk)
         else:
             print('geo_data_mgr.verify_geo_data == FALSE, rendering 404')
             redirect("handler404", request)
