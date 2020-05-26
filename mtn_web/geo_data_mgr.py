@@ -26,13 +26,19 @@ class GeoDataManager:
 
     def check_geo_data(self) -> bool:
         if self.json_data is None:
-            return self.get_geo_data() and self.fix_cyprus_country_code()
+            have_geo_data = self.get_geo_data()
+            have_cyprus_fix = self.fix_cyprus_country_code()
+            if have_geo_data and have_cyprus_fix:
+                return True
+            else:
+                return False
 
     def get_geo_data(self) -> bool:
         try:
             geo_data = staticfiles_storage.url('js/geo_data.json')
             # with open(static("js/geo_data.json")) as json_file:
             self.json_data = geo_data
+            print('have self.json_data from static')
             return True
         except FileNotFoundError:
             try:
@@ -41,12 +47,24 @@ class GeoDataManager:
                 )
                 if self.req_data.status_code == 200:
                     self.json_data = self.req_data.json()
+                    print('have self.json_data from request')
                     return True
                 else:
                     return False
             except requests.exceptions.RequestException as e:
                 logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
                 return False
+
+    def fix_cyprus_country_code(self) -> bool:
+        print(f'type(self.json_data) = {type(self.json_data)}')
+        print(f'\n\nself.json_data =====>\n{self.json_data}\n\n')
+        as_dict = json.loads(self.json_data)
+        print(f'type(as_dict) == {type(as_dict)}')
+        print('\n\nas_dict ======>\n{as_dict}\n\n')
+        for key in as_dict:
+            if self.json_data[key] == "-99":
+                self.json_data[key] = "CYP"
+        return True
 
     def initialize_result_dict(self) -> NoReturn:
         try:
@@ -75,14 +93,6 @@ class GeoDataManager:
 
     def add_result(self, a3_code: str) -> NoReturn:
         self.result_dict[a3_code] += 1
-
-    def fix_cyprus_country_code(self) -> bool:
-        print(f'type(self.json_data) = {type(self.json_data)}')
-        as_dict = json.loads(self.json_data)
-        for key in as_dict:
-            if self.json_data[key] == "-99":
-                self.json_data[key] = "CYP"
-        return True
 
     # TODO look at how to create files in s3 programatically
     def json_to_file(self) -> bool:
