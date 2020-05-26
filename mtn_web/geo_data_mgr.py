@@ -30,10 +30,10 @@ class GeoDataManager:
 
     def get_geo_data(self) -> bool:
         try:
-            with open(staticfiles_storage.url('js/geo_data.json')) as json_file:
-                # with open(static("js/geo_data.json")) as json_file:
-                self.json_data = json_file
-                return True 
+            geo_data = staticfiles_storage.url('js/geo_data.json')
+            # with open(static("js/geo_data.json")) as json_file:
+            self.json_data = geo_data
+            return True
         except FileNotFoundError:
             try:
                 self.req_data = requests.get(
@@ -52,21 +52,21 @@ class GeoDataManager:
         try:
             # print('opening file in initialize result dict')
             # with open(static('js/geo_data.txt')) as file:
-            with open(staticfiles_storage.url('js/geo_data.txt')) as file:
-                json_data = json.load(file)
-                # print(f'json_data from json.load(file) = {json_data}')
-                features = json_data['features']
-                # print(f'features from json_data = {features}')
-                self.result_dict = dict.fromkeys(
-                    [k['id'] for k in features], 0,
-                )
-                # self.result_dict = dict.fromkeys(
-                #     [
-                #         k["id"]
-                #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
-                #     ],
-                #     0,
-                # )
+            geo_data = staticfiles_storage.url('js/geo_data.txt')
+            json_data = json.load(geo_data)
+            # print(f'json_data from json.load(file) = {json_data}')
+            features = json_data['features']
+            # print(f'features from json_data = {features}')
+            self.result_dict = dict.fromkeys(
+                [k['id'] for k in features], 0,
+            )
+            # self.result_dict = dict.fromkeys(
+            #     [
+            #         k["id"]
+            #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
+            #     ],
+            #     0,
+            # )
         except (KeyError, FileNotFoundError):
             print(f'type(self.json_data) == {type(self.json_data)}')
             self.result_dict = dict.fromkeys(
