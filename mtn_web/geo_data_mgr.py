@@ -35,9 +35,12 @@ class GeoDataManager:
 
     def get_geo_data(self) -> bool:
         try:
-            geo_data = staticfiles_storage.url('js/geo_data.json')
+            geo_data_url = staticfiles_storage.url('js/geo_data.json')
+            response = requests.get(geo_data_url)
+            geo_data_json = response.json()
+            print(f'geo_data_json type={type(geo_data_json)} value=>\n{geo_data_json}\n\n')
             # with open(static("js/geo_data.json")) as json_file:
-            self.json_data = geo_data
+            self.json_data = geo_data_json
             print('have self.json_data from static')
             return True
         except FileNotFoundError:
