@@ -59,40 +59,49 @@ class GeoDataManager:
                 return False
 
     def fix_cyprus_country_code(self) -> bool:
-        print(f'type(self.json_data) = {type(self.json_data)}')
-        print(f'\n\nself.json_data =====>\n{self.json_data}\n\n')
-        as_dict = json.loads(self.json_data)
-        print(f'type(as_dict) == {type(as_dict)}')
-        print('\n\nas_dict ======>\n{as_dict}\n\n')
-        for key in as_dict:
-            if self.json_data[key] == "-99":
-                self.json_data[key] = "CYP"
+        # print(f'type(self.json_data) = {type(self.json_data)}')
+        # print(f'\n\nself.json_data =====>\n{self.json_data}\n\n')
+        # as_dict = json.loads(self.json_data)
+        # print(f'type(as_dict) == {type(as_dict)}')
+        # print('\n\nas_dict ======>\n{as_dict}\n\n')
+        # for key in as_dict:
+        #     if self.json_data[key] == "-99":
+        #         self.json_data[key] = "CYP"
+        for dict in self.json_data['features']:
+            if dict['id'] == '-99':
+                dict['id'] = 'CYP'
         return True
 
     def initialize_result_dict(self) -> NoReturn:
-        try:
-            # print('opening file in initialize result dict')
-            # with open(static('js/geo_data.txt')) as file:
-            geo_data = staticfiles_storage.url('js/geo_data.txt')
-            json_data = json.load(geo_data)
-            # print(f'json_data from json.load(file) = {json_data}')
-            features = json_data['features']
-            # print(f'features from json_data = {features}')
-            self.result_dict = dict.fromkeys(
-                [k['id'] for k in features], 0,
-            )
-            # self.result_dict = dict.fromkeys(
-            #     [
-            #         k["id"]
-            #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
-            #     ],
-            #     0,
-            # )
-        except (KeyError, FileNotFoundError):
-            print(f'type(self.json_data) == {type(self.json_data)}')
-            self.result_dict = dict.fromkeys(
-                [k["id"] for k in json.loads(self.json_data)["features"]], 0
-            )
+        self.result_dict = dict.fromkeys(
+            [k["id"] for k in json.loads(self.json_data)["features"]], 0
+        )
+        # try:
+        #     # print('opening file in initialize result dict')
+        #     # with open(static('js/geo_data.txt')) as file:
+        #     geo_data_url = staticfiles_storage.url('js/geo_data.txt')
+        #     response = requests.get(geo_data_url)
+        #     geo_data_txt = response.text
+        #     geo_data_json = json.loads(geo_data_txt)
+        #     # json_data = json.load(geo_data)
+        #     # print(f'json_data from json.load(file) = {json_data}')
+        #     features = geo_data_json['features']
+        #     # print(f'features from json_data = {features}')
+        #     self.result_dict = dict.fromkeys(
+        #         [k['id'] for k in features], 0,
+        #     )
+        #     # self.result_dict = dict.fromkeys(
+        #     #     [
+        #     #         k["id"]
+        #     #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
+        #     #     ],
+        #     #     0,
+        #     # )
+        # except (KeyError, FileNotFoundError):
+        #     print(f'type(self.json_data) == {type(self.json_data)}')
+        #     self.result_dict = dict.fromkeys(
+        #         [k["id"] for k in json.loads(self.json_data)["features"]], 0
+        #     )
 
     def add_result(self, a3_code: str) -> NoReturn:
         self.result_dict[a3_code] += 1
