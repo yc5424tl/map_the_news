@@ -61,8 +61,8 @@ class GeoDataManager:
         self.result_dict = dict.fromkeys(
             [k["id"] for k in self.json_data["features"]], 0
         )
-        self.result_dict["SGP"] = None
-        self.result_dict["HKG"] = None 
+        self.result_dict["SGP"] = 0
+        self.result_dict["HKG"] = 0
 
     def add_result(self, a3_code: str) -> NoReturn:
         self.result_dict[a3_code] += 1
