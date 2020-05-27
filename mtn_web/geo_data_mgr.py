@@ -63,6 +63,8 @@ class GeoDataManager:
         )
 
     def add_result(self, a3_code: str) -> NoReturn:
+        if a3_code == 'HKG':
+            a3_code = 'CHN'
         self.result_dict[a3_code] += 1
 
     # TODO look at how to create files in s3 programatically

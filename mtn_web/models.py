@@ -119,7 +119,44 @@ class Post(models.Model):
     public = models.BooleanField(default=False)
 
     def get_choro_map(self) -> str or NoReturn:
+        all_results = Result.objects.all()
+        for result in all_results:
+            print(f'result.pk = {result.pk}')
+            print(f'results.argument = {result.argument}')
+            if result.choropleth:
+                print(f'result.choropleth[:300] = {result.choropleth[:300]}')
+            else:
+                print('no choropleth')
+            if result.choro_html:
+                print(f'result.choro_html[:300] = {result.choro_html[:300]}')
+            else:
+                print('no choro_html')
+            print(f'result.data (default is '') = {result.data}')
+            print(f'date_created = {result.date_created}')
+            if result.date_last_modified:
+                print(f'result.date_last_modified = {result.date_last_modified}')
+            else:
+                print('no date_last_modified')
+            if result.filename:
+                print(f'result.filename = {result.filename}')
+            else:
+                print('no result.filename')
+            if result.filepath:
+                print(f'result.filepath = {result.filepath}')
+            else:
+                print('no result.filepath')
+            print(f'result.public (default = False) = {result.public}')
+            print(f'result.query_type (default = QueryTypeChoice.ALL) = {result.query_type}')
+            if result.author:
+                print(f'result.author = {result.author}, id={result.author_id}')
+            else:
+                print('no result.author')
+            print(f'result.archived (default = False) = {result.archived}')
+            print(f'result.article_count (default = 0) = {result.article_count}')
+            print(f'result.article_data_len (default = 0) = {result.article_data_len}')
         if self.result:
+            print(f'if self.result -> self.result.pk == {self.result.pk}')
+
             result_pk = self.result.pk
             result = Result.objects.get(result_pk)
             return result.choropleth if result.choropleth else None
