@@ -61,10 +61,10 @@ class GeoDataManager:
         self.result_dict = dict.fromkeys(
             [k["id"] for k in self.json_data["features"]], 0
         )
+        self.result_dict["SGP"] = None
+        self.result_dict["HKG"] = None 
 
     def add_result(self, a3_code: str) -> NoReturn:
-        if a3_code == "HKG":
-            a3_code = "CHN"
         self.result_dict[a3_code] += 1
 
     # TODO look at how to create files in s3 programatically
