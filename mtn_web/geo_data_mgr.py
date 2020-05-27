@@ -38,7 +38,7 @@ class GeoDataManager:
             geo_data_url = staticfiles_storage.url('js/geo_data.json')
             response = requests.get(geo_data_url)
             geo_data_json = response.json()
-            print(f'geo_data_json type={type(geo_data_json)} value=>\n{geo_data_json}\n\n')
+            # print(f'geo_data_json type={type(geo_data_json)} value=>\n{geo_data_json}\n\n')
             # with open(static("js/geo_data.json")) as json_file:
             self.json_data = geo_data_json
             print('have self.json_data from static')
@@ -67,9 +67,9 @@ class GeoDataManager:
         # for key in as_dict:
         #     if self.json_data[key] == "-99":
         #         self.json_data[key] = "CYP"
-        for dict in self.json_data['features']:
-            if dict['id'] == '-99':
-                dict['id'] = 'CYP'
+        for dikt in self.json_data['features']:
+            if dikt['id'] == '-99':
+                dikt['id'] = 'CYP'
         return True
 
     def initialize_result_dict(self) -> NoReturn:

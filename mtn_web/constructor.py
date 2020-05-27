@@ -68,7 +68,7 @@ class Constructor:
 
     def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:
         article_list = []
-        print(f'ARTICLE_DATA_LIST in constructor.build_article_data ==> \n\n{article_data_list}')
+        # print(f'ARTICLE_DATA_LIST in constructor.build_article_data ==> \n\n{article_data_list}')
         for article_data in article_data_list:
             new_article = self.new_article(article_data, query_result)
             if new_article:

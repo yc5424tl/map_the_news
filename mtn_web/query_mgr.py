@@ -59,7 +59,7 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
-        print(f'response for query = {response.json()}')
+        # print(f'response for query = {response.json()}')
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
         article_data = []
