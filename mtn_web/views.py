@@ -134,17 +134,29 @@ def new_query(request: requests.request) -> render or redirect:
                 print(f'result.pk == {result.pk}')
                 global_map, filename = data_tup[0], data_tup[1]
                 result_goc, created = Result.objects.get_or_create(
+                    query_type = query_mgr.focus,
+                    argument=query_mgr.arg,
+                    data=article_data,
+                    author=request.user,
                     choro_html=global_map.get_root().render(),
                     filename=filename,
-                    author=get_user_model().objects.get(pk=request.user.pk),
+                    # author=get_user_model().objects.get(pk=request.user.pk),
                     choropleth=global_map._repr_html_(),
                     article_count=article_count,
                     article_data_len=len(article_data)
                 )
                 print(f'created == {created}')
                 result_goc.save()
-                print(f'result_goc.pk == {result_goc.pk}')
-                return redirect("view_result", result_goc.pk)
+                if result_goc.pk:
+                    print(f'result_goc.pk == {result_goc.pk}')
+                    return redirect("view_result", result_goc.pk)
+                else:
+                    print('no result_goc.pk')
+                    if result.pk:
+                        print(f'result.pk = {result.pk}')
+                    else:
+                        print('no result.pk')
+                    return redirect('view_result', result.pk)
         else:
             redirect("handler404", request)
 

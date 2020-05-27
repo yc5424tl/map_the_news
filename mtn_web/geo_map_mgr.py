@@ -17,6 +17,7 @@ geo_data_mgr = GeoDataManager()
 
 
 class GeoMapManager:
+
     @staticmethod
     def map_source(source_country):
         return (
