@@ -158,7 +158,7 @@ def new_query(request: requests.request) -> render or redirect:
                 author=request.user,
             )
             result.save()
-            print(f'result_type, result =>\n{type(result)},\n {result}')
+            print(f'result_type, result =>\n{type(result)},\nQuery Type {result.query_type}\nArgument: {result.argument}\nData: {result.article_data[0-2]}\nAuthor: {request.user.get_full_name()}')
             print(f'result.pk = {result.pk}')
             article_list = constructor.build_article_data(article_data, result)
             # TODO get len of list for # of articles, in loop below map each to country
