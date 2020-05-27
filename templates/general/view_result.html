@@ -55,11 +55,11 @@
                                 {% csrf_token %}
                                 <div class="input-group view-query" id="view-query-form-header">
                                         <p class="input-group-text title-center text-center" id="new-post-span">Post Your Query</p>
-                                    <input type="text" id="view-query-form-input-title" class="form-control view-query" placeholder="Enter Title Here" aria-label="Post Title" name="_title">
+                                    <input type="text" id="view-query-form-input-title" class="form-control view-query" placeholder="Enter Title Here" aria-label="Post Title" name="title">
                                 </div>
                                 <div class="input-group view-query" id="view-query-form-textarea-container">
                                     <label class="input-group-prepend view-query" id="textarea-label">
-                                        <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="_body" rows="11"></textarea>
+                                        <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
                                     </label>
                                     <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
                                 </div>
