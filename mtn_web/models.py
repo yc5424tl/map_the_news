@@ -24,7 +24,7 @@ class Result(models.Model):
     public = models.BooleanField(default=False)
     query_type = models.CharField(
         max_length=50,
-        choices=[tag for tag in QueryTypeChoice],
+        choices=[(tag, tag.value) for tag in QueryTypeChoice],
         default=QueryTypeChoice.ALL,
     )
     author = models.ForeignKey(
