@@ -84,9 +84,9 @@ def logout_user(request: requests.request) -> NoReturn:
 
 
 def get_query_type(qm_focus: str):
-    if qm_focus == 'QueryTypeChoice.ALL':
+    if qm_focus == 'QueryTypeChoice.ALL' or 'all'.casefold():
         query_type = QueryTypeChoice.ALL
-    elif qm_focus == 'QueryTypeChoice.HDL':
+    elif qm_focus == 'QueryTypeChoice.HDL' or 'headlines'.casefold():
         query_type = QueryTypeChoice.HDL
     else:
         logger.log(level=logging.ERROR, msg=f'query_type not found in get_query_type for qm_focus of {qm_focus}')
