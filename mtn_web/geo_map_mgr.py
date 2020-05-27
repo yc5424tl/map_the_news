@@ -1,17 +1,13 @@
 import logging
 import os
 from datetime import datetime
-
 import folium
 import geopandas as gp
 import numpy as np
 import pandas as pd
 import pycountry
-
 from django.conf import settings
-
 from django.contrib.staticfiles.storage import staticfiles_storage
-
 from mtn_web.geo_data_mgr import GeoDataManager
 
 logger = logging.getLogger(__name__)

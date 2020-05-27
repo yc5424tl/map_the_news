@@ -6,8 +6,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class QueryTypeChoice(Enum):
-    HDL = "headlines"
-    ALL = "all"
+    HDL = "Headlines"
+    ALL = "All"
 
 
 class Result(models.Model):
@@ -24,7 +24,7 @@ class Result(models.Model):
     public = models.BooleanField(default=False)
     query_type = models.CharField(
         max_length=50,
-        choices=[(tag, tag.value) for tag in QueryTypeChoice],
+        choices=[tag for tag in QueryTypeChoice],
         default=QueryTypeChoice.ALL,
     )
     author = models.ForeignKey(
@@ -48,54 +48,9 @@ class Result(models.Model):
         return f"{self.date_created.month}, {self.date_created.day}, {self.date_created.year}"
 
 
-# class ChoiceEnum(Enum):
-#     @classmethod
-#     def choices(cls):
-#         return [(choice.name, choice.value) for choice in cls]
-
-
-# class CategoryChoices(models.TextChoices):
-#     BUSINESS = 'BIZ', 'business'
-#     ENTERTAINMENT = 'ENT', 'entertainment'
-#     GENERAL = 'GEN', 'general'
-#     HEALTH = 'HLT', 'health'
-#     SCIENCE = 'SCI', 'science'
-#     SPORTS = 'SPO', 'sports'
-#     TECHNOLOGY = 'TEC', 'technology'
-
-
 class Category(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
-
-    # name = models.CharField(max_length=50, choices=CategoryChoices.choices)
-
-    # class Name(models.TextChoices):
-    #     BUSINESS = 'BIZ', _('business')
-    #     ENTERTAINMENT = 'ENT', _('entertainment')
-    #     GENERAL = 'GEN', _('general')
-    #     HEALTH = 'HLT', _('health')
-    #     SCIENCE = 'SCI', _('science')
-    #     SPORTS = 'SPO', _('sports')
-    #     TECHNOLOGY = 'TEC', _('technology')
-    # class Name(Enum):
-    #     BUSINESS = 'BIZ'
-    #     ENTERTAINMENT = 'ENT'
-    #     GENERAL = 'GEN'
-    #     HEALTH = 'HLT'
-    #     SCIENCE = 'SCI'
-    #     SPORTS = 'SPO'
-    #     TECHNOLOGY = 'TEC'
-    #     CHOICES = (
-    #         (BUSINESS, 'business'),
-    #         (ENTERTAINMENT, 'entertainment'),
-    #         (GENERAL, 'general'),
-    #         (HEALTH, 'health'),
-    #         (SCIENCE, 'science'),
-    #         (SPORTS, 'sports'),
-    #         (TECHNOLOGY, 'technology'),
-    #     )
-    # name = models.CharField(max_length=50, choices=Name.CHOICES)
 
 
 class Source(models.Model):

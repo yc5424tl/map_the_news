@@ -14,7 +14,7 @@ class Query:
     def __init__(
         self,
         arg: str,
-        focus: str,
+        focus: QueryTypeChoice,
         from_date: datetime = None,
         to_date: datetime = None,
         endpoint: str = None,
@@ -36,21 +36,9 @@ class Query:
         return has_range and is_past
 
     def get_endpoint(self) -> bool:
-        # valid_date_range = (
-        #     self.validate_date_range() if self.from_date and self.to_date else False
-        # )
-        # if valid_date_range:
-        #     if self.focus == "all":
-        #         self.endpoint = f"https://newsapi.org/v2/everything?q={self.arg}&from={self.from_date}&to={self.to_date}&apiKey={api_key}&pageSize=100"
-        #     elif self.focus == "headlines":
-        #         self.endpoint = "b"
-        #     else:
-        #         self.endpoint = "c"
-        #         return False
-        # else:
-        if self.focus == 'QueryTypeChoice.ALL':
+        if self.focus == QueryTypeChoice.ALL:
             self.endpoint = f"https://newsapi.org/v2/everything?q={self.arg}&apiKey={api_key}&pageSize=100"
-        elif self.focus == 'QueryTypeChoice.HDL':
+        elif self.focus == QueryTypeChoice.HDL:
             self.endpoint = f"https://newsapi.org/v2/top-headlines?q={self.arg}&apiKey={api_key}&pageSize=100"
         else:
             self.endpoint = None
@@ -59,7 +47,6 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
-        # print(f'response for query = {response.json()}')
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
         article_data = []
@@ -87,8 +74,6 @@ class Query:
         #             logger.log(level=logging.INFO, msg=f'KeyErrorException while getting article_data on {p}')
         #             logger.log(level=logging.ERROR, msg=logger.exception(kE))
         #             continue
-        #     print(f'len(article data)={len(article_data)} pages={pages} article_count={article_count}')
-        print(f'returning article_data from execute query:\n\n{article_data}')
         return article_data, article_count
 
     def to_file(self, data) -> bool:

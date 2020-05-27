@@ -2,7 +2,6 @@ import json
 import logging
 from typing import NoReturn
 import requests
-from django.templatetags.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 logger = logging.getLogger(__name__)
@@ -18,8 +17,6 @@ class GeoDataManager:
     def verify_geo_data(self) -> bool:
         have_geo = self.check_geo_data()
         if have_geo:
-            # have_json = self.json_to_file()
-            # if have_json:
             self.initialize_result_dict()
             return True
         return False
@@ -38,10 +35,7 @@ class GeoDataManager:
             geo_data_url = staticfiles_storage.url('js/geo_data.json')
             response = requests.get(geo_data_url)
             geo_data_json = response.json()
-            # print(f'geo_data_json type={type(geo_data_json)} value=>\n{geo_data_json}\n\n')
-            # with open(static("js/geo_data.json")) as json_file:
             self.json_data = geo_data_json
-            print('have self.json_data from static')
             return True
         except FileNotFoundError:
             try:
@@ -50,7 +44,6 @@ class GeoDataManager:
                 )
                 if self.req_data.status_code == 200:
                     self.json_data = self.req_data.json()
-                    print('have self.json_data from request')
                     return True
                 else:
                     return False
@@ -59,14 +52,6 @@ class GeoDataManager:
                 return False
 
     def fix_cyprus_country_code(self) -> bool:
-        # print(f'type(self.json_data) = {type(self.json_data)}')
-        # print(f'\n\nself.json_data =====>\n{self.json_data}\n\n')
-        # as_dict = json.loads(self.json_data)
-        # print(f'type(as_dict) == {type(as_dict)}')
-        # print('\n\nas_dict ======>\n{as_dict}\n\n')
-        # for key in as_dict:
-        #     if self.json_data[key] == "-99":
-        #         self.json_data[key] = "CYP"
         for dikt in self.json_data['features']:
             if dikt['id'] == '-99':
                 dikt['id'] = 'CYP'
@@ -75,34 +60,7 @@ class GeoDataManager:
     def initialize_result_dict(self) -> NoReturn:
         self.result_dict = dict.fromkeys(
             [k["id"] for k in self.json_data["features"]], 0
-            # [k["id"] for k in json.loads(self.json_data)["features"]], 0
         )
-        # try:
-        #     # print('opening file in initialize result dict')
-        #     # with open(static('js/geo_data.txt')) as file:
-        #     geo_data_url = staticfiles_storage.url('js/geo_data.txt')
-        #     response = requests.get(geo_data_url)
-        #     geo_data_txt = response.text
-        #     geo_data_json = json.loads(geo_data_txt)
-        #     # json_data = json.load(geo_data)
-        #     # print(f'json_data from json.load(file) = {json_data}')
-        #     features = geo_data_json['features']
-        #     # print(f'features from json_data = {features}')
-        #     self.result_dict = dict.fromkeys(
-        #         [k['id'] for k in features], 0,
-        #     )
-        #     # self.result_dict = dict.fromkeys(
-        #     #     [
-        #     #         k["id"]
-        #     #         for k in json.load(open(static(f"js/{self.filename}")))["features"]
-        #     #     ],
-        #     #     0,
-        #     # )
-        # except (KeyError, FileNotFoundError):
-        #     print(f'type(self.json_data) == {type(self.json_data)}')
-        #     self.result_dict = dict.fromkeys(
-        #         [k["id"] for k in json.loads(self.json_data)["features"]], 0
-        #     )
 
     def add_result(self, a3_code: str) -> NoReturn:
         self.result_dict[a3_code] += 1
