@@ -12,6 +12,7 @@ class Constructor:
     def new_article(self, api_response, result: Result) -> Article or False:
         source = self.verify_source(api_response["source"]["name"])
         date_published = self.verify_date(api_response["publishedAt"])
+        description = None
         try:
             if api_response['description'] is not None:
                 if self.verify_str(api_response['description']):
