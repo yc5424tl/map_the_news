@@ -13,11 +13,11 @@ class Constructor:
         source = self.verify_source(api_response["source"]["name"])
         date_published = self.verify_date(api_response["publishedAt"])
         try:
-            description = (
-                self.verify_str(api_response["description"])
-                if api_response["description"] is not None
-                else "Unavailable"
-            )
+            if api_response['description'] is not None:
+                if self.verify_str(api_response['description']):
+                    description = self.verify_str(api_response['description'])
+            else:
+                description = 'Unavailable'
         except UnicodeDecodeError as e:
             logger.log(
                 level=logging.DEBUG,
