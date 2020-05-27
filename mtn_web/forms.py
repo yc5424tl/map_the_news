@@ -1,5 +1,4 @@
 from django import forms
-from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
 
@@ -43,7 +42,7 @@ class NewQueryForm(forms.ModelForm):
 
 
 class SaveResultForm(forms.ModelForm):
-    #  add option to publish in this form
+    # TODO add option to publish in this form
     class Meta:
         model = Result
         fields = ("public",)

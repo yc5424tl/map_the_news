@@ -3,7 +3,7 @@ from django.contrib import admin
 from mtn_web.models import Source, Post, Result, Article, Comment, Category
 
 from django.contrib.auth.admin import UserAdmin
-from .models import User# Register your models here.
+from .models import User  # Register your models here.
 
 
 admin.site.register(User, UserAdmin)

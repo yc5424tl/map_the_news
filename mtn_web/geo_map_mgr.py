@@ -17,7 +17,6 @@ geo_data_mgr = GeoDataManager()
 
 
 class GeoMapManager:
-
     @staticmethod
     def map_source(source_country):
         return (
@@ -30,9 +29,11 @@ class GeoMapManager:
         self, argument, focus, geo_data_manager: GeoDataManager
     ) -> (folium.Map, str) or None:
         try:
-            geo_data_url = staticfiles_storage.url('js/geo_data.json')
+            geo_data_url = staticfiles_storage.url("js/geo_data.json")
             world_df = gp.read_file(geo_data_url)
-            global_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=3)
+            global_map = folium.Map(
+                location=[0, 0], tiles="OpenStreetMap", zoom_start=3
+            )
             articles_per_country = pd.Series(geo_data_manager.result_dict)
             world_df["article_count"] = world_df["id"].map(articles_per_country)
             world_df.head()
@@ -62,7 +63,7 @@ class GeoMapManager:
             filename = f"{datetime.ctime(datetime.now()).replace(' ', '_').replace(':', '-')}_{focus}_query_{argument}_choropleth_map.html"
             global_map.save(CHORO_MAP_ROOT + filename)
             return global_map, filename if global_map and filename else None
-   
+
         except FileNotFoundError as e:
             logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
             return None

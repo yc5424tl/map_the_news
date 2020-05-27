@@ -1,7 +1,5 @@
-# import json
 import logging
-# import os
-# import sys
+
 from logging import Logger
 from typing import NoReturn
 import pycountry
@@ -84,12 +82,15 @@ def logout_user(request: requests.request) -> NoReturn:
 
 
 def get_query_type(qm_focus: str):
-    if qm_focus == 'QueryTypeChoice.ALL' or 'all'.casefold():
+    if qm_focus == "QueryTypeChoice.ALL" or "all".casefold():
         query_type = QueryTypeChoice.ALL
-    elif qm_focus == 'QueryTypeChoice.HDL' or 'headlines'.casefold():
+    elif qm_focus == "QueryTypeChoice.HDL" or "headlines".casefold():
         query_type = QueryTypeChoice.HDL
     else:
-        logger.log(level=logging.ERROR, msg=f'query_type not found in get_query_type for qm_focus of {qm_focus}')
+        logger.log(
+            level=logging.ERROR,
+            msg=f"query_type not found in get_query_type for qm_focus of {qm_focus}",
+        )
         query_type = None
     return query_type
 
@@ -103,11 +104,14 @@ def new_query(request: requests.request) -> render or redirect:
         if geo_data_mgr.verify_geo_data():
             query_mgr = Query(
                 arg=request.POST.get("argument"),
-                focus=get_query_type(request.POST.get('query_type'))
+                focus=get_query_type(request.POST.get("query_type")),
             )
             have_endpoint = query_mgr.get_endpoint()
             if have_endpoint is False:
-                messages.info(request, message='Unable to contact endpoint to complete your query.')
+                messages.info(
+                    request,
+                    message="Unable to contact endpoint to complete your query.",
+                )
                 return render(new_query, request)
             query_data = query_mgr.execute_query()
             article_data, article_count = query_data[0], query_data[1]
@@ -131,7 +135,6 @@ def new_query(request: requests.request) -> render or redirect:
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
             else:
-                # print(f'result.pk == {result.pk}')
                 global_map, filename = data_tup[0], data_tup[1]
                 result.choro_html = global_map.get_root().render()
                 result.filename = filename
@@ -139,31 +142,7 @@ def new_query(request: requests.request) -> render or redirect:
                 result.article_count = article_count
                 result.article_data_len = len(article_data)
                 result.save()
-                return redirect('view_result', result.pk)
-                # result_goc, created = Result.objects.get_or_create(
-                #     query_type=query_mgr.focus,
-                #     argument=query_mgr.arg,
-                #     data=article_data,
-                #     author=request.user,
-                #     choro_html=global_map.get_root().render(),
-                #     filename=filename,
-                #     # author=get_user_model().objects.get(pk=request.user.pk),
-                #     choropleth=global_map._repr_html_(),
-                #     article_count=article_count,
-                #     article_data_len=len(article_data)
-                # )
-                # print(f'created == {created}')
-                # result_goc.save()
-                # if result_goc.pk:
-                #     print(f'result_goc.pk == {result_goc.pk}')
-                #     return redirect("view_result", result_goc.pk)
-                # else:
-                #     print('no result_goc.pk')
-                #     if result.pk:
-                #         print(f'result.pk = {result.pk}')
-                #     else:
-                #         print('no result.pk')
-                #     return redirect('view_result', result.pk)
+                return redirect("view_result", result.pk)
         else:
             redirect("handler404", request)
 
@@ -281,9 +260,9 @@ def new_post(request):
                 pk = request.user.pk
                 author = get_user_model().objects.get(pk=pk)
                 if form.is_valid():
-                    title = form.cleaned_data["title"]
+                    title = form.cleaned_data.get("title")
                     public = request.POST.get("save_radio")
-                    body = form.cleaned_data["body"]
+                    body = form.cleaned_data.get("body")
                     result_pk = request.POST.get("result_pk")
                     result = Result.objects.get(pk=result_pk)
                     post = Post(

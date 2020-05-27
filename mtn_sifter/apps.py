@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class MtnSifterConfig(AppConfig):
-    name = 'mtn_sifter'
+    name = "mtn_sifter"

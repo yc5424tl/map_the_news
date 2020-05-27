@@ -6,33 +6,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mtn_web', '0001_initial'),
+        ("mtn_web", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='result',
-            name='choro_html',
+            model_name="result",
+            name="choro_html",
             field=models.TextField(blank=True, max_length=200000, null=True),
         ),
         migrations.AlterField(
-            model_name='result',
-            name='choropleth',
+            model_name="result",
+            name="choropleth",
             field=models.TextField(blank=True, max_length=2000000, null=True),
         ),
         migrations.AlterField(
-            model_name='result',
-            name='data',
-            field=models.CharField(blank=True, default='', max_length=200000),
+            model_name="result",
+            name="data",
+            field=models.CharField(blank=True, default="", max_length=200000),
         ),
         migrations.AlterField(
-            model_name='result',
-            name='filename',
+            model_name="result",
+            name="filename",
             field=models.TextField(blank=True, max_length=700, null=True),
         ),
         migrations.AlterField(
-            model_name='result',
-            name='filepath',
+            model_name="result",
+            name="filepath",
             field=models.TextField(blank=True, max_length=1000, null=True),
         ),
     ]

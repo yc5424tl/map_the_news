@@ -32,7 +32,7 @@ class GeoDataManager:
 
     def get_geo_data(self) -> bool:
         try:
-            geo_data_url = staticfiles_storage.url('js/geo_data.json')
+            geo_data_url = staticfiles_storage.url("js/geo_data.json")
             response = requests.get(geo_data_url)
             geo_data_json = response.json()
             self.json_data = geo_data_json
@@ -52,9 +52,9 @@ class GeoDataManager:
                 return False
 
     def fix_cyprus_country_code(self) -> bool:
-        for dikt in self.json_data['features']:
-            if dikt['id'] == '-99':
-                dikt['id'] = 'CYP'
+        for dikt in self.json_data["features"]:
+            if dikt["id"] == "-99":
+                dikt["id"] = "CYP"
         return True
 
     def initialize_result_dict(self) -> NoReturn:
@@ -63,8 +63,8 @@ class GeoDataManager:
         )
 
     def add_result(self, a3_code: str) -> NoReturn:
-        if a3_code == 'HKG':
-            a3_code = 'CHN'
+        if a3_code == "HKG":
+            a3_code = "CHN"
         self.result_dict[a3_code] += 1
 
     # TODO look at how to create files in s3 programatically

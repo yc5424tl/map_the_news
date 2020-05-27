@@ -7,11 +7,11 @@ scheduler = BlockingScheduler()
 
 if verify_base_cat() and verify_base_src():
     scheduler.add_job(
-        id='sift_scheduler',
+        id="sift_scheduler",
         func=sift,
-        trigger='interval',
+        trigger="interval",
         minutes=6,
         max_instances=1,
-        replace_existing=True
+        replace_existing=True,
     )
     scheduler.start()
