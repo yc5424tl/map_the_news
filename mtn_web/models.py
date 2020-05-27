@@ -9,6 +9,9 @@ class QueryTypeChoice(Enum):
     HDL = "Headlines"
     ALL = "All"
 
+    def __str__(self):
+        return self.value
+
 
 class Result(models.Model):
     argument = models.CharField(max_length=500)
