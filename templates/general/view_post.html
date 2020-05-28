@@ -48,7 +48,7 @@
                         <tr>
                             <th>Country</th>
                             {% for country in result.articles_per_country %}
-                                <td>{{ country }}</td>
+                                <td>{{ country|alpha3_to_name }}</td>
                             {% endfor %}
                         </tr>
                         <tr>
@@ -67,7 +67,7 @@
                         </tr>
                         {% for country in result.articles_per_country %}
                             <tr>
-                                <td>{{ country }}</td>
+                                <td>{{ country|alpha3_to_name }}</td>
                                 <td>{{ result.articles_per_country.country|add:"0" }}</td>
                             </tr>
                         {% endfor %}
