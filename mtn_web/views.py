@@ -151,6 +151,7 @@ def new_query(request: requests.request) -> render or redirect:
 @login_required()
 def view_result(request, result_pk: int):
     result = get_object_or_404(Result, pk=result_pk)
+    logger.log(level=logging.ERROR, msg=f'result.articles_per_country == {result.articles_per_country}')
     return render(
         request,
         "general/view_result.html",
