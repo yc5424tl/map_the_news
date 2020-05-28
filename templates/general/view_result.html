@@ -124,20 +124,20 @@
                 </div>
             </div>
 
-            {% if result.articles_per_country %}
+            {% if country_articles %}
                 <div class="col-xl-8 col-sm-12 bg-div">
-                    <div id="horizontal-table-div">  {% comment %}class=table-responsive{% endcomment %} %}
+                    <div id="horizontal-table-div">
                         <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
                             <tr>
                                 <th class="th-article-count">Country</th>
-                                {% for country in result.articles_per_country %}
+                                {% for country in country_articles%}
                                     <td>{{ country }}</td>
                                 {% endfor %}
                             </tr>
                             <tr>
                                 <th class="th-article-count">Articles</th>
-                                {% for country in result.articles_per_country %}
-                                    <td>{{ result.articles_per_country.country|add:"0" }}</td>
+                                {% for country in country_articles %}
+                                    <td>{{ country_articles.country }}</td>
                                 {% endfor %}
                             </tr>
                         </table>
@@ -146,12 +146,13 @@
                         <table id="horizontal-headings" class="table-dark">
                             <tr>
                                 <th class="th-article-count">Country</th>
-                                <th class="th-article-count">Articles</th>>
+                                <th class="th-article-count">Articles</th>
                             </tr>
-                            {% for country in result.articles_per_country %}
+                            {% for country in country_articles %}
+{#                                {% if country_articles.country != None or '0' %}#}
                                 <tr>
                                     <td>{{ country }}</td>
-                                    <td>{{ result.articles_per_country.country|add:"0" }}</td>
+                                    <td>{{ country_articles.country }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

@@ -42,20 +42,20 @@
                 {{ result.choropleth|safe }}
             </div>
         </div>
-        {% if result.articles_per_country %}
+        {% if country_articles %}
             <div class="col-xl-2 col-sm-12 bg-div">
                 <div id="horizontal-table-div">
                     <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
                         <tr>
                             <th>Country</th>
-                            {% for country in result.articles_per_country %}
+                            {% for country in country_articles%}
                                 <td>{{ country }}</td>
                             {% endfor %}
                         </tr>
                         <tr>
                             <th>Articles</th>
-                            {% for country in result.articles_per_country %}
-                                <td>{{ result.articles_per_country.country|add:"0" }}</td> # coerce str to int
+                            {% for country in country_articles %}
+                                <td>{{ country_articles.country }}</td>
                             {% endfor %}
                         </tr>
                     </table>
@@ -66,10 +66,10 @@
                             <th>Country</th>
                             <th>Articles</th>>
                         </tr>
-                        {% for country in result.articles_per_country %}
+                        {% for country in country_articles %}
                             <tr>
                                 <td>{{ country }}</td>
-                                <td>{{ result.articles_per_country.country|add:"0" }}</td>
+                                <td>{{ country_articles.country }}</td>
                             </tr>
                         {% endfor %}
                     </table>
