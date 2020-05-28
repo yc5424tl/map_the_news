@@ -3,6 +3,7 @@ from typing import NoReturn
 import pycountry
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import JSONField
 
 
 class QueryTypeChoice(Enum):
@@ -36,6 +37,7 @@ class Result(models.Model):
     archived = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
     article_data_len = models.IntegerField(default=0)
+    articles_per_country = JSONField(max_length=20000, null=True, blank=True)
 
     def __str__(self):
         details = (

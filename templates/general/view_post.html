@@ -13,7 +13,7 @@
 
 {% block content%}
     <div class="row" id="view-post-upper">
-        <div class="col-xl-5 col-sm-12 bg-div">
+        <div class="col-xl col-sm-12 bg-div">
             <div id="post">
                 <h3 class="lt-header" id="post-header">{{ post.title }}</h3>
                 <small id="post-detail">
@@ -36,43 +36,45 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-xl-5 col-sm-12 bg-div">
+        <div class="col-xl col-sm-12 bg-div">
             <div id="iframe-div">
                 {{ result.choropleth|safe }}
             </div>
         </div>
-        <div class="col-xl-2 col-sm-12 bg-div">
-            <div id="horizontal-table-div">  {% comment %}class=table-responsive{% endcomment %} %}
-                <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
-                    <tr>
-                        <th>Country</th>
-                        {% for country in result.data %}
-                            <td>{{ country }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <th>Articles</th>
-                        {% for country in result.data %}
-                            <td>{{ result.data.country }}</td>
-                        {% endfor %}
-                    </tr>
-                </table>
-            </div>
-            <div id="vertical-table-div">
-                <table id="horizontal-headings" class="table-dark">
-                    <tr>
-                        <th>Country</th>
-                        <th>Articles</th>>
-                    </tr>
-                    {% for country in result.data %}
+        {% if result.articles_per_country %}
+            <div class="col-xl-2 col-sm-12 bg-div">
+                <div id="horizontal-table-div">
+                    <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
                         <tr>
-                            <td>{{ country }}</td>
-                            <td>{{ result.data.country }}</td>
+                            <th>Country</th>
+                            {% for country in result.articles_per_country %}
+                                <td>{{ country }}</td>
+                            {% endfor %}
                         </tr>
-                    {% endfor %}
-                </table>
+                        <tr>
+                            <th>Articles</th>
+                            {% for country in result.articles_per_country %}
+                                <td>{{ result.articles_per_country.country|add:"0" }}</td> # coerce str to int
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+                <div id="vertical-table-div">
+                    <table id="horizontal-headings" class="table-dark">
+                        <tr>
+                            <th>Country</th>
+                            <th>Articles</th>>
+                        </tr>
+                        {% for country in result.articles_per_country %}
+                            <tr>
+                                <td>{{ country }}</td>
+                                <td>{{ result.articles_per_country.country|add:"0" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
-        </div>
+        {% endif %}
         <div class="row">
             <div class="col-sm-0 col-lg-1 bg-div"></div>
             <div class="col-sm-12 col-lg-10 bg-div" id="articles-wrapper">

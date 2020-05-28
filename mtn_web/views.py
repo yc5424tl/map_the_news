@@ -120,6 +120,7 @@ def new_query(request: requests.request) -> render or redirect:
                 argument=query_mgr.arg,
                 data=article_data,
                 author=request.user,
+                articles_per_country=geo_data_mgr.result_dict
             )
             result.save()
             article_list = constructor.build_article_data(article_data, result)
@@ -142,7 +143,7 @@ def new_query(request: requests.request) -> render or redirect:
                 result.article_count = article_count
                 result.article_data_len = len(article_data)
                 result.save()
-                return redirect("view_result", result.pk)
+                return redirect("view_result", result.pk, {'result_dict': geo_data_mgr.result_dict})
         else:
             redirect("handler404", request)
 
