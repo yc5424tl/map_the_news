@@ -48,14 +48,18 @@
                     <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
                         <tr>
                             <th>Country</th>
-                            {% for country in country_articles%}
-                                <td>{{ country }}</td>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ country }}</td>
+                                {% endif %}
                             {% endfor %}
                         </tr>
                         <tr>
                             <th>Articles</th>
-                            {% for country in country_articles %}
-                                <td>{{ country_articles.country }}</td>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ value }}</td>
+                                {% endif %}
                             {% endfor %}
                         </tr>
                     </table>
@@ -66,11 +70,13 @@
                             <th>Country</th>
                             <th>Articles</th>>
                         </tr>
-                        {% for country in country_articles %}
-                            <tr>
-                                <td>{{ country }}</td>
-                                <td>{{ country_articles.country }}</td>
-                            </tr>
+                        {% for country, value in country_articles.items %}
+                            {% if value > 0 %}
+                                <tr>
+                                    <td>{{ country }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </table>
                 </div>

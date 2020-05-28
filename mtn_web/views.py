@@ -152,7 +152,6 @@ def new_query(request: requests.request) -> render or redirect:
 def view_result(request, result_pk: int):
     result = get_object_or_404(Result, pk=result_pk)
     logger.log(level=logging.ERROR, msg=f'result.articles_per_country == {result.articles_per_country}')
-    article_counts = result.articles_per_country.to_python(result.articles_per_country)
     return render(
         request,
         "general/view_result.html",
@@ -165,7 +164,7 @@ def view_result(request, result_pk: int):
             "filename": result.filename,
             "article_count": result.article_count,
             "article_data_len": result.article_data_len,
-            'country_articles': article_counts,
+            'country_articles': result.articles_per_country,
         },
     )
 
@@ -340,7 +339,7 @@ def view_post(request, post_pk):
                     "edit_post_form": edit_post_form,
                     "result": result,
                     "articles": articles,
-                    'country_articles': result.articles_per_country.to_python(),
+                    'country_articles': result.articles_per_country,
                 },
             )
         else:
