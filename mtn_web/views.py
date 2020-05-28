@@ -143,7 +143,7 @@ def new_query(request: requests.request) -> render or redirect:
                 result.article_count = article_count
                 result.article_data_len = len(article_data)
                 result.save()
-                return redirect("view_result", result.pk, {'result_dict': geo_data_mgr.result_dict})
+                return redirect("view_result", result.pk)
         else:
             redirect("handler404", request)
 
