@@ -30,6 +30,20 @@ th, .view-query-tr {
     border-collapse : collapse;
 }
 
+.th-article-count {
+    font-weight: bold;
+}
+
+#horizontal-headings,
+#vertical-headings,
+#vertical-headings td,
+#horizontal-headings td {
+    border-collapse: collapse;
+    border: 1pt solid var(--main-light);
+    color: var(--aux-accent-6);
+    text-align: left;
+}
+
 .view-query-tr:last-child,
 #view-query-form-controls {
     border-bottom-left-radius  : 5px;
@@ -284,6 +298,31 @@ th, .view-query-tr {
         height           : auto;
         display          : inline-block;
         background-color : transparent;
+    }
+
+    #horizontal-table-div {
+        display: block;
+        background-color: transparent;
+        width: 100%;
+        height: auto;
+    }
+
+    #vertical-table-div {
+        display: None;
+    }
+}
+
+@media (max-width: 1199px) {
+
+    #vertical-table-div {
+        display: block;
+        width: 100%;
+        height: auto;
+        background-color: transparent;
+    }
+
+    #horizontal-table-div {
+        display: None;
     }
 }
 

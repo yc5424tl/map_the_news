@@ -7,12 +7,13 @@
 
 {% block styles %}
     {{ block.super }}
+    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/view_post.css' %}">
 {% endblock %}
 
 {% block content%}
     <div class="row" id="view-post-upper">
-        <div class="col-lg-6 col-sm-12 bg-div">
+        <div class="col-xl-5 col-sm-12 bg-div">
             <div id="post">
                 <h3 class="lt-header" id="post-header">{{ post.title }}</h3>
                 <small id="post-detail">
@@ -35,9 +36,41 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-lg-6 col-sm-12 bg-div">
+        <div class="col-xl-5 col-sm-12 bg-div">
             <div id="iframe-div">
                 {{ result.choropleth|safe }}
+            </div>
+        </div>
+        <div class="col-xl-2 col-sm-12 bg-div">
+            <div id="horizontal-table-div">  {% comment %}class=table-responsive{% endcomment %} %}
+                <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
+                    <tr>
+                        <th>Country</th>
+                        {% for country in result.data %}
+                            <td>{{ country }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <th>Articles</th>
+                        {% for country in result.data %}
+                            <td>{{ result.data.country }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            <div id="vertical-table-div">
+                <table id="horizontal-headings" class="table-dark">
+                    <tr>
+                        <th>Country</th>
+                        <th>Articles</th>>
+                    </tr>
+                    {% for country in result.data %}
+                        <tr>
+                            <td>{{ country }}</td>
+                            <td>{{ result.data.country }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
         <div class="row">
@@ -118,4 +151,9 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block footer-scripts %}
+    super()
+    <script type="text/javascript" src="{% static 'js/responsive-tables.js' %}"></script>
 {% endblock %}
