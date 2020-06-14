@@ -308,7 +308,7 @@ th, .view-query-tr {
     }
 
     #vertical-table-div {
-        display: None;
+        display: none;
     }
 }
 
@@ -322,7 +322,7 @@ th, .view-query-tr {
     }
 
     #horizontal-table-div {
-        display: None;
+        display: none;
     }
 }
 
