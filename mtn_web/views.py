@@ -101,7 +101,8 @@ def new_query(request: requests.request) -> render or redirect:
         form = NewQueryForm()
         return render(request, "general/new_query.html", {"search_form": form})
     elif request.method == "POST":
-        if geo_data_mgr.verify_geo_data():
+        gdm = GeoDataManager()
+        if gdm.verify_geo_data():
             query_mgr = Query(
                 arg=request.POST.get("argument"),
                 focus=get_query_type(request.POST.get("query_type")),
@@ -112,7 +113,7 @@ def new_query(request: requests.request) -> render or redirect:
                     request,
                     message="Unable to contact endpoint to complete your query.",
                 )
-                return render(new_query, request)
+                return redirect("new_query", request)
             query_data = query_mgr.execute_query()
             article_data, article_count = query_data[0], query_data[1]
             result = Result.objects.create(
@@ -120,7 +121,7 @@ def new_query(request: requests.request) -> render or redirect:
                 argument=query_mgr.arg,
                 data=article_data,
                 author=request.user,
-                articles_per_country=geo_data_mgr.result_dict
+                articles_per_country=gdm.result_dict
             )
             result.save()
             article_list = constructor.build_article_data(article_data, result)
@@ -129,9 +130,9 @@ def new_query(request: requests.request) -> render or redirect:
                 country_code = geo_map_mgr.map_source(
                     source_country=article.source_country
                 )
-                geo_data_mgr.add_result(country_code)
+                gdm.add_result(country_code)
             data_tup = geo_map_mgr.build_choropleth(
-                result.argument, result.query_type, geo_data_mgr
+                result.argument, result.query_type, gdm
             )
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
