@@ -1,0 +1,32 @@
+
+.row {
+    background-color: var(--transp-bg-4);
+}
+
+.col-sm-10.col-lg-6 {
+    background-color: var(--main-accent-1);
+}
+
+#error_msg_div {
+    background-color: var(--transp-bg-7);
+    color: var(--main-light);
+}
+
+#error_contact_div {
+    background-color: var(--btn-hover-bg);
+    color: var(--main-accent-2);
+}
+
+#status-code {
+    font-size: xx-large;
+    color: var(--main-light);
+    text-align: center;
+    font-weight: bolder;
+}
+
+#status-msg {
+    font-size: x-large;
+    color: var(--main-light);
+    text-align: center;
+    font-weight: bolder;
+}

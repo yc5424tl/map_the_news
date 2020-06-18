@@ -458,24 +458,43 @@ def view_choro(request: requests.request, result_pk) -> render:
 
 # BAD REQUEST
 def handler400(request, exception):
-  return render(
-      request=request,
-      template_name='error/400.html',
-      context=locals()
-  )
+  #  return render(request=request, template_name='error/400.html', context=locals())
+    return render(
+        request=request,
+        template_name="error/base.html",
+        context=locals(),
+        status=400
+    )
 
 
 # PERMISSION DENIED, called by raising PermissionDenied
 def handler403(request, exception):
-    return render(request=request, template_name='error/403.html', context=locals())
+    # return render(request=request, template_name='error/403.html', context=locals())
+    return render(
+        request=request,
+        template_name='error/base.html',
+        context=locals(),
+        status=403
+    )
 
 
 # PAGE NOT FOUND
 def handler404(request, exception):
     context = RequestContext(request)
-    return render(request=request, template_name="error/404.html", context=locals())
+    # return render(request=request, template_name="error/404.html", context=locals())
+    return render(
+        request=request,
+        template_name="error/base.html",
+        context=locals(),
+        status=404
+    )
 
 
 #  SERVER ERROR
 def handler500(request):
-    return render(request, "error/500.html", status=500)
+    # return render(request, "error/500.html", status=500)
+    return render(
+        request=request,
+        template_name="error/base.html",
+        status=500
+    )
