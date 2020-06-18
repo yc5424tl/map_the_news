@@ -498,3 +498,12 @@ def handler500(request):
         template_name="error/base.html",
         status=500
     )
+
+
+def report_error(request):
+    return render(
+        request=request,
+        template_name="error/report",
+        context=locals(),
+        status=200
+    )
