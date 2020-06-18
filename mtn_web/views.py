@@ -503,7 +503,7 @@ def handler500(request):
 def report_error(request):
     return render(
         request=request,
-        template_name="error/report",
+        template_name="error/report.html",
         context=locals(),
         status=200
     )
