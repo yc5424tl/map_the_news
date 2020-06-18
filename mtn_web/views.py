@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import PermissionDenied
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404, Http404
@@ -149,7 +150,9 @@ def new_query(request: requests.request) -> render or redirect:
                 return redirect("view_result", result.pk)
         else:
             # redirect("handler404", request)
-            raise Http404
+            return redirect("index", messages="Mapping Resources Unavailable.")
+    else:
+        raise Http404("Unsupported Request Method.")
 
 @login_required()
 def view_result(request, result_pk: int):
@@ -247,7 +250,7 @@ def view_user(request, member_pk):
             },
         )
     except get_user_model().DoesNotExist:
-        raise Http404
+        raise Http404("User Not Found")
 
 
 @login_required()
@@ -287,9 +290,9 @@ def new_post(request):
                     messages.error = (request, form.errors)
                     return redirect("new_post")
             except get_user_model().DoesNotExist:
-                raise Http404
+                raise Http404("User Not Found")
     else:
-        raise Http404
+        raise
 
 
 @login_required()
@@ -433,7 +436,7 @@ def view_comment(request, comment_pk):
         comment = Comment.objects.get(pk=comment_pk)
         return render(request, "general/view_comment.html", {"comment": comment})
     except Comment.DoesNotExist:
-        raise Http404
+        raise Http404("Comment Not Found")
 
 
 @login_required()
@@ -453,10 +456,26 @@ def view_choro(request: requests.request, result_pk) -> render:
     return render(request, "general/view_choro.html", {"result": result})
 
 
+# BAD REQUEST
+def handler400(request, exception):
+  return render(
+      request=request,
+      template_name='error/400.html',
+      context=locals()
+  )
+
+
+# PERMISSION DENIED, called by raising PermissionDenied
+def handler403(request, exception):
+    return render(request=request, template_name='error/403.html', context=locals())
+
+
+# PAGE NOT FOUND
 def handler404(request, exception):
     context = RequestContext(request)
-    return render(request, "error/404.html", locals())
+    return render(request=request, template_name="error/404.html", context=locals())
 
 
+#  SERVER ERROR
 def handler500(request):
     return render(request, "error/500.html", status=500)

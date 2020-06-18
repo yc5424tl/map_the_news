@@ -50,9 +50,14 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+handler400 = "mtn_web.views.handler400"
+handler403 = "mtn_web.views.handler403"
 handler404 = "mtn_web.views.handler404"
 handler500 = "mtn_web.views.handler500"
 
+
+# def permission_denied_handler(request, exception=None):
+#     if request.path.startswith('')
 if os.environ.get("DEBUG") == "TRUE":
     import debug_toolbar
 
