@@ -32,7 +32,7 @@ urlpatterns = [
     # url(r"^sources/import/original/$", views.postgres, name="import_original"),
     url(r"^sources/$", views.view_sources, name="view_sources"),
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
-    url(r"^error/submit/$", views.report_error, name="error_report")
+    url(r"^error/report/$", views.report_error, name="report_error")
 ]
 
 
