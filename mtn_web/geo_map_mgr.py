@@ -13,7 +13,7 @@ from mtn_web.geo_data_mgr import GeoDataManager
 logger = logging.getLogger(__name__)
 CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 
-geo_data_mgr = GeoDataManager()
+# geo_data_mgr = GeoDataManager()
 
 
 class GeoMapManager:

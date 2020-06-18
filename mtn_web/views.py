@@ -21,7 +21,9 @@ from mtn_web.forms import (
     EditCommentForm,
     NewCommentForm,
 )
-from mtn_web.geo_map_mgr import GeoMapManager, geo_data_mgr
+
+from mtn_web.geo_data_mgr import GeoDataManager
+from mtn_web.geo_map_mgr import GeoMapManager  # , geo_data_mgr
 from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice
 from mtn_web.query_mgr import Query
 
@@ -113,7 +115,7 @@ def new_query(request: requests.request) -> render or redirect:
                     request,
                     message="Unable to contact endpoint to complete your query.",
                 )
-                return redirect("new_query", request)
+                return redirect("new_query", messages=messages)
             query_data = query_mgr.execute_query()
             article_data, article_count = query_data[0], query_data[1]
             result = Result.objects.create(
@@ -146,8 +148,8 @@ def new_query(request: requests.request) -> render or redirect:
                 result.save()
                 return redirect("view_result", result.pk)
         else:
-            redirect("handler404", request)
-
+            # redirect("handler404", request)
+            raise Http404
 
 @login_required()
 def view_result(request, result_pk: int):
