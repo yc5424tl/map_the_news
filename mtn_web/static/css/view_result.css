@@ -280,7 +280,7 @@ th, .view-query-tr {
     background-color : transparent;
 }
 
-@media (min-width: 1200px) {
+@media screen and (min-width: 1200px) {
     .article-img-sm {
         display : none;
     }
@@ -312,7 +312,7 @@ th, .view-query-tr {
     }
 }
 
-@media (min-width: 1px) and (max-width: 1199px) {
+@media screen and (min-width: 1px) and (max-width: 1199px) {
 
     #vertical-table-div {
         display: block;
@@ -326,7 +326,7 @@ th, .view-query-tr {
     }
 }
 
-@media (min-width: 769px) and (max-width: 1199px) {
+@media screen and  (min-width: 769px) and (max-width: 1199px) {
     .article-img-sm {
         display          : block;
         text-align       : center;
@@ -348,7 +348,7 @@ th, .view-query-tr {
     }
 }
 
-@media (min-width: 1px) and (max-width: 768px) {
+@media screen and (min-width: 1px) and (max-width: 768px) {
     .article-img-sm,
     .article-img-xl,
     .article-img-xl-container {

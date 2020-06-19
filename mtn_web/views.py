@@ -160,7 +160,7 @@ def new_query(request: requests.request) -> render or redirect:
             return redirect("index", messages=messages)
     else:
         # raise Http404("Unsupported Request Method.")
-        raise HttpResponseBadRequest
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 @login_required()
 def view_result(request, result_pk: int):
@@ -199,22 +199,25 @@ def view_public_posts(request):
 
 @login_required()
 def delete_comment(request, comment_pk: int):
-    if request.method == "POST":
-        comment = get_object_or_404(Comment, pk=comment_pk)
-        post_pk = comment.post.pk
-        if comment.author.pk == request.user.pk:
-            comment.delete()
-            messages.info(request, message="Comment Deleted")
-        else:
-            messages.info(request, message="Unauthorized")
-        return redirect("view_post", post_pk, messages=messages)
+    if request.method != 'POST':
+        return HttpResponseBadRequest('Unsupported Request Method')
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    post_pk = comment.post.pk
+    if comment.author.pk == request.user.pk:
+        comment.delete()
+        messages.info(request, message="Comment Deleted")
+    else:
+        messages.info(request, message="Unauthorized")
+    return redirect("view_post", post_pk, messages=messages)
 
 
 @login_required()
 def delete_result(request, result_pk: int):
-    Result.objects.filter(pk=result_pk).delete()
-    messages.info(request, "Result Successfully Deleted")
-    return redirect("new_result")
+    result = get_object_or_404(Result, pk=result_pk)
+    result.delete()
+    # Result.objects.filter(pk=result_pk).delete()
+    messages.info(request, message="Result Successfully Deleted")
+    return redirect("new_result", messages=messages)
 
 
 @login_required()
@@ -300,7 +303,7 @@ def new_post(request):
                     messages.error = (request, form.errors)
                     return redirect("new_post")
             except get_user_model().DoesNotExist:
-                return PermissionDenied
+                raise PermissionDenied
 
 
 
@@ -420,7 +423,7 @@ def country_a2_to_name(source):
 @login_required()
 def delete_post(request):
     if request.method != 'POST':
-        raise HttpResponseBadRequest
+        return HttpResponseBadRequest('Unsupported Request Method')
     pk = request.POST["post_pk"]
     post = get_object_or_404(Post, pk=pk)
     if post.author.id == request.user.id:
@@ -445,6 +448,8 @@ def new_comment(request, post_pk):
         c = Comment.objects.create(post=c_post, body=c_body, author=c_author)
         c.save()
         return redirect("view_comment", c.pk)
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 
 @login_required()
@@ -458,6 +463,8 @@ def view_comment(request, comment_pk):
 
 @login_required()
 def delete_comment(request, comment_pk):
+    if request.method != "POST":
+        return HttpResponseBadRequest('Unsupported Request Method')
     comment = get_object_or_404(Comment, pk=comment_pk)
     comment.delete()
     last_url = request.POST["redirect_url"]
