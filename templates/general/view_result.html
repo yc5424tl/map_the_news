@@ -8,7 +8,7 @@
 
 {% block styles %}
     {{ block.super }}
-    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}" />
+{#    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}" />#}
     <link rel="stylesheet" href="{% static 'css/view_result.css' %}">
 {% endblock %}
 
@@ -126,6 +126,7 @@
 
             {% if country_articles %}
                 <div class="col-xl-8 col-sm-12 bg-div">
+
                     <div id="horizontal-table-div">
                         <table id="vertical-headings" class="responsive table-dark table-bordered table-hover">
                             <tr>
@@ -146,6 +147,7 @@
                             </tr>
                         </table>
                     </div>
+
                     <div id="vertical-table-div">
                         <table id="horizontal-headings" class="table-dark">
                             <tr>
@@ -163,6 +165,7 @@
                         </table>
                     </div>
                 </div>
+
             {% endif %}
         </div>
 
