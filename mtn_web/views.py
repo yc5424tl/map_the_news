@@ -41,7 +41,8 @@ def index(request) -> render:
     if request.method == "GET":
         form = AuthenticationForm()
         return render(request, "general/index.html", {"form": form})
-
+    else:
+        return redirect('handler400')
 
 def register_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
@@ -53,7 +54,11 @@ def register_user(request: requests.request) -> render or redirect:
         else:
             messages.info(request, message=form.errors)
             form = CustomUserCreationForm()
-            return render(request, "general/new_user.html", {"form": form})
+            return render(
+                request=request,
+                template_name="general/new_user.html",
+                context={"form": form}
+            )
     if request.method == "GET":
         form = CustomUserCreationForm()
         return render(request, "general/new_user.html", {"form": form})
@@ -150,9 +155,11 @@ def new_query(request: requests.request) -> render or redirect:
                 return redirect("view_result", result.pk)
         else:
             # redirect("handler404", request)
-            return redirect("index", messages="Mapping Resources Unavailable.")
+            messages.info(request, message="Mapping Resources Unavailable")
+            return redirect("index", messages=messages)
     else:
-        raise Http404("Unsupported Request Method.")
+        # raise Http404("Unsupported Request Method.")
+        return redirect("handler400", messages="Unsupported Request Method")
 
 @login_required()
 def view_result(request, result_pk: int):
@@ -196,8 +203,10 @@ def delete_comment(request, comment_pk: int):
         post_pk = comment.post.pk
         if comment.author.pk == request.user.pk:
             comment.delete()
-            messages.info(request, "Comment Deleted")
-        return redirect("view_post", post_pk)
+            messages.info(request, message="Comment Deleted")
+        else:
+            messages.info(request, message="Unauthorized")
+        return redirect("view_post", post_pk, messages=messages)
 
 
 @login_required()
@@ -290,7 +299,7 @@ def new_post(request):
                     messages.error = (request, form.errors)
                     return redirect("new_post")
             except get_user_model().DoesNotExist:
-                raise Http404("User Not Found")
+                return redirect("handler401", messages="Unauthorized")
     else:
         raise
 
@@ -330,7 +339,7 @@ def view_post(request, post_pk):
             messages.error(request, form.errors)
         return redirect("post_details", post_pk=post_pk)
     else:
-        post = Post.objects.get(pk=post_pk)
+        post = get_object_or_404(Post, pk=post_pk)
         result = post.result
         articles = post.result.articles.all()
         if post.author.id == request.user.id:
@@ -345,14 +354,19 @@ def view_post(request, post_pk):
                     "edit_post_form": edit_post_form,
                     "result": result,
                     "articles": articles,
-                    'country_articles': result.articles_per_country,
+                    'country_articles': result.articles_per_country
                 },
             )
         else:
             return render(
                 request,
                 "general/view_post.html",
-                {"post": post, "result": result, "articles": articles},
+                {
+                    "post": post,
+                    "result": result,
+                    "articles": articles,
+                    'country_articles': result.articles_per_country
+                },
             )
 
 
@@ -413,6 +427,7 @@ def delete_post(request):
         return redirect("index")
     else:
         messages.error(request, "Action Not Authorized")
+        return redirect("view_post", pk=pk)
 
 
 @login_required()
@@ -445,14 +460,15 @@ def delete_comment(request, comment_pk):
     comment.delete()
     last_url = request.POST["redirect_url"]
     messages.info(request, "Failed to Delete Comment")
-    return redirect(request, last_url)
+    return redirect(last_url)
 
 
 # TODO def password_reset(request)
 
 
 def view_choro(request: requests.request, result_pk) -> render:
-    result = Result.objects.get(pk=result_pk)
+    # result = Result.objects.get(pk=result_pk)
+    result = get_object_or_404(Result, pk=result_pk)
     return render(request, "general/view_choro.html", {"result": result})
 
 
