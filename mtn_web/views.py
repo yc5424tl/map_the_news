@@ -11,6 +11,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.template import RequestContext
 from mtn_web.constructor import Constructor
@@ -42,7 +43,7 @@ def index(request) -> render:
         form = AuthenticationForm()
         return render(request, "general/index.html", {"form": form})
     else:
-        return redirect('handler400')
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 def register_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
@@ -159,7 +160,7 @@ def new_query(request: requests.request) -> render or redirect:
             return redirect("index", messages=messages)
     else:
         # raise Http404("Unsupported Request Method.")
-        return redirect("handler400", messages="Unsupported Request Method")
+        raise HttpResponseBadRequest
 
 @login_required()
 def view_result(request, result_pk: int):
@@ -299,9 +300,8 @@ def new_post(request):
                     messages.error = (request, form.errors)
                     return redirect("new_post")
             except get_user_model().DoesNotExist:
-                return redirect("handler401", messages="Unauthorized")
-    else:
-        raise
+                return PermissionDenied
+
 
 
 @login_required()
@@ -419,6 +419,8 @@ def country_a2_to_name(source):
 
 @login_required()
 def delete_post(request):
+    if request.method != 'POST':
+        raise HttpResponseBadRequest
     pk = request.POST["post_pk"]
     post = get_object_or_404(Post, pk=pk)
     if post.author.id == request.user.id:
