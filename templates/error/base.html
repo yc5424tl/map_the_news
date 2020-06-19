@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block title %}
-    {{ STATUS_CODE }}: {{ STATUS_MSG }}
 {% endblock %}
 
 {% block styles %}
@@ -16,8 +15,8 @@
         <div class="col-sm-10 col-lg-6">
             <div class="row">
                 <div id="error_msg_div">
-                    <h2 id="status-code">{{ status }}</h2>
-                    <h1 id="status-msg">{{ exception }}</h1>
+                    {% block status %}{% endblock %}
+                    {% block exception %}{% endblock %}
                 </div>
             </div>
             <div class="row">

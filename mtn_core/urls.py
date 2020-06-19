@@ -52,6 +52,7 @@ urlpatterns = [
 
 
 handler400 = "mtn_web.views.handler400"
+handler401 = "mtn_web.views.handler401"
 handler403 = "mtn_web.views.handler403"
 handler404 = "mtn_web.views.handler404"
 handler500 = "mtn_web.views.handler500"

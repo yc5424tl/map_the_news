@@ -17,14 +17,16 @@
     color: var(--main-accent-2);
 }
 
-#status-code {
+/* Passed into status block */
+.err_code {
     font-size: xx-large;
     color: var(--main-light);
     text-align: center;
     font-weight: bolder;
 }
 
-#status-msg {
+/* Passed into exception block */
+.err_exc {
     font-size: x-large;
     color: var(--main-light);
     text-align: center;

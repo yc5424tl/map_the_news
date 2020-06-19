@@ -1,4 +1,4 @@
-{% extends 'general/root.html' %}
+{% extends 'error/base.html' %}
 {% load static %}
 
 {% block title %}
@@ -7,15 +7,23 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{#    <link rel="stylesheet" href="{% static 'css/errors.css' %}">#}
 {% endblock %}
 
-{% block content %}
-    <div class="col"></div>
-    <div class="col-9 err-wrapper">
-        <img class="err-img" src="{% static 'img/500b.png' %}" alt="500 Error">
-        <sub class="err-sub">500 Internal Server Error</sub>
-    </div>
-    <div class="col"></div>
-
+{% block status %}
+    <h1 class="err_code">500</h1>
 {% endblock %}
+
+{% block exception %}
+    <h2 class="err_exc">Someone cut a wire, started a fire, and/or straight hacked us...or there's some funky code about.</h2>
+{% endblock %}
+
+{#{% block content %}#}
+{#    <div class="col"></div>#}
+{#    <div class="col-9 err-wrapper">#}
+{#        <img class="err-img" src="{% static 'img/500b.png' %}" alt="500 Error">#}
+{#        <sub class="err-sub">500 Internal Server Error</sub>#}
+{#    </div>#}
+{#    <div class="col"></div>#}
+{##}
+{#{% endblock %}#}

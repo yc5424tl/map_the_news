@@ -461,9 +461,19 @@ def handler400(request, exception):
   #  return render(request=request, template_name='error/400.html', context=locals())
     return render(
         request=request,
-        template_name="error/base.html",
+        template_name="error/400.html",
         context=locals(),
         status=400
+    )
+
+
+# UNAUTHORIZED
+def handler401(request, exception):
+    return render(
+        request=request,
+        template_name="error/401.html",
+        context=locals(),
+        status=401
     )
 
 
@@ -472,7 +482,7 @@ def handler403(request, exception):
     # return render(request=request, template_name='error/403.html', context=locals())
     return render(
         request=request,
-        template_name='error/base.html',
+        template_name='error/403.html',
         context=locals(),
         status=403
     )
@@ -484,8 +494,8 @@ def handler404(request, exception):
     # return render(request=request, template_name="error/404.html", context=locals())
     return render(
         request=request,
-        template_name="error/base.html",
-        context=locals(),
+        template_name="error/404.html",
+        context=context,
         status=404
     )
 
@@ -495,7 +505,7 @@ def handler500(request):
     # return render(request, "error/500.html", status=500)
     return render(
         request=request,
-        template_name="error/base.html",
+        template_name="error/500.html",
         status=500
     )
 
