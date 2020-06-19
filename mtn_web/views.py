@@ -511,7 +511,7 @@ def handler404(request, exception):
     return render(
         request=request,
         template_name="error/404.html",
-        context=context,
+        context=locals(),
         status=404
     )
 
