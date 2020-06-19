@@ -280,6 +280,11 @@ th, .view-query-tr {
     background-color : transparent;
 }
 
+#horizontal-table-div,
+#vertical-table-div {
+    display: none;
+}
+
 @media screen and (min-width: 1200px) {
     .article-img-sm {
         display : none;
