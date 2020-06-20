@@ -366,7 +366,7 @@ th, tr {
     }
 
     #horizontal-table-div {
-        display: None;
+        display: none;
     }
 }
 
@@ -393,7 +393,7 @@ th, tr {
     }
 
     #vertical-table-div {
-        display: None;
+        display: none;
     }
 }
 
