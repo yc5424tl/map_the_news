@@ -91,6 +91,5 @@ class NewUserForm(UserCreationForm):
 
 
 class UpdateUserForm(UserChangeForm):
-
     model = get_user_model()
     fields = ["email"]

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class Constructor:
-    def new_article(self, api_response, result: Result) -> Article or False:
+    def new_article(self, api_response: dict, result: Result) -> Article or False:
         source = self.verify_source(api_response["source"]["name"])
         date_published = self.verify_date(api_response["publishedAt"])
         description = None
@@ -92,14 +92,14 @@ class Constructor:
             return None
 
     @staticmethod
-    def format_date(data):
+    def format_date(data) -> datetime or None:
         try:
             return parse(data)
         except ValueError:
             return None
 
     @staticmethod
-    def verify_source(source_name) -> str or False:
+    def verify_source(source_name: str) -> str or False:
         if source_name:
             try:
                 return Source.objects.get(name=source_name)

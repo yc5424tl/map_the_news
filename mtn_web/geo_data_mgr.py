@@ -25,10 +25,7 @@ class GeoDataManager:
         if self.json_data is None:
             have_geo_data = self.get_geo_data()
             have_cyprus_fix = self.fix_cyprus_country_code()
-            if have_geo_data and have_cyprus_fix:
-                return True
-            else:
-                return False
+            return bool(have_geo_data and have_cyprus_fix)
 
     def get_geo_data(self) -> bool:
         try:

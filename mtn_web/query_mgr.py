@@ -49,9 +49,7 @@ class Query:
         response = requests.get(self.endpoint)
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
-        article_data = []
-        article_data.extend(response_data)
-
+        article_data = list(response_data)
         # ********************* FREE VERSION OF NEWS_API LIMITS RESULTS TO 100 PER REQUEST, BELOW IS FOR PAGING THROUGH MORE THAN 100 RESULTS *****************
         #
         # if article_count > 100:
@@ -76,23 +74,23 @@ class Query:
         #             continue
         return article_data, article_count
 
-    def to_file(self, data) -> bool:
-        try:
-            with open(self.filename, "w+") as file:
-                file.write(str(data))
-            return True
-        except UnicodeEncodeError:
-            logger.exception(
-                UnicodeEncodeError,
-                "UnicodeEncodeError during writing articles.json to file (QueryManager)",
-            )
-            return False
-        except AttributeError:
-            logger.exception(
-                AttributeError,
-                "AttributeException during writing articles.json to file (QueryManager)",
-            )
-            return False
-        except TypeError:
-            logger.exception(TypeError, "TypeError while ")
-            return False
+    # def to_file(self, data) -> bool:
+    #     try:
+    #         with open(self.filename, "w+") as file:
+    #             file.write(str(data))
+    #         return True
+    #     except UnicodeEncodeError:
+    #         logger.exception(
+    #             UnicodeEncodeError,
+    #             "UnicodeEncodeError during writing articles.json to file (QueryManager)",
+    #         )
+    #         return False
+    #     except AttributeError:
+    #         logger.exception(
+    #             AttributeError,
+    #             "AttributeException during writing articles.json to file (QueryManager)",
+    #         )
+    #         return False
+    #     except TypeError:
+    #         logger.exception(TypeError, "TypeError while ")
+    #         return False

@@ -38,7 +38,7 @@ geo_map_mgr = GeoMapManager()
 
 
 @transaction.atomic
-def index(request) -> render:
+def index(request: requests.request) -> render:
     if request.method == "GET":
         form = AuthenticationForm()
         return render(request, "general/index.html", {"form": form})
@@ -90,7 +90,7 @@ def logout_user(request: requests.request) -> NoReturn:
         messages.info(request, "Logout Successful", extra_tags="alert")
 
 
-def get_query_type(qm_focus: str):
+def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
     if qm_focus == "QueryTypeChoice.ALL" or "all".casefold():
         query_type = QueryTypeChoice.ALL
     elif qm_focus == "QueryTypeChoice.HDL" or "headlines".casefold():
@@ -105,7 +105,7 @@ def get_query_type(qm_focus: str):
 
 
 @login_required()
-def new_query(request: requests.request) -> render or redirect:
+def new_query(request: requests.request) -> render or redirect or HttpResponseBadRequest:
     if request.method == "GET":
         form = NewQueryForm()
         return render(request, "general/new_query.html", {"search_form": form})
@@ -163,7 +163,7 @@ def new_query(request: requests.request) -> render or redirect:
         return HttpResponseBadRequest('Unsupported Request Method')
 
 @login_required()
-def view_result(request, result_pk: int):
+def view_result(request: requests.request, result_pk: int) -> render:
     result = get_object_or_404(Result, pk=result_pk)
     logger.log(level=logging.ERROR, msg=f'result.articles_per_country == {result.articles_per_country}')
     return render(
@@ -184,7 +184,7 @@ def view_result(request, result_pk: int):
 
 
 @login_required()
-def view_public_posts(request):
+def view_public_posts(request: requests.request) -> render:
     posts = Post.objects.order_by("-id").all()
     paginator = Paginator(posts, 10)
     page = request.GET.get("page")
@@ -198,7 +198,7 @@ def view_public_posts(request):
 
 
 @login_required()
-def delete_comment(request, comment_pk: int):
+def delete_comment(request: requests.request, comment_pk: int) -> HttpResponseBadRequest or redirect:
     if request.method != 'POST':
         return HttpResponseBadRequest('Unsupported Request Method')
     comment = get_object_or_404(Comment, pk=comment_pk)
