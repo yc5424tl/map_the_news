@@ -61,7 +61,7 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
     list_display = ("name", "country", "language", "url", "verified")
-    list_editable = ("country", "language", "url", "verified", "categories")
+    list_editable = ("country", "language", "url", "verified")
     list_filter = ("country", "language", "verified")
     list_display_links = ["name"]
 
