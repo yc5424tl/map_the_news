@@ -32,7 +32,7 @@ class ResultAdmin(admin.ModelAdmin):
     )
     list_editable = ("query_type", "archived", "public", "filename", "filepath")
     list_filter = ("query_type", "archived", "public", "date_created", "author", "argument")
-    list_display_links = ("author", "archived", "public", "query_type")
+    list_display_links = ("author",)
 
 
 @admin.register(Post)
