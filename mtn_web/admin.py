@@ -12,7 +12,7 @@ admin.site.register(User, UserAdmin)
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ("title", "author", "date_published", "source", "result", "image_url", "article_url")
-    list_editable = ("title", "author", "source", "image_url", "article_url")
+    list_editable = ("image_url", "article_url")
     list_filter = ("author", "source", "date_published", "result")
     list_display_links = ("author", "source", "result")
 
@@ -60,7 +60,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
-    list_display = ("name", "country", "language", "url", "verified", "categories")
+    list_display = ("name", "country", "language", "url", "verified")
     list_editable = ("country", "language", "url", "verified", "categories")
     list_filter = ("country", "language", "verified")
     list_display_links = ["name"]
