@@ -46,7 +46,15 @@ th, .view-query-tr {
 
 #horizontal-table-div {
     width: 100%;
-    overflow: scroll;
+    overflow-x: scroll;
+    padding: 1em;
+    background-color: transparent;
+}
+
+#vertical-table-div {
+    width: 100%;
+    padding: 1em;
+    background-color: transparent;
 }
 
 .view-query-tr:last-child,
