@@ -213,10 +213,12 @@ def view_result(request: requests.request, result_pk: int) -> render:
     result = get_object_or_404(Result, pk=result_pk)
     logger.log(level=logging.ERROR, msg=f'result.articles_per_country == {result.articles_per_country}')
 
-    #  Builds a new dictionary replacing iso 2 letter code keys with full country names,
-    #  easier to understand when viewed in page
-    country_articles = \
-        {iso_codes[code]["name"]: result.articles_per_country[code] for code in result.articles_per_country}
+    # #  Builds a new dictionary replacing iso 2 letter code keys with full country names,
+    # #  easier to understand when viewed in page
+    # country_articles = \
+    #     {iso_codes[code]["name"]: result.articles_per_country[code] for code in result.articles_per_country}
+
+    country_articles = full_name_result_set(result.articles_per_country)
 
     return render(
         request,
@@ -595,3 +597,18 @@ def report_error(request):
         context=locals(),
         status=200
     )
+
+
+def full_name_result_set(result_dict: dict):
+    full_name_dict = {}
+    for alpha3_code in result_dict:
+        if alpha3_code == 'CS-KM':
+            country_name = 'Serbia'
+        else:
+            country_name = pycountry.countries.get(alpha_3=alpha3_code).name
+
+        if country_name is not None:
+            full_name_dict[country_name] = result_dict[alpha3_code]
+        else:
+            logger.log(level=logging.ERROR, msg=f'Error parsing country name from alpha3 code of <{alpha3_code}>')
+    return full_name_dict
