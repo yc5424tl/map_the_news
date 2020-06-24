@@ -15,9 +15,9 @@
 {% block content %}
     <div class="container" id="view-query-parent-container">
         <div class="row">
-            <table>
-                <tr>
-                    <td>
+            <table id="view-result-table">
+                <tr class="view-result-tr">
+                    <td class="view-result-td">
                         <div id="adjacent-target">
                             <table id="view-query-table">
                                 <tr>
@@ -114,7 +114,7 @@
                             {% endif %}
                         {% endif %}
                     </td>
-                    <td colspan="2">
+                    <td colspan="2" class="view-result-td">
                         <div class="col-sm-12 col-xl-8" id="view-query-iframe-container">
                             <div class="embed-responsive-16by9" id="view-query-iframe-div">
                                 {{ choro_map|safe }}
@@ -122,8 +122,8 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3">
+                <tr class="view-result-tr">
+                    <td colspan="3" class="view-result-td">
                         {% if country_articles %}
                             <div class="col-xl-8 col-sm-12 bg-div">
                                 <div id="horizontal-table-div">
