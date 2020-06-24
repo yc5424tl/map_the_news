@@ -14,160 +14,314 @@
 
 {% block content %}
     <div class="container" id="view-query-parent-container">
-
         <div class="row">
-            <div class="col">
-                <div id="adjacent-target">
-                    <table id="view-query-table">
-                        <tr>
-                            <th colspan="2" class="text-center">Query Details</th>
-                        </tr>
-                        <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Query: </td>
-                            <td class="view-query-details-row-data">{{ result.argument }}</td>
-                        </tr>
-                        <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Type: </td>
-                            <td class="view-query-details-row-data">{{ result.query_type.value|capfirst }}</td>
-                        </tr>
-                        <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Date: </td>
-                            <td class="view-query-details-row-data">{{ result.date_created_readable }}</td>
-                        </tr>
-                        <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Archived: </td>
-                            <td class="view-query-details-row-data">{{ result.archived }}</td>
-                        </tr>
-                        <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Article Count:</td>
-                            <td class="view-query-details-row-data">{{ article_count }}</td>
-                        </tr>
-                         <tr class="view-query-tr">
-                            <td class="view-query-details-row-title">Length Article Data:</td>
-                            <td class="view-query-details-row-data">{{ article_data_len }}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                {% if user.pk == query_author.id %}
-
-                    {% if result.archived is False %}
-                        <div id="post-query-container">
-                            <form method="post" action="{% url 'new_post' %}" id="new-post-form">
-                                {% csrf_token %}
-                                <div class="input-group view-query" id="view-query-form-header">
-                                        <p class="input-group-text title-center text-center" id="new-post-span">Post Your Query</p>
-                                    <input type="text" id="view-query-form-input-title" class="form-control view-query" placeholder="Enter Title Here" aria-label="Post Title" name="title">
-                                </div>
-                                <div class="input-group view-query" id="view-query-form-textarea-container">
-                                    <label class="input-group-prepend view-query" id="textarea-label">
-                                        <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
-                                    </label>
-                                    <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
-                                </div>
-                                <div class="input-group view-query" id="view-query-form-controls">
-                                    <div class="form-check form-check-inline">
-                                        <label class="form-check-label" for="private-save-false">Private  </label>
-                                        <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <label class="form-check-label" for="public-save-false">Public  </label>
-                                        <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
-                                    </div>
-                                    <div class="btn-group-sm float-right">
-                                        <a href="#">
-                                            <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
-                                        </a>
-                                        <a href={% url 'delete_result' result.pk %}>
-                                            <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
-                                        </a>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                                <input type="hidden" name="result_pk" value="{{ result.pk }}">
-                            </form>
+            <table>
+                <tr>
+                    <td>
+                        <div id="adjacent-target">
+                            <table id="view-query-table">
+                                <tr>
+                                    <th colspan="2" class="text-center">Query Details</th>
+                                </tr>
+                                <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Query: </td>
+                                    <td class="view-query-details-row-data">{{ result.argument }}</td>
+                                </tr>
+                                <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Type: </td>
+                                    <td class="view-query-details-row-data">{{ result.query_type.value|capfirst }}</td>
+                                </tr>
+                                <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Date: </td>
+                                    <td class="view-query-details-row-data">{{ result.date_created_readable }}</td>
+                                </tr>
+                                <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Archived: </td>
+                                    <td class="view-query-details-row-data">{{ result.archived }}</td>
+                                </tr>
+                                <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Article Count:</td>
+                                    <td class="view-query-details-row-data">{{ article_count }}</td>
+                                </tr>
+                                 <tr class="view-query-tr">
+                                    <td class="view-query-details-row-title">Length Article Data:</td>
+                                    <td class="view-query-details-row-data">{{ article_data_len }}</td>
+                                </tr>
+                            </table>
                         </div>
-                    {% endif %}
-
-                    {% if result.archived is True %}
-                        <form method="post" action="{% url 'update_post' post.pk %}">
-                            {% csrf_token %}
-                            <div class="input-group">
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label"> Private
-                                        <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
-                                    </label>
+                        {% if user.pk == query_author.id %}
+                            {% if result.archived is False %}
+                                <div id="post-query-container">
+                                    <form method="post" action="{% url 'new_post' %}" id="new-post-form">
+                                        {% csrf_token %}
+                                        <div class="input-group view-query" id="view-query-form-header">
+                                                <p class="input-group-text title-center text-center" id="new-post-span">Post Your Query</p>
+                                            <input type="text" id="view-query-form-input-title" class="form-control view-query" placeholder="Enter Title Here" aria-label="Post Title" name="title">
+                                        </div>
+                                        <div class="input-group view-query" id="view-query-form-textarea-container">
+                                            <label class="input-group-prepend view-query" id="textarea-label">
+                                                <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
+                                            </label>
+                                            <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
+                                        </div>
+                                        <div class="input-group view-query" id="view-query-form-controls">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label" for="private-save-false">Private  </label>
+                                                <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label" for="public-save-false">Public  </label>
+                                                <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
+                                            </div>
+                                            <div class="btn-group-sm float-right">
+                                                <a href="#">
+                                                    <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
+                                                </a>
+                                                <a href={% url 'delete_result' result.pk %}>
+                                                    <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                                        <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                                    </form>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label"> Public
-                                        <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
-                                    </label>
+                            {% endif %}
+                            {% if result.archived is True %}
+                                <form method="post" action="{% url 'update_post' post.pk %}">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label"> Private
+                                                <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label"> Public
+                                                <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-default">Update Post</button>
+                                    <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                                    <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                                </form>
+                                <form method="post" action="{% url 'delete_post' post.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete Post</button>
+                                    <sub>* Query will also be deleted</sub>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    <td colspan="2">
+                        <div class="col-sm-12 col-xl-8" id="view-query-iframe-container">
+                            <div class="embed-responsive-16by9" id="view-query-iframe-div">
+                                {{ choro_map|safe }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        {% if country_articles %}
+                            <div class="col-xl-8 col-sm-12 bg-div">
+                                <div id="horizontal-table-div">
+                                    <table id="vertical-headings">
+                                        <tr>
+                                            <th class="th-article-count">Country</th>
+                                            {% for country, value in country_articles.items %}
+                                                {% if value > 0 %}
+                                                    <td>{{ country }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                        <tr>
+                                            <th class="th-article-count">Articles</th>
+                                            {% for country, value in country_articles.items %}
+                                                {% if value > 0 %}
+                                                    <td>{{ value }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div id="vertical-table-div">
+                                    <table id="horizontal-headings">
+                                        <tr>
+                                            <th class="th-article-count">Country</th>
+                                            <th class="th-article-count">Articles</th>
+                                        </tr>
+                                        {% for country, value in country_articles.items %}
+                                            {% if value > 0 %}
+                                                <tr>
+                                                    <td>{{ country }}</td>
+                                                    <td>{{ value }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </table>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-default">Update Post</button>
-                            <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                            <input type="hidden" name="result_pk" value="{{ result.pk }}">
-                        </form>
-                        <form method="post" action="{% url 'delete_post' post.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Delete Post</button>
-                            <sub>* Query will also be deleted</sub>
-                        </form>
-                    {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
 
-                {% endif %}
-            </div>
 
-            <div class="col-sm-12 col-xl-8" id="view-query-iframe-container">
-                <div class="embed-responsive-16by9" id="view-query-iframe-div">
-                    {{ choro_map|safe }}
-                </div>
-            </div>
 
-            {% if country_articles %}
-                <div class="col-xl-8 col-sm-12 bg-div">
-
-                    <div id="horizontal-table-div">
-                        <table id="vertical-headings">
-                            <tr>
-                                <th class="th-article-count">Country</th>
-                                {% for country, value in country_articles.items %}
-                                    {% if value > 0 %}
-                                        <td>{{ country }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                <th class="th-article-count">Articles</th>
-                                {% for country, value in country_articles.items %}
-                                    {% if value > 0 %}
-                                        <td>{{ value }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div id="vertical-table-div">
-                        <table id="horizontal-headings">
-                            <tr>
-                                <th class="th-article-count">Country</th>
-                                <th class="th-article-count">Articles</th>
-                            </tr>
-                            {% for country, value in country_articles.items %}
-                                {% if value > 0 %}
-                                    <tr>
-                                        <td>{{ country }}</td>
-                                        <td>{{ value }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </table>
-                    </div>
-                </div>
-
-            {% endif %}
-        </div>
+{#            <div class="col">#}
+{#                <div id="adjacent-target">#}
+{#                    <table id="view-query-table">#}
+{#                        <tr>#}
+{#                            <th colspan="2" class="text-center">Query Details</th>#}
+{#                        </tr>#}
+{#                        <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Query: </td>#}
+{#                            <td class="view-query-details-row-data">{{ result.argument }}</td>#}
+{#                        </tr>#}
+{#                        <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Type: </td>#}
+{#                            <td class="view-query-details-row-data">{{ result.query_type.value|capfirst }}</td>#}
+{#                        </tr>#}
+{#                        <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Date: </td>#}
+{#                            <td class="view-query-details-row-data">{{ result.date_created_readable }}</td>#}
+{#                        </tr>#}
+{#                        <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Archived: </td>#}
+{#                            <td class="view-query-details-row-data">{{ result.archived }}</td>#}
+{#                        </tr>#}
+{#                        <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Article Count:</td>#}
+{#                            <td class="view-query-details-row-data">{{ article_count }}</td>#}
+{#                        </tr>#}
+{#                         <tr class="view-query-tr">#}
+{#                            <td class="view-query-details-row-title">Length Article Data:</td>#}
+{#                            <td class="view-query-details-row-data">{{ article_data_len }}</td>#}
+{#                        </tr>#}
+{#                    </table>#}
+{#                </div>#}
+{##}
+{#                {% if user.pk == query_author.id %}#}
+{##}
+{#                    {% if result.archived is False %}#}
+{#                        <div id="post-query-container">#}
+{#                            <form method="post" action="{% url 'new_post' %}" id="new-post-form">#}
+{#                                {% csrf_token %}#}
+{#                                <div class="input-group view-query" id="view-query-form-header">#}
+{#                                        <p class="input-group-text title-center text-center" id="new-post-span">Post Your Query</p>#}
+{#                                    <input type="text" id="view-query-form-input-title" class="form-control view-query" placeholder="Enter Title Here" aria-label="Post Title" name="title">#}
+{#                                </div>#}
+{#                                <div class="input-group view-query" id="view-query-form-textarea-container">#}
+{#                                    <label class="input-group-prepend view-query" id="textarea-label">#}
+{#                                        <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>#}
+{#                                    </label>#}
+{#                                    <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>#}
+{#                                </div>#}
+{#                                <div class="input-group view-query" id="view-query-form-controls">#}
+{#                                    <div class="form-check form-check-inline">#}
+{#                                        <label class="form-check-label" for="private-save-false">Private  </label>#}
+{#                                        <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>#}
+{#                                    </div>#}
+{#                                    <div class="form-check form-check-inline">#}
+{#                                        <label class="form-check-label" for="public-save-false">Public  </label>#}
+{#                                        <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">#}
+{#                                    </div>#}
+{#                                    <div class="btn-group-sm float-right">#}
+{#                                        <a href="#">#}
+{#                                            <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>#}
+{#                                        </a>#}
+{#                                        <a href={% url 'delete_result' result.pk %}>#}
+{#                                            <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>#}
+{#                                        </a>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <input type="hidden" name="user_pk" value="{{ user.pk }}">#}
+{#                                <input type="hidden" name="result_pk" value="{{ result.pk }}">#}
+{#                            </form>#}
+{#                        </div>#}
+{#                    {% endif %}#}
+{##}
+{#                    {% if result.archived is True %}#}
+{#                        <form method="post" action="{% url 'update_post' post.pk %}">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="input-group">#}
+{#                                <div class="form-check form-check-inline">#}
+{#                                    <label class="form-check-label"> Private#}
+{#                                        <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>#}
+{#                                    </label>#}
+{#                                </div>#}
+{#                                <div class="form-check form-check-inline">#}
+{#                                    <label class="form-check-label"> Public#}
+{#                                        <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">#}
+{#                                    </label>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <button type="submit" class="btn btn-default">Update Post</button>#}
+{#                            <input type="hidden" name="user_pk" value="{{ user.pk }}">#}
+{#                            <input type="hidden" name="result_pk" value="{{ result.pk }}">#}
+{#                        </form>#}
+{#                        <form method="post" action="{% url 'delete_post' post.pk %}">#}
+{#                            {% csrf_token %}#}
+{#                            <button type="submit" class="btn btn-danger">Delete Post</button>#}
+{#                            <sub>* Query will also be deleted</sub>#}
+{#                        </form>#}
+{#                    {% endif %}#}
+{##}
+{#                {% endif %}#}
+{#            </div>#}
+{##}
+{#            <div class="col-sm-12 col-xl-8" id="view-query-iframe-container">#}
+{#                <div class="embed-responsive-16by9" id="view-query-iframe-div">#}
+{#                    {{ choro_map|safe }}#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            {% if country_articles %}#}
+{#                <div class="col-xl-8 col-sm-12 bg-div">#}
+{##}
+{#                    <div id="horizontal-table-div">#}
+{#                        <table id="vertical-headings">#}
+{#                            <tr>#}
+{#                                <th class="th-article-count">Country</th>#}
+{#                                {% for country, value in country_articles.items %}#}
+{#                                    {% if value > 0 %}#}
+{#                                        <td>{{ country }}</td>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <th class="th-article-count">Articles</th>#}
+{#                                {% for country, value in country_articles.items %}#}
+{#                                    {% if value > 0 %}#}
+{#                                        <td>{{ value }}</td>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </tr>#}
+{#                        </table>#}
+{#                    </div>#}
+{##}
+{#                    <div id="vertical-table-div">#}
+{#                        <table id="horizontal-headings">#}
+{#                            <tr>#}
+{#                                <th class="th-article-count">Country</th>#}
+{#                                <th class="th-article-count">Articles</th>#}
+{#                            </tr>#}
+{#                            {% for country, value in country_articles.items %}#}
+{#                                {% if value > 0 %}#}
+{#                                    <tr>#}
+{#                                        <td>{{ country }}</td>#}
+{#                                        <td>{{ value }}</td>#}
+{#                                    </tr>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                        </table>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            {% endif %}#}
+{#        </div>#}
 
         <div class="row" id="articles-row">
             <div class="col-sm-0 col-lg-1"></div>

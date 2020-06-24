@@ -44,6 +44,11 @@ th, .view-query-tr {
     text-align: left;
 }
 
+#horizontal-table-div {
+    width: 100%;
+    overflow: scroll;
+}
+
 .view-query-tr:last-child,
 #view-query-form-controls {
     border-bottom-left-radius  : 5px;
@@ -306,6 +311,7 @@ th, .view-query-tr {
     }
 
     #horizontal-table-div {
+        text-align: center;
         display: block!important;
         background-color: transparent;
         width: 100%;
