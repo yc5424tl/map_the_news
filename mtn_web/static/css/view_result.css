@@ -307,6 +307,13 @@ th, .view-query-tr {
     width: 100%;
 }
 
+#view-result-table {
+    width: 100%;
+    min-width: 100%;
+    margin: 0;
+    align-content: center;
+}
+
 @media screen and (min-width: 1200px) {
     .article-img-sm {
         display : none;
