@@ -16,7 +16,7 @@
     <div class="container" id="view-query-parent-container">
 
         <div class="row">
-            <div class="col">
+            <div class="col-sm-12 col-xl-4">
                 <div id="adjacent-target">
                     <table id="view-query-table">
                         <tr>
@@ -123,9 +123,11 @@
                     {{ choro_map|safe }}
                 </div>
             </div>
+        </div>
 
-            {% if country_articles %}
-                <div class="col-xl-8 col-sm-12 bg-div">
+        {% if country_articles %}
+            <div class="row" id="article-count-div">
+                <div class="col-12 bg-div">
 
                     <div id="horizontal-table-div">
                         <table id="vertical-headings">
@@ -165,9 +167,9 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        {% endif %}
 
-            {% endif %}
-        </div>
 
         <div class="row" id="articles-row">
             <div class="col-sm-0 col-lg-1"></div>

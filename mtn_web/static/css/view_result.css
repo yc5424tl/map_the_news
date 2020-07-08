@@ -285,6 +285,11 @@ th, .view-query-tr {
     display: none;
 }
 
+#article-count-div {
+    align-content: center;
+    width: 100%;
+}
+
 @media screen and (min-width: 1200px) {
     .article-img-sm {
         display : none;
