@@ -29,6 +29,8 @@ from mtn_web.geo_map_mgr import GeoMapManager  # , geo_data_mgr
 from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice
 from mtn_web.query_mgr import Query
 
+from .country_data import iso_codes
+
 
 logging.basicConfig(filename="news_map.log", level=logging.INFO)
 logger = Logger(__name__)
@@ -44,6 +46,7 @@ def index(request: requests.request) -> render:
         return render(request, "general/index.html", {"form": form})
     else:
         return HttpResponseBadRequest('Unsupported Request Method')
+
 
 def register_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
@@ -65,6 +68,17 @@ def register_user(request: requests.request) -> render or redirect:
         return render(request, "general/new_user.html", {"form": form})
 
 
+#
+#
+#
+#
+#  ██╗      ██████╗  ██████╗ ██╗███╗   ██╗    ██╗   ██╗███████╗███████╗██████╗
+#  ██║     ██╔═══██╗██╔════╝ ██║████╗  ██║    ██║   ██║██╔════╝██╔════╝██╔══██╗
+#  ██║     ██║   ██║██║  ███╗██║██╔██╗ ██║    ██║   ██║███████╗█████╗  ██████╔╝
+#  ██║     ██║   ██║██║   ██║██║██║╚██╗██║    ██║   ██║╚════██║██╔══╝  ██╔══██╗
+#  ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║    ╚██████╔╝███████║███████╗██║  ██║
+#  ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝     ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+#
 def login_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
         form = AuthenticationForm(request.POST)
@@ -85,6 +99,17 @@ def login_user(request: requests.request) -> render or redirect:
         return render(request, "general/login_user.html", {"form": form})
 
 
+#
+#
+#
+#
+#  ██╗      ██████╗  ██████╗  ██████╗ ██╗   ██╗████████╗    ██╗   ██╗███████╗███████╗██████╗
+#  ██║     ██╔═══██╗██╔════╝ ██╔═══██╗██║   ██║╚══██╔══╝    ██║   ██║██╔════╝██╔════╝██╔══██╗
+#  ██║     ██║   ██║██║  ███╗██║   ██║██║   ██║   ██║       ██║   ██║███████╗█████╗  ██████╔╝
+#  ██║     ██║   ██║██║   ██║██║   ██║██║   ██║   ██║       ██║   ██║╚════██║██╔══╝  ██╔══██╗
+#  ███████╗╚██████╔╝╚██████╔╝╚██████╔╝╚██████╔╝   ██║       ╚██████╔╝███████║███████╗██║  ██║
+#  ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝    ╚═╝        ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+#
 def logout_user(request: requests.request) -> NoReturn:
     if request.user.is_authenticated:
         messages.info(request, "Logout Successful", extra_tags="alert")
@@ -104,6 +129,17 @@ def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
     return query_type
 
 
+#
+#
+#
+#
+#  ███╗   ██╗███████╗██╗    ██╗     ██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗
+#  ████╗  ██║██╔════╝██║    ██║    ██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝
+#  ██╔██╗ ██║█████╗  ██║ █╗ ██║    ██║   ██║██║   ██║█████╗  ██████╔╝ ╚████╔╝
+#  ██║╚██╗██║██╔══╝  ██║███╗██║    ██║▄▄ ██║██║   ██║██╔══╝  ██╔══██╗  ╚██╔╝
+#  ██║ ╚████║███████╗╚███╔███╔╝    ╚██████╔╝╚██████╔╝███████╗██║  ██║   ██║
+#  ╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝      ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝
+#
 @login_required()
 def new_query(request: requests.request) -> render or redirect or HttpResponseBadRequest:
     if request.method == "GET":
@@ -162,10 +198,28 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
         # raise Http404("Unsupported Request Method.")
         return HttpResponseBadRequest('Unsupported Request Method')
 
+
+#
+#
+#  ██╗   ██╗██╗███████╗██╗    ██╗    ██████╗ ███████╗███████╗██╗   ██╗██╗  ████████╗
+#  ██║   ██║██║██╔════╝██║    ██║    ██╔══██╗██╔════╝██╔════╝██║   ██║██║  ╚══██╔══╝
+#  ██║   ██║██║█████╗  ██║ █╗ ██║    ██████╔╝█████╗  ███████╗██║   ██║██║     ██║
+#  ╚██╗ ██╔╝██║██╔══╝  ██║███╗██║    ██╔══██╗██╔══╝  ╚════██║██║   ██║██║     ██║
+#   ╚████╔╝ ██║███████╗╚███╔███╔╝    ██║  ██║███████╗███████║╚██████╔╝███████╗██║
+#    ╚═══╝  ╚═╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝
+#
 @login_required()
 def view_result(request: requests.request, result_pk: int) -> render:
     result = get_object_or_404(Result, pk=result_pk)
     logger.log(level=logging.ERROR, msg=f'result.articles_per_country == {result.articles_per_country}')
+
+    # #  Builds a new dictionary replacing iso 2 letter code keys with full country names,
+    # #  easier to understand when viewed in page
+    # country_articles = \
+    #     {iso_codes[code]["name"]: result.articles_per_country[code] for code in result.articles_per_country}
+
+    country_articles = full_name_result_set(result.articles_per_country)
+
     return render(
         request,
         "general/view_result.html",
@@ -178,7 +232,8 @@ def view_result(request: requests.request, result_pk: int) -> render:
             "filename": result.filename,
             "article_count": result.article_count,
             "article_data_len": result.article_data_len,
-            'country_articles': result.articles_per_country,
+            "country_articles": country_articles
+            # 'country_articles': result.articles_per_country,
         },
     )
 
@@ -542,3 +597,18 @@ def report_error(request):
         context=locals(),
         status=200
     )
+
+
+def full_name_result_set(result_dict: dict):
+    full_name_dict = {}
+    for alpha3_code in result_dict:
+        if alpha3_code == 'CS-KM':
+            country_name = 'Serbia'
+        else:
+            country_name = pycountry.countries.get(alpha_3=alpha3_code).name
+
+        if country_name is not None:
+            full_name_dict[country_name] = result_dict[alpha3_code]
+        else:
+            logger.log(level=logging.ERROR, msg=f'Error parsing country name from alpha3 code of <{alpha3_code}>')
+    return full_name_dict
