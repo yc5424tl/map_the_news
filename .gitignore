@@ -14,6 +14,7 @@ venv/
 /venv
 ./latest.dump
 *.dump
+.vscode
 
 __pycache__/
 geo_data.txt
