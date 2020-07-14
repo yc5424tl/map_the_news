@@ -8,7 +8,7 @@
 
 {% block styles %}
     {{ block.super }}
-{#    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}" />#}
+<!--{#    <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}" />#}-->
     <link rel="stylesheet" href="{% static 'css/view_result.css' %}">
 {% endblock %}
 
@@ -128,7 +128,7 @@
                 <tr class="view-result-tr row">
                     <td colspan="3" class="view-result-td col-*-12 bg-div">
                         {% if country_articles %}
-{#                            <div class="col-*-12 bg-div">#}
+<!--{#                            <div class="col-*-12 bg-div">#}-->
                             <div id="horizontal-table-div">
                                 <table id="vertical-headings">
                                     <tr>
@@ -165,17 +165,17 @@
                                     {% endfor %}
                                 </table>
                             </div>
-{#                            </div>#}
+<!--{#                            </div>#}-->
                         {% endif %}
                     </td>
-{#                    <td class="view-result-td"></td>#}
-{#                    <td class="view-result-td"></td>#}
+<!--{#                    <td class="view-result-td"></td>#}-->
+<!--{#                    <td class="view-result-td"></td>#}-->
                 </tr>
             </table>
 
 
 
-{#            <div class="col">#}
+<!--{#            <div class="col">#}
 {#                <div id="adjacent-target">#}
 {#                    <table id="view-query-table">#}
 {#                        <tr>#}
@@ -326,7 +326,7 @@
 {#                </div>#}
 {##}
 {#            {% endif %}#}
-{#        </div>#}
+{#        </div>#} -->
 
         <div class="row" id="articles-row">
             <div class="col-sm-0 col-lg-1"></div>
@@ -363,7 +363,7 @@
                                     </li>
                                 {% endif %}
                             {% empty %}
-                                <p class="list-group-item">No Articles Found for Query</p>
+                                <li class="list-group-item">No Articles Found for Query</li>
                             {% endfor %}
                         </ul>
                     </div>
