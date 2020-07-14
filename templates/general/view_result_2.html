@@ -14,9 +14,9 @@
 
 {% block content %}
     
-    <div class="row">
-        <div class="col-sm-12 col-lg-6">
-            <div class="row">
+    <div class="row no-gutters">
+        <div class="col-xs-12 col-lg-6">
+            <div class="row no-gutters">
 
                 <div class="col-12">  <!-- result detail table -->
                     <table id="view-query-table">
@@ -120,7 +120,7 @@
             </div> <!-- end inner row-->
         </div> <!-- end row 1 col 1-->
 
-        <div class="col-sm-12 col-lg-6"> <!-- iframe -->
+        <div class="col-xs-12 col-lg-6"> <!-- iframe -->
             <div id="view-query-iframe-container">
                 <div class="embed-responsive-16by9" id="view-query-iframe-div">
                     {{ choro_map|safe }}
@@ -131,8 +131,8 @@
 
 
     {% if country_articles %}
-        <div class="row">
-            <div id="horizontal-table-div"> 
+        <div class="row no-gutters">
+            <div id="horizontal-table-div" class="col-12"> 
                 <table id="vertical-headings">
                     <tr>
                         <th class="th-article-count">Country</th>
@@ -152,11 +152,11 @@
                     </tr>
                 </table>
             </div>
-            <div id="vertical-table-div">
+            <div id="vertical-table-div" class="col-12">
                 <table id="horizontal-headings">
                     <tr>
-                        <th class="th-article-count">Country</th>
-                        <th class="th-article-count">Articles</th>
+                        <th class="th-article-count vert" id="vert-name">Country</th>
+                        <th class="th-article-count vert" id="vert-count">Articles</th>
                     </tr>
                     {% for country, value in country_articles.items %}
                         {% if value > 0 %}
@@ -172,46 +172,53 @@
     {% endif %}
     
 
-    <div class="row">
+    <div class="row no-gutters">
         <!-- article grid -->
-        <div class="col-sm-0 col-lg-1"></div>
+        <div class="col-xs-0 col-lg-1"></div>
 
-        <div class="col-sm-12 col-lg-10" id="articles-wrapper-col">
-            <div class="row">
+        <div class="col-xs-12 col-lg-10" id="articles-wrapper-col">
+            <div class="row card no-gutters" id="articles-card">
                 <div class="col-12" id="articles-hdr-wrapper">
                     <h1 class="title-center" id="articles-hdr">Mapped Articles</h1>
                 </div>
-                {% for article in articles %}
-                    {% if article %}
-                        <div class="col-sm-12 col-lg-6 col-xl-4 article-col">
-                            <div class="row article-row">
-                                <div class="col-xl-1 col-sm-0 buffer"></div>
-                                <div class="col-xl-7 col-sm-12 article-details-container">
-                                    <a href="{{ article.article_url }}" class="img-link">
-                                        <h4 class="article-title title-center">{{ article.title }}</h4>
-                                    </a>
-                                        <img class="article-img-sm" src="{{ article.image_url }}" alt="{{ article.description }}">
-                                        <h6 class="title-center article-subtitle-container">
-                                            <sub class="article-subtitle title-center">
-                                                By <span class="article-author"> {{ article.author }}</span>
-                                                {{ article.date_published|date:"DATETIME_FORMAT"}}
-                                        </sub>
-                                        </h6>
-                                    <p class="article-body">{{ article.description }}</p>
-                                </div>
-                                <div class="col-xl-3 col-sm-0 article-img-xl-container">
-                                    <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
-                                </div>
-                                <div class="col-xl-1 col-sm-0 buffer"></div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% empty %}
-                    <li class="list-group-item">No Articles Found for Query</li>
-                {% endfor %}
-            </div>
+                <ul class="list-group-horizontal flex-row col-12">
+                    <div class="row no-gutters">
+                        {% for article in articles %}
+                            {% if article %}
+                                <li class="col-xs-12 col-lg-6 col-xl-4 article-col list-group-item">
+                                    <div class="row article-row no-gutters">
+                                        <div class="col-xl-1 col-xs-0 buffer"></div>
+                                        <div class="col-xl-7 col-xs-12 article-details-container">
+                                            <a href="{{ article.article_url }}" class="img-link">
+                                                <h4 class="article-title title-center">{{ article.title }}</h4>
+                                            </a>
+                                                <img class="article-img-sm" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                                <h6 class="title-center article-subtitle-container">
+                                                    <sub class="article-subtitle title-center">
+                                                        By <span class="article-author"> {{ article.author }}</span>
+                                                        {{ article.date_published|date:"DATETIME_FORMAT"}}
+                                                </sub>
+                                                </h6>
+                                            <p class="article-body">{{ article.description }}</p>
+                                        </div>
+                                       
+                                        <div class="col-xl-3 col-xs-0 article-img-xl-container">
+                                            <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                        </div>
+                                        <div class="col-12 xs-img-div">
+                                            <img class="article-img-xs" src="{{ article.image.url}}" alt="{{ article.description }}">
+                                        </div>
+                                        <div class="col-xl-1 col-xs-0 buffer"></div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% empty %}
+                            <li class="list-group-item">No Articles Found for Query</li>
+                        {% endfor %}
+                    </div>
+                </ul>
         </div>
-        <div class="col-sm-0 col-lg-1"></div>
+        <div class="col-xs-0 col-lg-1"></div>
     </div> <!-- end article grid-->
 
 {% endblock %}
@@ -229,6 +236,6 @@
 
 {% block footer-scripts %}
     {{ block.super }}
-    <script  type="text/javascript" src="{% static 'js/responsive-tables.js' %}"></script>
+    <!-- <script  type="text/javascript" src="{% static 'js/responsive-tables.js' %}"></script> -->
     <script src="{% static 'js/view_result.js' %}"></script>
 {% endblock %}
