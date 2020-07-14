@@ -122,7 +122,7 @@ th, .view-query-tr {
 
 #articles-hdr-wrapper {
     font-size   : xx-large;
-    color       : rgb(0, 0, 0);
+    color       : rgb(0,0,0);
     text-shadow : 0 0 5px #FFF,
                  0 0 10px #FFF,
                  0 0 15px #FFF,
@@ -155,7 +155,7 @@ th, .view-query-tr {
     color            : var(--main-light);
 }
 
-.article-col *,
+.article-col > *,
 .articles-details-container,
 .articles-details-container > *,
 .article-subtitle-container,
@@ -569,9 +569,7 @@ td.text-left,
 .th-article-count.text-left {
     text-align: left;
 }
-border-radius    : 5pt;
-border-collapse  : collapse;
-width            : 100%;
+
 
 th, 
 td,
@@ -582,7 +580,8 @@ textarea,
     padding: 1%;
 }
 
+
 .th-article-count,
 .td-article-count {
-    border: 1pt solid var(--main-light)
+    border: 1pt solid var(--main-light);
 }
