@@ -206,7 +206,7 @@ td, tr {
 }
 
 .navbar-toggler-icon {
-    background-color : var(--main-dark);
+    background-color : var(--main-light);
 }
 
 .navbar-toggler {

@@ -133,7 +133,7 @@
     {% if country_articles %}
         <div class="row no-gutters">
             <div id="horizontal-table-div" class="col-12"> 
-                <table id="vertical-headings">
+                <table id="horizontal-table">
                     <tr>
                         <th class="th-article-count text-left">Country</th>
                         {% for country, value in country_articles.items %}
@@ -153,7 +153,7 @@
                 </table>
             </div>
             <div id="vertical-table-div" class="col-12">
-                <table id="horizontal-headings">
+                <table id="vertical-table">
                     <tr class="text-center">
                         <th class="th-article-count vert" id="vert-name">Country</th>
                         <th class="th-article-count vert" id="vert-count">Articles</th>
@@ -185,28 +185,33 @@
                     <div class="row no-gutters">
                         {% for article in articles %}
                             {% if article %}
-                                <li class="col-xs-12 col-lg-6 col-xl-4 article-col list-group-item">
+                                <li class="col-xs-12 col-lg-6 col-xl-4 article-col list-group-item article-li">
                                     <div class="row article-row no-gutters">
                                         <div class="col-xl-1 col-xs-0 buffer"></div>
                                         <div class="col-xl-7 col-xs-12 article-details-container">
-                                            <a href="{{ article.article_url }}" class="img-link">
-                                                <h4 class="article-title title-center">{{ article.title }}</h4>
-                                            </a>
-                                                <img class="article-img-sm" src="{{ article.image_url }}" alt="{{ article.description }}">
-                                                <h6 class="title-center article-subtitle-container">
-                                                    <sub class="article-subtitle title-center">
-                                                        By <span class="article-author"> {{ article.author }}</span>
-                                                        {{ article.date_published|date:"DATETIME_FORMAT"}}
-                                                </sub>
-                                                </h6>
-                                            <p class="article-body">{{ article.description }}</p>
-                                        </div>
-                                       
-                                        <div class="col-xl-3 col-xs-0 article-img-xl-container">
-                                            <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
-                                        </div>
-                                        <div class="col-12 xs-img-div">
-                                            <img class="article-img-xs" src="{{ article.image.url}}" alt="{{ article.description }}">
+                                            <div class="row no-gutters">
+                                                <div class="col-12">
+                                                    <a href="{{ article.article_url }}" class="img-link">
+                                                        <h4 class="article-title title-center">{{ article.title }}</h4>
+                                                    </a>
+                                                        <img class="article-img-sm" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                                        <h6 class="title-center article-subtitle-container">
+                                                            <sub class="article-subtitle title-center text-center ">
+                                                                By <span class="article-author"> {{ article.author }}</span>
+                                                                {{ article.date_published|date:"DATETIME_FORMAT"}}
+                                                        </sub>
+                                                        </h6>
+                                                    <p class="article-body">{{ article.description }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="row no-gutters">
+                                                <div class="col-12 xl-img-div">
+                                                    <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                                </div>
+                                                <div class="col-12 xs-img-div">
+                                                    <img class="article-img-xs" src="{{ article.image.url}}" alt="{{ article.description }}">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-xl-1 col-xs-0 buffer"></div>
                                     </div>
@@ -217,7 +222,7 @@
                         {% endfor %}
                     </div>
                 </ul>
-        </div>
+            </div>
         <div class="col-xs-0 col-lg-1"></div>
     </div> <!-- end article grid-->
 

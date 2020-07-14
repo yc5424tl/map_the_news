@@ -13,14 +13,14 @@
 {% block content %}
     <div class="row new-query-div upper">
         <div class="col"></div>
-        <div class="col-6" id="new-query-title-ctr">
+        <div class="col-xs-10 col-lg-8 col-xl-6" id="new-query-title-ctr">
             <h2>Search Parameters</h2>
         </div>
         <div class="col"></div>
     </div>
     <div class="row new-query-div lower">
         <div class="col"></div>
-        <div class="col-6" id="new-query-body-ctr">
+        <div class="col-xs-10 col-lg-8 col-xl-6" id="new-query-body-ctr">
             <form id="new-query-form" method="post" action="{% url 'new_query' %}">
                 {% csrf_token %}
                 {{ search_form.as_p }}
