@@ -19,9 +19,15 @@
     --aux-accent-6    : #35e8d6;
 }
 
+div {
+    margin: 0;
+    background-color: transparent;
+}
+
 * {
     margin      : 0;
     font-family : 'Josefin Sans', sans-serif;
+    background-color: transparent;
 }
 
 html {
@@ -122,7 +128,8 @@ div.jumbotron {
 
 #content-div {
     margin-bottom : 0;
-    padding       : 1em 1em 60px 1em;
+    padding: 0;
+    /* padding       : 1em 1em 60px 1em; */
 }
 
 /*=================FOOTER===================*/
@@ -206,11 +213,13 @@ td, tr {
 }
 
 .navbar-toggler-icon {
-    background-color : var(--main-light);
+    background-color : transparent;
+    color: var(--main-light);
 }
 
 .navbar-toggler {
     background-color : var(--transp-bg-7);
+    color: var(--main-light);
 }
 
 .nav-link {

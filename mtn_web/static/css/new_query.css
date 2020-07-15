@@ -80,6 +80,6 @@
     max-width : 100%;
 }
 
-button {
+button[text] {
     color : var(--transp-bg-1);
 }
