@@ -275,8 +275,9 @@ th, .view-query-tr {
 }
 
 .article-img-xl {
-    max-width        : 300px;
+    /* max-width        : 300px; */
     width            : 100%;
+    max-width: 100%;
     border-radius    : 5pt;
     border-collapse  : collapse;
     background-color : var(--main-accent-2);
@@ -506,7 +507,7 @@ input.form-control.view-query::placeholder {
         /* margin-left: 10%;
         margin-right: 10%; */
         width: 100%;
-        height: auto;
+        /* height: auto; */
         text-align: center;
         background-color: transparent;
     }
@@ -536,6 +537,8 @@ input.form-control.view-query::placeholder {
     #vertical-table-div {
         display: block;
         text-align: center;
+        max-height: 75vh;
+        overflow-y: scroll;
     }
 }
 
@@ -572,6 +575,7 @@ input.form-control.view-query::placeholder {
         border-radius    : 5pt;
         border-collapse  : collapse;
         width            : 100%;
+        object-fit: contain;
         height           : auto;
         display          : block;
         background-color : transparent;
