@@ -28,10 +28,10 @@
     background-color : var(--transp-bg-1);
 } */
 
-#view-query-table > th,
+/* #view-query-table > th,
 #view-query-table > td {
     padding    : 1em;
-}
+} */
 
 th {
     text-align: center;
