@@ -703,3 +703,9 @@ link:hover {
 #first-row {
     background-color: rgb(46, 46 ,46);
 }
+
+.article-img-xl {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
