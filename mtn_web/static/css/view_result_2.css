@@ -571,8 +571,8 @@ input.form-control.view-query::placeholder {
     .article-img-xl {
         border-radius    : 5pt;
         border-collapse  : collapse;
-        width            : 100%;
-        height           : auto;
+        width            : auto;
+        height           : 100%;
         display          : block;
         background-color : transparent;
     }
