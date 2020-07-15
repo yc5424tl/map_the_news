@@ -432,7 +432,7 @@ input.form-control.view-query::placeholder {
 
 .th-article-count {
     width: fit-content;
-    color: hotpink;
+    color: var(--main-link-hover);
 }
 
 #horizontal-table-div {
@@ -462,10 +462,10 @@ input.form-control.view-query::placeholder {
 
     .xs-image-div {
         display: block;
-        margin-left: 10%;
-        margin-right: 10%;
+        /* margin-left: 10%;
+        margin-right: 10%; */
         width: 100%;
-        height: fit-content;
+        height: auto;
         text-align: center;
         background-color: transparent;
     }
@@ -608,4 +608,11 @@ textarea,
 /* #horizontal-table > td, */
 #horizontal-table > th {
     word-wrap: break-word;
+}
+
+#country-articles-wrapper {
+    overflow-x: scroll;
+    margin: 0;
+    width: 100%;
+    height: auto;
 }

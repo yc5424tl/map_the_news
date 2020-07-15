@@ -15,9 +15,15 @@
 {% block content %}
     
     <div class="row no-gutters">
+
+        <div class="col-12" id="view-query-iframe-container"> <!-- iframe -->
+            <div class="embed-responsive-16by9" id="view-query-iframe-div">
+                {{ choro_map|safe }}
+            </div>
+        </div> <!-- end row 1 col 2 (iframe) -->
+
         <div class="col-xs-12 col-lg-6" text-center>
             <div class="row no-gutters">
-
                 <div class="col-12">  <!-- result detail table -->
                     <table id="view-query-table">
                         <tr>
@@ -51,14 +57,14 @@
                 </div> <!-- end result detail table-->
 
                 {% if user.pk == query_author.id %}
-                    <div class="col-12 text-center" id="result-action-wrapper"> <!-- result action form -->
+                    <div class="col-lg-6 col-cs-12 text-center" id="result-action-wrapper"> <!-- result action form -->
                         {% if result.archived is False %}
                             <!-- <div id="post-query-container" class="col-12"> -->
                                 <form method="post" action="{% url 'new_post' %}" id="new-post-form" class="text-center">
                                     {% csrf_token %}
                                     <div class="input-group view-query row" id="view-query-form-header">
-                                            <p class="input-group-text title-center text-center col-xs-12 col-lg-6" id="new-post-span">Post Your Query</p>
-                                        <input type="text" id="view-query-form-input-title" class="form-control view-query col-xs-12 col-lg-6" placeholder="Enter Title Here" aria-label="Post Title" name="title">
+                                        <p class="input-group-text title-center text-center col-12" id="new-post-span">Post Your Query</p>
+                                        <input type="text" id="view-query-form-input-title" class="form-control view-query col-12" placeholder="Enter Title Here" aria-label="Post Title" name="title">
                                     </div>
                                     <div class="input-group view-query col-12" id="view-query-form-textarea-container">
                                         <label class="input-group-prepend view-query" id="textarea-label">
@@ -117,21 +123,14 @@
                         {% endif %}
                     </div> <!-- end result action form -->
                 {% endif %}
-            </div> <!-- end inner row-->
-        </div> <!-- end row 1 col 1-->
-
-        <div class="col-xs-12 col-lg-6"> <!-- iframe -->
-            <div id="view-query-iframe-container">
-                <div class="embed-responsive-16by9" id="view-query-iframe-div">
-                    {{ choro_map|safe }}
-                </div>
             </div>
-        </div> <!-- end row 1 col 2 (iframe) -->
+        </div> 
+
     </div>
 
 
     {% if country_articles %}
-        <div class="row no-gutters">
+        <div class="row no-gutters" id="country-articles-wrapper">
             <div id="horizontal-table-div" class="col-12"> 
                 <table id="horizontal-table">
                     <tr>
@@ -171,9 +170,52 @@
         </div>
     {% endif %}
     
+    <div class="row">
+        <div class="col-sm-0 col-lg-1 bg-div"></div>
+        <div class="col-sm-12 col-lg-10 bg-div" id="articles-wrapper">
+            <div class="col" id="articles-col">
+                <div class="card" id="articles-card">
+                    <div class="card-header title-center"><h1>Mapped Articles</h1></div>
+                    <ul class="list-group" id="articles-list">
+                        {% for article in articles %}
+                            {% if article %}
+                                <li class="article-li">
+                                    <div class="row article">
+                                        <div class="col-xl-1 col-sm-0 articles-left-buffer"></div>
+                                        <div class="col-xl-7 col-sm-12 article-txt-container">
+                                            <a href="{{ article.article_url }}" class="img-link">
+                                                <h4 class="article-title title-center">{{ article.title }}</h4>
+                                            </a>
+                                             <img class="article-img-sm" src="{{ article.image_url }}" alt="article.description }}">
+                                             <h6 class="title-center article-subtitle-container">
+                                                 <sub class="article-subtitle title-center">
+                                                     By <span class="article-author">{{ article.author }}</span>
+                                                     {{ article.date_published|date:"DATETIME_FORMAT"}}
+                                                </sub>
+                                             </h6>
+                                            <p class="article-body">{{ article.description }}</p>
+                                        </div>
+                                        <div class="col-3 article-img-container">
+                                            <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                        </div>
+                                        <div class="col-12 xs-img-div">
+                                            <img class="article-img-xs" src="{{ article.image.url}}" alt="{{ article.description }}">
+                                        </div>
+                                        <div class="col-xl-1 col-sm-0 articles-right-buffer"></div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% empty %}
+                            <p class="list-group-item">No Articles Found for Query</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-0 col-lg-1 bg-div"></div>
 
-    <div class="row no-gutters text-center">
-        <!-- article grid -->
+    <!-- <div class="row no-gutters text-center">
+        <!- article grid ->
         <div class="col-xs-0 col-lg-1"></div>
 
         <div class="col-xs-12 col-lg-10" id="articles-wrapper-col">
@@ -224,7 +266,8 @@
                 </ul>
             </div>
         <div class="col-xs-0 col-lg-1"></div>
-    </div> <!-- end article grid-->
+    </div> <!- end article grid ->
+-->
 
 {% endblock %}
 
