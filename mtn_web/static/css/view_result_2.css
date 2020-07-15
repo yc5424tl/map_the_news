@@ -72,23 +72,13 @@ th, .view-query-tr {
 
 #view-query-form-header,
 #new-post-span-container,
-#new-post-span,
-#card-header-wrapper,
-.article-title.title-center,
-.article-title.title-center:link,
-.article-title.title-center:visited {
+#new-post-span {
     border-collapse         : collapse;
     border-top-right-radius : 5pt;
     border-top-left-radius  : 5pt;
     background-color        : transparent;
 }
 
-#card-header-wrapper,
-.article-title.title-center,
-.article-title.title-center:link,
-.article-title.title-center:visited {
-    background-color: var(--main-accent-2);
-}
 
 #new-post-span-container {
     text-align    : center;
@@ -215,12 +205,21 @@ th, .view-query-tr {
     padding-right : 0;
 } */
 
+#card-header-wrapper,
+.article-title.title-center,
+.article-title.title-center:link,
+.article-title.title-center:visited {
+    border-collapse         : collapse;
+    border-top-right-radius : 5pt;
+    border-top-left-radius  : 5pt;
+    background-color: var(--main-accent-2);
+}
 .article-title.title-center,
 .article-title.title-center:link,
 .article-title.title-center:visited {
     font-weight    : 800;
     font-size      : 18pt;
-    margin-top     : 10px;
+    padding-top     : 10px;
     padding-bottom : 0;
     margin-bottom  : 0;
     /* color          : var(--main-link-color); */
@@ -588,11 +587,14 @@ input.form-control.view-query::placeholder {
     .article-img-sm {
         display          : block;
         text-align       : center;
-        border-radius    : 5pt;
         border-collapse  : collapse;
         width            : 100%;
         height           : auto;
         background-color : var(--main-accent-2);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .xl-img-div,
@@ -601,12 +603,6 @@ input.form-control.view-query::placeholder {
     .xs-img-div,
     .xs-img-row {
         display : none;
-    }
-
-    .article-title {
-        background-color : var(--main-accent-2);
-        color            : var(--main-light);
-        border-radius: 5pt;
     }
 
     #horizontal-table-div,
@@ -673,6 +669,12 @@ textarea,
     /* color: var(--main-grey); */
     color: rgb(33, 37, 41)
 }
+
+.article:first-child {
+    background-color: var(--main-accent-2);
+    border-radius: 5pt;
+}
+
 
 #articles-list {
     list-style: none;
