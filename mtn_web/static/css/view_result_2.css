@@ -431,7 +431,7 @@ input.form-control.view-query::placeholder {
 }
 
 .th-article-count {
-    width: fit-content;
+    width: auto;
     color: var(--main-link-hover);
 }
 
@@ -579,13 +579,15 @@ td,
 #view-query-form-input-title,
 textarea,
 #pre-textarea {
-    padding: 1%;
+    padding: 3%;
 }
 
 
 .th-article-count,
 .td-article-count {
     border: 1pt solid var(--main-light);
+    padding: 1em;
+    width: fit-content;
 }
 
 .article-subtitle {
@@ -594,9 +596,23 @@ textarea,
 }
 
 .article-li {
-    border: 1pt solid var(--main-light);
+    border-top: 1pt solid var(--main-accent-1);
+    border-bottom: 1pt solid var(--main-accent-1);
+    border-left: none;
+    border-right: none;
     border-collapse: collapse;
     padding: 4%;
+    background-color: var(--main-grey);
+}
+
+#articles-list {
+    list-style: none;
+    background-color: var(--transp-bg-7);
+}
+
+.article-txt-container {
+    background-color: var(--main-accent-1);
+    color: var(--main-grey);
 }
 
 #horizontal-table {
@@ -615,4 +631,13 @@ textarea,
     margin: 0;
     width: 100%;
     height: auto;
+}
+
+.link {
+    color: var(--main-link-color);
+}
+
+link:focus,
+link:hover {
+    color: var(--main-link-hover);
 }
