@@ -99,6 +99,33 @@ th, .view-query-tr {
     min-width    : 100%;
 }
 
+#articles-wrapper {
+    background-color: var(--main-grey);
+    border-radius: 5pt;
+}
+
+.card-header.title-center {
+    background-color: var(--main-grey);
+}
+
+.card-header.title-center > h1 {
+    background-color: transparent;
+    font-size   : xx-large;
+    color       : rgb(0,0,0);
+    text-shadow : 0 0 5px #FFF,
+                 0 0 10px #FFF,
+                 0 0 15px #FFF,
+                 0 0 20px #BEFFF6,
+                 0 0 30px #BEFFF6,
+                 0 0 40px #8BCCC3,
+                 0 0 55px #72B3AA,
+                 0 0 75px #FFF,
+                 2px 2px 2px var(--transp-bg-7);
+    text-align  : center;
+    font-weight : 900;
+    border      : 0;
+}
+
 #articles-wrapper-col {
     border-radius : 5pt;
     padding       : 0;
@@ -116,7 +143,6 @@ th, .view-query-tr {
 .article-col {
     background-color : transparent;
     color            : var(--main-light);
-    border-radius    : 5pt;
     padding          : 0;
 }
 
@@ -185,7 +211,8 @@ th, .view-query-tr {
     margin-top     : 10px;
     padding-bottom : 0;
     margin-bottom  : 0;
-    color          : var(--main-link-color);
+    /* color          : var(--main-link-color); */
+    color: var(--main-grey);
     overflow-x     : hidden;
 }
 
@@ -213,15 +240,15 @@ th, .view-query-tr {
 }
 
 .article-author {
-    color            : var(--aux-accent-3);
+    color            : var(--main-link-color);
     background-color : transparent;
 }
 
 .article-body {
-    padding         : 2em 1em 1em 1em;
+    padding         : 1.5em 1em 1em 1em;
     margin-top      : 0;
     margin-bottom   : 0;
-    border-radius   : 5pt;
+    border-top: 1pt solid var(--main-grey);
     border-collapse : collapse;
 }
 
@@ -586,8 +613,8 @@ textarea,
 .th-article-count,
 .td-article-count {
     border: 1pt solid var(--main-light);
-    padding: 1em;
-    width: fit-content;
+    padding: 2em;
+    width: auto;
 }
 
 .article-subtitle {
@@ -602,7 +629,8 @@ textarea,
     border-right: none;
     border-collapse: collapse;
     padding: 4%;
-    background-color: var(--main-grey);
+    background-color: var(--main-light);
+    color: var(--main-grey);
 }
 
 #articles-list {
