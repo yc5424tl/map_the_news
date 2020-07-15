@@ -656,6 +656,10 @@ textarea,
     background-color: rgb(66, 75, 84);
 }
 
+#articles-list > li::marker {
+    display: none;
+}
+
 .article-txt-container {
     background-color: var(--main-light);
     /* color: var(--main-grey); */
