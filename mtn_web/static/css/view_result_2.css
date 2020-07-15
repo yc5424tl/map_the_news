@@ -513,8 +513,8 @@ input.form-control.view-query::placeholder {
 
     .xs-img-row {
         display: block;
-        width: 100%;
-        height: auto;
+        /* width: 100%; */
+        /* height: auto; */
     }
     .article-img-xs {
         display: block;
@@ -745,5 +745,5 @@ link:hover {
 }
 
 .article-img-container {
-    background-color: var(--main-light);
+    background-color: var(--main-accent-2);
 }

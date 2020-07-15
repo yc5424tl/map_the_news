@@ -179,7 +179,7 @@
                         {% for article in articles %}
                             {% if article %}
                                 <li class="article-li">
-                                    <div class="row article no-gutters">
+                                    <div class="row no-gutters">
                                         <div class="col-xl-1 col-sm-0 articles-left-buffer"></div>
                                         <div class="col-xl-6 col-sm-12 article-txt-container">
                                             <a href="{{ article.article_url }}" class="img-link">
@@ -199,7 +199,7 @@
                                         </div>
                                         <div class="col-xl-1 col-sm-0 articles-right-buffer"></div>
                                     </div>
-                                    <div class="row xs-img-row no-gutters">
+                                    <div class="row no-gutters">
                                         <div class="col-12 xs-img-div article-img-container">
                                             <img class="article-img-xs" src="{{ article.image.url }}" alt="{{ article.description }}">
                                         </div>
