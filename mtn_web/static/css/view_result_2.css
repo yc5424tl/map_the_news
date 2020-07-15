@@ -29,7 +29,6 @@
 } */
 
 #view-query-table {
-    margin-top : 1em;
     padding    : 1em;
 }
 
@@ -62,9 +61,6 @@ th, .view-query-tr {
     border-right : 1pt solid var(--main-light);
 }
 
-#result-action-wrapper {
-    margin-top: 2em;
-}
 
 #result-action-wrapper > form > button {
     font-weight: 700;
@@ -463,10 +459,6 @@ input.form-control.view-query::placeholder {
     color: var(--main-link-hover);
 }
 
-#horizontal-table-div {
-    overflow-x: scroll;
-}
-
 /***
  *    ███████╗███╗   ██╗██████╗     ██╗   ██╗██╗███████╗██╗    ██╗     ██████╗ ██╗   ██╗███████╗██████╗ ██╗   ██╗
  *    ██╔════╝████╗  ██║██╔══██╗    ██║   ██║██║██╔════╝██║    ██║    ██╔═══██╗██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝
@@ -509,11 +501,11 @@ input.form-control.view-query::placeholder {
         height: auto;
     }
 
-    #horizontal-table-div {
+    /* #horizontal-table-div {
         width: 100%;
         min-width: 100%;
         overflow-x: scroll;
-    }
+    } */
 
     #horizontal-table-div,
     #horizontal-table-div > * {
@@ -532,6 +524,10 @@ input.form-control.view-query::placeholder {
     #horizontal-table-div {
         display: block;
         text-align: center;
+        overflow-x: scroll;
+        width: 100%;
+        min-width: 100%;
+        margin-bottom: 2em
     }
 
     #vertical-table-div,
@@ -630,6 +626,7 @@ textarea,
     border: 1pt solid var(--main-light);
     padding: 2em;
     width: auto;
+    min-width: fit-content;
 }
 
 .article-subtitle {
@@ -671,6 +668,7 @@ textarea,
     width: 100%;
     min-width: 100%;
     text-align: center;
+
 }
 
 #vertical-table {
@@ -721,4 +719,7 @@ link:hover {
     margin-right: 0;
     padding-left: 0;
     padding-right: 0;
+    margin-top: 0;
+    height: 100%;
+    min-height: 100%;
 }

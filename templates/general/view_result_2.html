@@ -23,7 +23,7 @@
         </div> <!-- end row 1 col 2 (iframe) -->
     </div>
 
-    <div class=row>
+    <div class="row no-gutters">
         <div class="col-xs-12 col-lg-6 text-center" id="result-detail-wrapper">
             <div class="row no-gutters">
                 <div class="col-12">  <!-- result detail table -->
@@ -59,73 +59,72 @@
                 </div> <!-- end result detail table-->
             </div>
         </div>
-    {% if user.pk == query_author.id %}
-        <div class="col-lg-6 col-xs-12 text-center" id="result-action-wrapper"> <!-- result action form -->
-            {% if result.archived is False %}
-                <!-- <div id="post-query-container" class="col-12"> -->
-                    <form method="post" action="{% url 'new_post' %}" id="new-post-form" class="text-center">
+        {% if user.pk == query_author.id %}
+            <div class="col-lg-6 col-xs-12 text-center" id="result-action-wrapper"> <!-- result action form -->
+                {% if result.archived is False %}
+                    <!-- <div id="post-query-container" class="col-12"> -->
+                        <form method="post" action="{% url 'new_post' %}" id="new-post-form" class="text-center">
+                            {% csrf_token %}
+                            <div class="input-group view-query row no-gutters" id="view-query-form-header">
+                                <p class="input-group-text title-center text-center col-12" id="new-post-span">Post Your Query</p>
+                                <input type="text" id="view-query-form-input-title" class="form-control view-query col-12" placeholder="Enter Title Here" aria-label="Post Title" name="title">
+                                    <label class="input-group-prepend view-query" id="textarea-label">
+                                    <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
+                                </label>
+                                <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
+                            </div>
+                            <div class="input-group view-query" id="view-query-form-controls">
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="private-save-false">Private  </label>
+                                    <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="public-save-false">Public  </label>
+                                    <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
+                                </div>
+                                <div class="btn-group-sm float-right">
+                                    <a href="#">
+                                        <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
+                                    </a>
+                                    <a href="{% url 'delete_result' result.pk %}">
+                                        <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
+                                    </a>
+                                </div>
+                            </div>
+                            <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                            <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                        </form>
+                    <!-- </div> -->
+                {% endif %}
+
+                {% if result.archived is True %}
+                    <form method="post" action="{% url 'update_post' post.pk %}">
                         {% csrf_token %}
-                        <div class="input-group view-query row" id="view-query-form-header">
-                            <p class="input-group-text title-center text-center col-12" id="new-post-span">Post Your Query</p>
-                            <input type="text" id="view-query-form-input-title" class="form-control view-query col-12" placeholder="Enter Title Here" aria-label="Post Title" name="title">
-                        </div>
-                        <div class="input-group view-query col-12" id="view-query-form-textarea-container">
-                            <label class="input-group-prepend view-query" id="textarea-label">
-                                <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
-                            </label>
-                            <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
-                        </div>
-                        <div class="input-group view-query" id="view-query-form-controls">
+                        <div class="input-group">
                             <div class="form-check form-check-inline">
-                                <label class="form-check-label" for="private-save-false">Private  </label>
-                                <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
+                                <label class="form-check-label"> Private
+                                    <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
+                                </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <label class="form-check-label" for="public-save-false">Public  </label>
-                                <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
-                            </div>
-                            <div class="btn-group-sm float-right">
-                                <a href="#">
-                                    <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
-                                </a>
-                                <a href={% url 'delete_result' result.pk %}>
-                                    <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
-                                </a>
+                                <label class="form-check-label"> Public
+                                    <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
+                                </label>
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-default">Update Post</button>
                         <input type="hidden" name="user_pk" value="{{ user.pk }}">
                         <input type="hidden" name="result_pk" value="{{ result.pk }}">
                     </form>
-                <!-- </div> -->
-            {% endif %}
-
-            {% if result.archived is True %}
-                <form method="post" action="{% url 'update_post' post.pk %}">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label"> Private
-                                <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label"> Public
-                                <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
-                            </label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-default">Update Post</button>
-                    <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                    <input type="hidden" name="result_pk" value="{{ result.pk }}">
-                </form>
-                <form method="post" action="{% url 'delete_post' post.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete Post</button>
-                    <sub>* Query will also be deleted</sub>
-                </form>
-            {% endif %}
-        </div> <!-- end result action form -->
-    {% endif %}
+                    <form method="post" action="{% url 'delete_post' post.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Post</button>
+                        <sub>* Query will also be deleted</sub>
+                    </form>
+                {% endif %}
+            </div> <!-- end result action form -->
+        {% endif %}
+    </div>
     
 
 
@@ -170,9 +169,9 @@
         </div>
     {% endif %}
     
-    <div class="row">
-        <div class="col-sm-0 col-lg-1 bg-div"></div>
-        <div class="col-sm-12 col-lg-10 bg-div" id="articles-wrapper">
+    <div class="row no-gutters">
+        <div class="col-sm-0 col-lg-1"></div>
+        <div class="col-sm-12 col-lg-10" id="articles-wrapper">
             <div class="col" id="articles-col">
                 <div class="card" id="articles-card">
                     <div class="card-header title-center"><h1>Mapped Articles</h1></div>
@@ -180,17 +179,17 @@
                         {% for article in articles %}
                             {% if article %}
                                 <li class="article-li">
-                                    <div class="row article">
+                                    <div class="row article no-gutters">
                                         <div class="col-xl-1 col-sm-0 articles-left-buffer"></div>
                                         <div class="col-xl-7 col-sm-12 article-txt-container">
                                             <a href="{{ article.article_url }}" class="img-link">
                                                 <h4 class="article-title title-center link">{{ article.title }}</h4>
                                             </a>
-                                             <img class="article-img-sm" src="{{ article.image_url }}" alt="article.description }}">
+                                             <img class="article-img-sm" src="{{ article.image_url }}" alt="{{ article.description }}">
                                              <h6 class="title-center article-subtitle-container">
                                                  <sub class="article-subtitle title-center">
                                                      By <span class="article-author">{{ article.author }}</span>
-                                                     {{ article.date_published|date:"DATETIME_FORMAT"}}
+                                                     {{ article.date_published|date:"DATETIME_FORMAT" }}
                                                 </sub>
                                              </h6>
                                             <p class="article-body">{{ article.description }}</p>
@@ -200,9 +199,9 @@
                                         </div>
                                         <div class="col-xl-1 col-sm-0 articles-right-buffer"></div>
                                     </div>
-                                    <div class="row xs-img-row">
+                                    <div class="row xs-img-row no-gutters">
                                         <div class="col-12 xs-img-div">
-                                            <img class="article-img-xs" src="{{ article.image.url}}" alt="{{ article.description }}">
+                                            <img class="article-img-xs" src="{{ article.image.url }}" alt="{{ article.description }}">
                                         </div>
                                     </div>
                                 </li>
@@ -214,7 +213,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-0 col-lg-1 bg-div"></div>
+        <div class="col-sm-0 col-lg-1"></div>
+    </div>
 
     <!-- <div class="row no-gutters text-center">
         <!- article grid ->
