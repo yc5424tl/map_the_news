@@ -497,10 +497,21 @@ input.form-control.view-query::placeholder {
         background-color: transparent;
     }
 
+    .xs-img-row {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
     .article-img-xs {
         display: block;
         width: 100%;
         height: auto;
+    }
+
+    #horizontal-table-div {
+        width: 100%;
+        min-width: 100%;
+        overflow-x: scroll;
     }
 
     #horizontal-table-div,
@@ -529,6 +540,7 @@ input.form-control.view-query::placeholder {
 
     .article-img-sm,
     .xs-img-div, 
+    .cs-img-row,
     .article-img-xs {
         display : none;
     }
@@ -563,7 +575,8 @@ input.form-control.view-query::placeholder {
     .xl-img-div,
     .article-img-xl,
     .article-img-xs,
-    .xs-img-div {
+    .xs-img-div,
+    .xs-img-row {
         display : none;
     }
 
@@ -646,6 +659,14 @@ textarea,
 #horizontal-table {
     table-layout: fixed;
     width: 100%;
+    min-width: 100%;
+    text-align: center;
+}
+
+#vertical-table {
+    width: 100%;
+    min-width: 100%;
+    text-align: center;
 }
 
 #horizontal-table > tr,
