@@ -219,7 +219,6 @@ th, .view-query-tr {
 .article-title.title-center:visited {
     font-weight    : 800;
     font-size      : 18pt;
-    padding-top     : 10px;
     padding-bottom : 0;
     margin-bottom  : 0;
     /* color          : var(--main-link-color); */
@@ -497,31 +496,49 @@ input.form-control.view-query::placeholder {
 
 
 @media (max-width: 767px) {
-    .article-img-sm,
+    /* .article-img-sm, */
+    .article-img-xs,
     .article-img-xl,
     .xl-img-div {
         display: none;
     }
 
     .xs-image-div {
-        display: block;
+        display: none;
+        /* display: block; */
         /* margin-left: 10%;
         margin-right: 10%; */
-        width: 100%;
+        /* width: 100%; */
         /* height: auto; */
-        text-align: center;
-        background-color: transparent;
+        /* text-align: center; */
+        /* background-color: transparent; */
     }
 
     .xs-img-row {
-        display: block;
+        display: none;
+        /* display: block; */
         /* width: 100%; */
         /* height: auto; */
     }
     .article-img-xs {
-        display: block;
-        max-width: 100%;
-        height: auto;
+        /* display: block; */
+        /* max-width: 100%; */
+        /* height: auto; */
+        display: none;
+    }
+
+    .article-img-sm {
+    border-radius: 0;
+    display          : block;
+    text-align       : center;
+    border-collapse  : collapse;
+    width            : 100%;
+    height           : auto;
+    background-color : var(--main-accent-2);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     }
 
     /* #horizontal-table-div {
@@ -585,6 +602,7 @@ input.form-control.view-query::placeholder {
 
 @media (min-width: 768px) and (max-width: 1199px) {
     .article-img-sm {
+        border-radius: 0;
         display          : block;
         text-align       : center;
         border-collapse  : collapse;

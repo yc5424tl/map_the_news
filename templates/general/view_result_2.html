@@ -199,11 +199,11 @@
                                         </div>
                                         <div class="col-xl-1 col-xs-0 articles-right-buffer"></div>
                                     </div>
-                                    <div class="row no-gutters">
-                                        <div class="col-xs-12 col-sm-0 xs-img-div article-img-container">
-                                            <img class="article-img-xs" src="{{ article.image.url }}" alt="{{ article.description }}">
-                                        </div>
-                                    </div>
+                                    {% comment %} <div class="row no-gutters"> {% endcomment %}
+                                        {% comment %} <div class="col-xs-12 col-sm-0 xs-img-div article-img-container"> {% endcomment %}
+                                            {% comment %} <img class="article-img-xs" src="{{ article.image.url }}" alt="{{ article.description }}"> {% endcomment %}
+                                        {% comment %} </div> {% endcomment %}
+                                    {% comment %} </div> {% endcomment %}
                                 </li>
                             {% endif %}
                         {% empty %}
