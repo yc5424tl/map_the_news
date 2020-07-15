@@ -21,8 +21,10 @@
                 {{ choro_map|safe }}
             </div>
         </div> <!-- end row 1 col 2 (iframe) -->
+    </div>
 
-        <div class="col-xs-12 col-lg-6 text-center">
+    <div class=row>
+        <div class="col-xs-12 col-lg-6 text-center" id="result-detail-wrapper">
             <div class="row no-gutters">
                 <div class="col-12">  <!-- result detail table -->
                     <table id="view-query-table">
@@ -55,78 +57,76 @@
                         </tr>
                     </table>
                 </div> <!-- end result detail table-->
-
-                {% if user.pk == query_author.id %}
-                    <div class="col-lg-6 col-cs-12 text-center" id="result-action-wrapper"> <!-- result action form -->
-                        {% if result.archived is False %}
-                            <!-- <div id="post-query-container" class="col-12"> -->
-                                <form method="post" action="{% url 'new_post' %}" id="new-post-form" class="text-center">
-                                    {% csrf_token %}
-                                    <div class="input-group view-query row" id="view-query-form-header">
-                                        <p class="input-group-text title-center text-center col-12" id="new-post-span">Post Your Query</p>
-                                        <input type="text" id="view-query-form-input-title" class="form-control view-query col-12" placeholder="Enter Title Here" aria-label="Post Title" name="title">
-                                    </div>
-                                    <div class="input-group view-query col-12" id="view-query-form-textarea-container">
-                                        <label class="input-group-prepend view-query" id="textarea-label">
-                                            <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
-                                        </label>
-                                        <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
-                                    </div>
-                                    <div class="input-group view-query" id="view-query-form-controls">
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label" for="private-save-false">Private  </label>
-                                            <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label" for="public-save-false">Public  </label>
-                                            <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
-                                        </div>
-                                        <div class="btn-group-sm float-right">
-                                            <a href="#">
-                                                <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
-                                            </a>
-                                            <a href={% url 'delete_result' result.pk %}>
-                                                <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                                    <input type="hidden" name="result_pk" value="{{ result.pk }}">
-                                </form>
-                            <!-- </div> -->
-                        {% endif %}
-
-                        {% if result.archived is True %}
-                            <form method="post" action="{% url 'update_post' post.pk %}">
-                                {% csrf_token %}
-                                <div class="input-group">
-                                    <div class="form-check form-check-inline">
-                                        <label class="form-check-label"> Private
-                                            <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <label class="form-check-label"> Public
-                                            <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
-                                        </label>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-default">Update Post</button>
-                                <input type="hidden" name="user_pk" value="{{ user.pk }}">
-                                <input type="hidden" name="result_pk" value="{{ result.pk }}">
-                            </form>
-                            <form method="post" action="{% url 'delete_post' post.pk %}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Delete Post</button>
-                                <sub>* Query will also be deleted</sub>
-                            </form>
-                        {% endif %}
-                    </div> <!-- end result action form -->
-                {% endif %}
             </div>
-        </div> 
+        </div>
+    {% if user.pk == query_author.id %}
+        <div class="col-lg-6 col-xs-12 text-center" id="result-action-wrapper"> <!-- result action form -->
+            {% if result.archived is False %}
+                <!-- <div id="post-query-container" class="col-12"> -->
+                    <form method="post" action="{% url 'new_post' %}" id="new-post-form" class="text-center">
+                        {% csrf_token %}
+                        <div class="input-group view-query row" id="view-query-form-header">
+                            <p class="input-group-text title-center text-center col-12" id="new-post-span">Post Your Query</p>
+                            <input type="text" id="view-query-form-input-title" class="form-control view-query col-12" placeholder="Enter Title Here" aria-label="Post Title" name="title">
+                        </div>
+                        <div class="input-group view-query col-12" id="view-query-form-textarea-container">
+                            <label class="input-group-prepend view-query" id="textarea-label">
+                                <textarea class="form-control view-query" id="new-post-textarea" aria-label="Post Body" name="body" rows="11"></textarea>
+                            </label>
+                            <div id="pre-textarea" contenteditable="true" placeholder="share your thoughts!"></div>
+                        </div>
+                        <div class="input-group view-query" id="view-query-form-controls">
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="private-save-false">Private  </label>
+                                <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="public-save-false">Public  </label>
+                                <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
+                            </div>
+                            <div class="btn-group-sm float-right">
+                                <a href="#">
+                                    <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
+                                </a>
+                                <a href={% url 'delete_result' result.pk %}>
+                                    <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
+                                </a>
+                            </div>
+                        </div>
+                        <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                        <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                    </form>
+                <!-- </div> -->
+            {% endif %}
 
-    </div>
+            {% if result.archived is True %}
+                <form method="post" action="{% url 'update_post' post.pk %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label"> Private
+                                <input type="radio" class="form-check-input" id="private-save-true" name="save_radio" value="False" checked>
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label"> Public
+                                <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default">Update Post</button>
+                    <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                    <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                </form>
+                <form method="post" action="{% url 'delete_post' post.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Post</button>
+                    <sub>* Query will also be deleted</sub>
+                </form>
+            {% endif %}
+        </div> <!-- end result action form -->
+    {% endif %}
+    
 
 
     {% if country_articles %}

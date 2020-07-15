@@ -709,3 +709,11 @@ link:hover {
     top: 50%;
     transform: translateY(-50%);
 }
+
+#result-detail-wrapper,
+#result-action-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
