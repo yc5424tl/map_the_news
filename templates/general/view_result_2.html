@@ -170,9 +170,9 @@
     {% endif %}
     
     <div class="row no-gutters">
-        <div class="col-sm-0 col-lg-1"></div>
-        <div class="col-sm-12 col-lg-10" id="articles-wrapper">
-            <div class="col" id="articles-col">
+        <div class="col-xs-0 col-lg-1"></div>
+        <div class="col-xs-12 col-lg-10" id="articles-wrapper">
+            {% comment %} <div class="col" id="articles-col"> {% endcomment %}
                 <div class="card" id="articles-card">
                     <div class="card-header title-center"><h1>Mapped Articles</h1></div>
                     <ul class="list-group" id="articles-list">
@@ -180,8 +180,8 @@
                             {% if article %}
                                 <li class="article-li">
                                     <div class="row no-gutters">
-                                        <div class="col-xl-1 col-sm-0 articles-left-buffer"></div>
-                                        <div class="col-xl-6 col-sm-12 article-txt-container">
+                                        <div class="col-xl-1 col-xs-0 articles-left-buffer"></div>
+                                        <div class="col-xl-6 col-xs-12 article-txt-container">
                                             <a href="{{ article.article_url }}" class="img-link">
                                                 <h4 class="article-title title-center link">{{ article.title }}</h4>
                                             </a>
@@ -197,7 +197,7 @@
                                         <div class="col-4 article-img-container">
                                             <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
                                         </div>
-                                        <div class="col-xl-1 col-sm-0 articles-right-buffer"></div>
+                                        <div class="col-xl-1 col-xs-0 articles-right-buffer"></div>
                                     </div>
                                     <div class="row no-gutters">
                                         <div class="col-12 xs-img-div article-img-container">
@@ -211,9 +211,9 @@
                         {% endfor %}
                     </ul>
                 </div>
-            </div>
+            {% comment %} </div> {% endcomment %}
         </div>
-        <div class="col-sm-0 col-lg-1"></div>
+        <div class="col-xs-0 col-lg-1"></div>
     </div>
 
     <!-- <div class="row no-gutters text-center">

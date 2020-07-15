@@ -133,7 +133,8 @@ th, .view-query-tr {
                  2px 2px 2px rgba(212, 212, 212, 0.7);
     text-align  : center;
     font-weight : 900;
-    border      : 0;
+    border      : 1pt solid var(--main-light);
+    border-radius: 5pt;
 }
 
 /* #articles-wrapper-col {
@@ -268,6 +269,7 @@ th, .view-query-tr {
     border-top: 1pt solid var(--main-grey);
     border-collapse : collapse;
     color: var(--main-light);
+    border-radius: 5pt;
 }
 
 .xl-img-div {
@@ -519,7 +521,7 @@ input.form-control.view-query::placeholder {
     }
     .article-img-xs {
         display: block;
-        width: 100%;
+        max-width: 100%;
         height: auto;
     }
 
@@ -590,7 +592,7 @@ input.form-control.view-query::placeholder {
         border-collapse  : collapse;
         width            : 100%;
         height           : auto;
-        background-color : transparent;
+        background-color : var(--main-accent-2);
     }
 
     .xl-img-div,
@@ -602,8 +604,9 @@ input.form-control.view-query::placeholder {
     }
 
     .article-title {
-        background-color : transparent;
+        background-color : var(--main-accent-2);
         color            : var(--main-light);
+        border-radius: 5pt;
     }
 
     #horizontal-table-div,
@@ -685,6 +688,7 @@ textarea,
     background-color: var(--main-light);
     /* color: var(--main-grey); */
     color: rgb(33, 37, 41)
+    border-radius: 5pt;
 }
 
 #horizontal-table {
@@ -725,6 +729,7 @@ link:hover {
 
 #articles-card {
     background-color: rgb(66, 75, 84);
+    border: 1pt solid var(--main-light);
 }
 
 #first-row {
