@@ -222,7 +222,7 @@ def view_result(request: requests.request, result_pk: int) -> render:
 
     return render(
         request,
-        "general/view_result_2.html",
+        "general/view_result_3.html",
         {
             "result": result,
             "query_author": result.author,
