@@ -195,10 +195,10 @@ th, .view-query-tr {
     background-color: var(--main-accent-2);
 }
 
-/* .buffer {
+.buffer {
     background-color : transparent;
     margin           : 0;
-} */
+}
 
 /* .article-details-container {
     padding-left  : 0;
@@ -732,6 +732,7 @@ textarea,
     /* color: var(--main-grey); */
     color: rgb(33, 37, 41);
     border-radius: 5pt;
+    min-height: 100%;
 }
 
 #horizontal-table {
