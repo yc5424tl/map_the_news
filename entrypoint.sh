@@ -14,4 +14,4 @@ export SECRET_KEY=${SEC_KEY}
 #python3 manage.py ensure_adminuser --username="${SU_USERNAME}" --email="${SU_EMAIL}" --password="${SU_PASSWORD}"
 #python3 manage.py ensure_sifter --username="${SIFTER_USER}" --email="${SIFTER_EMAIL}" --password="${SIFTER_PW}"
 #echo 'Starting Server'
-gunicorn mtn_core.wsgi:application --bind 0.0.0.0:"${PORT}"
+gunicorn mtn_core.wsgi:application --bind 0.0.0.0:"${PORT}" --reload
