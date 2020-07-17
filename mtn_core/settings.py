@@ -147,6 +147,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+)
+
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
 if USE_S3:
@@ -173,17 +178,15 @@ else:
     STATIC_URL = "/static/"
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-    ]
+    # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATIC_ROOT = "./static"
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-)
+
 
 ADMIN_MEDIA_PREFIX = f"{STATIC_URL}admin/"
 
