@@ -218,7 +218,7 @@ th, .view-query-tr {
     border-collapse         : collapse;
     border-top-right-radius : 5pt;
     border-top-left-radius  : 5pt;
-    background-color: var(--main-accent-2);
+    background-color: var(--main-grey);
 }
 .article-title.title-center,
 .article-title.title-center:link,
@@ -246,6 +246,8 @@ th, .view-query-tr {
     margin-bottom  : 0;
     padding-top    : 8px;
     padding-bottom : 8px;
+    background-color: var(--main-grey);
+    color: var(--main-light);
 }
 
 .article-subtitle {
@@ -256,6 +258,7 @@ th, .view-query-tr {
     text-align   : center;
     font-size    : 10pt;
     color: var(--main-light);
+    background-color: var(--main-grey);
 }
 
 .article-author,
@@ -263,7 +266,7 @@ th, .view-query-tr {
 .articles-left-buffer {
     /* color            : var(--main-link-color);*/
     /* background-color : transparent; */
-    background-color: var(--main-accent-2);
+    background-color: rgb(46, 46, 46);
     color: var(--main-light);
 
 }
@@ -272,9 +275,9 @@ th, .view-query-tr {
     padding         : 1.5em 1em 1em 1em;
     margin-top      : 0;
     margin-bottom   : 0;
-    border-top: 1pt solid var(--main-grey);
+    border-top: 1pt solid var(--main-light);
     border-collapse : collapse;
-    color: var(--main-light);
+    color: rgb(46, 46, 46);
     border-bottom-left-radius: 5pt;
     border-bottom-right-radius: 5pt;
 }
@@ -695,21 +698,22 @@ textarea,
 }
 
 .article-li {
-    border-top: 1pt solid var(--main-light);
-    border-bottom: 1pt solid var(--main-light);
+    border-top: 1pt solid var(--main-grey);
+    border-bottom: 1pt solid var(--main-grey);
     border-left: none;
     border-right: none;
     border-collapse: collapse;
     padding: 4%;
-    background-color: var(--main-light);
+    background-color: var(--transp-accent-2);
     /* background-color: rgb(66, 75, 84); */
     /* color: var(--main-grey); */
     color: rgb(33, 37, 41)
 }
 
 .article-li:first-child {
-    background-color: var(--main-accent-2);
-    border-radius: 5pt;
+    background-color: var(--transp-accent-2);
+    border-top-right-radius: 5pt;
+    border-top-left-radius: 5pt;
 }
 
 

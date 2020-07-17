@@ -37,7 +37,13 @@
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Type: </td>
-                            <td class="view-query-details-row-data">{{ result.query_type.value|capfirst }}</td>
+                            <td class="view-query-details-row-data">
+                                {% if result.query_type == 'QueryTypeChoice.ALL' %}
+                                    ALL
+                                {% elif result.query_type == 'QueryTypeChoice.HDL' %}
+                                    HEADLINES ONLY
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr class="view-query-tr">
                             <td class="view-query-details-row-title">Date: </td>
@@ -270,7 +276,7 @@
         <div class="col-xs-0 col-lg-1"></div>
     </div> <!- end article grid ->
 -->
-
+Query
 {% endblock %}
 
 {% block scripts %}

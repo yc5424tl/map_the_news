@@ -66,8 +66,6 @@ def register_user(request: requests.request) -> render or redirect:
     if request.method == "GET":
         form = CustomUserCreationForm()
         return render(request, "general/new_user.html", {"form": form})
-
-
 #
 #
 #
@@ -97,8 +95,6 @@ def login_user(request: requests.request) -> render or redirect:
     if request.method == "GET":
         form = AuthenticationForm()
         return render(request, "general/login_user.html", {"form": form})
-
-
 #
 #
 #
@@ -113,22 +109,6 @@ def login_user(request: requests.request) -> render or redirect:
 def logout_user(request: requests.request) -> NoReturn:
     if request.user.is_authenticated:
         messages.info(request, "Logout Successful", extra_tags="alert")
-
-
-def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
-    if qm_focus == "QueryTypeChoice.ALL" or "all".casefold():
-        query_type = QueryTypeChoice.ALL
-    elif qm_focus == "QueryTypeChoice.HDL" or "headlines".casefold():
-        query_type = QueryTypeChoice.HDL
-    else:
-        logger.log(
-            level=logging.ERROR,
-            msg=f"query_type not found in get_query_type for qm_focus of {qm_focus}",
-        )
-        query_type = None
-    return query_type
-
-
 #
 #
 #
@@ -222,7 +202,7 @@ def view_result(request: requests.request, result_pk: int) -> render:
 
     return render(
         request,
-        "general/view_result_3.html",
+        "general/view_result_2.html",
         {
             "result": result,
             "query_author": result.author,
@@ -612,3 +592,17 @@ def full_name_result_set(result_dict: dict):
         else:
             logger.log(level=logging.ERROR, msg=f'Error parsing country name from alpha3 code of <{alpha3_code}>')
     return full_name_dict
+
+
+def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
+    if qm_focus == "QueryTypeChoice.ALL" or "all".casefold():
+        query_type = QueryTypeChoice.ALL
+    elif qm_focus == "QueryTypeChoice.HDL" or "headlines".casefold():
+        query_type = QueryTypeChoice.HDL
+    else:
+        logger.log(
+            level=logging.ERROR,
+            msg=f"query_type not found in get_query_type for qm_focus of {qm_focus}",
+        )
+        query_type = None
+    return query_type

@@ -46,7 +46,7 @@
                             </button>
                         </h3>
                     </div>
-                    <div id="details-collapse" class="collapse show" data-parent="#accordion">
+                    <div id="details-collapse" class="collapse" data-parent="#accordion">
                         <div class="card-body row">
                             <div class="col-4 text-center">Query: {{ result.argument }}</div>
                             <div class="col-4 text-center">Date: {{ result.date_created_readable }}</div>
@@ -99,7 +99,7 @@
                             </button>
                         </h3>
                     </div>
-                    <div id="articles-collapse" class="collapse show" data-parent="#accordion">
+                    <div id="articles-collapse" class="collapse" data-parent="#accordion">
                         <div class="card-body">
                             <ul class="list-group">
                                 {% for article in articles %}
@@ -111,7 +111,7 @@
                                                     <a href="{{ article.article_url }}" class="img-link">
                                                         <h4 class="article-title text-center link card-link">{{ article.title }}</h4>
                                                     </a>
-                                                    <img class="article-img-sm" src="{{ article.img_url }}" alt="{{ article.description }}">
+                                                    <img class="article-img sm" src="{{ article.img_url }}" alt="{{ article.description }}">
                                                     <h6 class="article-subtitle-wrapper text-center">
                                                         <sub class="article-subtitle text-center">
                                                             By <span class="article-author">{{ article.author }}</span>
@@ -121,7 +121,7 @@
                                                     <p class="article-body">{{ article.description }}</p>
                                                 </div>
                                                 <div class="col-xs-0 col-xl-4">
-                                                    <img class="article-img-xl" src="{{ article.img_url }}" alt="{{ article.description }}">
+                                                    <img class="article-img xl" src="{{ article.img_url }}" alt="{{ article.description }}">
                                                 </div>
                                                 <div class="col-xs-0 col-xl-1 buffer-right"></div>
                                             </div>
@@ -145,7 +145,7 @@
                                 </button>
                             </h3>
                         </div>
-                        <div id="save-collapse" class="collapse show" data-parent="#accordion">
+                        <div id="save-collapse" class="collapse" data-parent="#accordion">
                             <div class="card-body">
                                 {% if result.archived is False %}
                                     <form method="post" action="{% url 'new_post' %}" class="text-center">

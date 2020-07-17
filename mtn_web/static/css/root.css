@@ -3,7 +3,8 @@
     --main-dark       : rgba(66, 75, 84, 0.3);
     --main-grey       : #424B54; /* rgb(66,75,84) */
     --main-accent-1   : #A1A499;
-    --main-accent-2   : #896A67;
+    --main-accent-2   : #896a67;  /* rgb(137, 106, 103) */
+    --transp-accent-2 : rgba(137, 106, 103, 0.4);
     --btn-hover-bg    : rgba(66, 75, 84, 0.5);
     --transp-bg-1     : rgba(0, 0, 0, 0.1);
     --transp-bg-4     : rgba(0, 0, 0, 0.4);
@@ -338,7 +339,7 @@ td, tr {
         padding-right : 0;
         align-content : space-evenly;
         text-align    : justify-all;
-        flex-grow     : 1;
+        flex-grow     : 1;gb(137, 106, 103);
         flex-basis    : 0;
     }
 
