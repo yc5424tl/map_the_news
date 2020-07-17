@@ -6,24 +6,25 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-ENV DEBUG 0
+ENV DEBUG False
 
 COPY requirements.txt ./
 
-RUN apt-get update && \
+RUN \
+apt-get update && \
 apt-get install -y \
+    curl \
     python3 \
     python3-pip \
     gcc \
-    libgdal20 \
-    libgdal-dev && \
-apt update && \
-apt install -y \
     gdal-bin \
-    python-gdal \
+    gdal-data \
+    libgdal20 \
+    libgdal-dev \
+    python3.7-dev \
     python3-gdal \
-    python3-rtree \
-    curl && \
+    python3-rtree && \
+pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2 && \
 pip3 install -r requirements.txt
 
 COPY . .

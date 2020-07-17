@@ -1,5 +1,6 @@
 {% extends 'general/root.html' %}
 {% load static %}
+{% load alpha3_to_name %}
 
 {% block title %}
     View Post - {{ block.super }}
@@ -7,12 +8,13 @@
 
 {% block styles %}
     {{ block.super }}
+    {# <link type="text/css" media="screen" rel="stylesheet" href="{% static 'css/responsive-tables.css' %}"/> #}
     <link rel="stylesheet" href="{% static 'css/view_post.css' %}">
 {% endblock %}
 
 {% block content%}
     <div class="row" id="view-post-upper">
-        <div class="col-lg-6 col-sm-12 bg-div">
+        <div class="col-xl col-sm-12 bg-div">
             <div id="post">
                 <h3 class="lt-header" id="post-header">{{ post.title }}</h3>
                 <small id="post-detail">
@@ -35,11 +37,52 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-lg-6 col-sm-12 bg-div">
+        <div class="col-xl col-sm-12 bg-div">
             <div id="iframe-div">
                 {{ result.choropleth|safe }}
             </div>
         </div>
+        {% if country_articles %}
+            <div class="col-xl-2 col-sm-12 bg-div">
+                <div id="horizontal-table-div">
+                    {# <table id="vertical-headings" class="responsive table-dark table-bordered table-hover"> #}
+                    <table id="vertical-headings">
+                        <tr>
+                            <th>Country</th>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ country }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th>Articles</th>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ value }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+                <div id="vertical-table-div">
+                    <table id="horizontal-headings" class="table-dark">
+                        <tr>
+                            <th>Country</th>
+                            <th>Articles</th>
+                        </tr>
+                        {% for country, value in country_articles.items %}
+                            {% if value > 0 %}
+                                <tr>
+                                    <td>{{ country }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
         <div class="row">
             <div class="col-sm-0 col-lg-1 bg-div"></div>
             <div class="col-sm-12 col-lg-10 bg-div" id="articles-wrapper">
@@ -118,4 +161,9 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block footer-scripts %}
+    super()
+    {# <script type="text/javascript" src="{% static 'js/responsive-tables.js' %}"></script> #}
 {% endblock %}

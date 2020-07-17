@@ -1,0 +1,209 @@
+
+{% extends 'general/root.html' %}
+{% load static %}
+{% load alpha3_to_name %}
+
+
+{% block title %}
+    Query Results - {{ block.super }}
+{% endblock %}
+
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_result_3.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="row text-center">
+        <div class="col-xs-12 col-lg-10 col-xl-8">
+            <div id="accordion">
+                <!--  MAP  -->
+                <div class="card">
+                    <div class="card-header" id="map-header">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#map-collapse">
+                                MAP
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="map-collapse" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="embed-responsive-16by9" id="iframe">
+                                {{ choro_map|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END MAP -->
+
+                <!-- DETAILS -->
+                <div class="card">
+                    <div class="card-header" id="details-header">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#details-collapse">
+                                DETAILS
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="details-collapse" class="collapse show" data-parent="#accordion">
+                        <div class="card-body row">
+                            <div class="col-4 text-center">Query: {{ result.argument }}</div>
+                            <div class="col-4 text-center">Date: {{ result.date_created_readable }}</div>
+                            <div class="col-4 text-center">Hits: {{ article_count }}</div>
+                            <div class="col-12 text-center">
+                                <table id="horizontal-table">
+                                    <tr>
+                                        <th class="th-article-count text-left">COUNTRY</th>
+                                        {% for country, value in country_articles.items %}
+                                            {% if value > 0 %}
+                                                <td class="td-article-count text-center">{{ country }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    <tr>
+                                        <th class="th-article-count text-left">ARTICLES</th>
+                                            {% for country, value in country_articles.items %}
+                                                {% if value > 0 %}
+                                                    <td class="td-article-count text-center">{{ value }}</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </th>
+                                    </tr>
+                                </table>
+                                <table id="vertical-table">
+                                    <tr>
+                                        <th class="th-article-count text-center">COUNTRY</th>
+                                        <th class="th-article-count text-center">ARTICLES</th>
+                                    </tr>
+                                    {% for country, value in country_articles.items %}
+                                        {% if value > 0 %}
+                                            <tr>
+                                                <td class="td-article-count text-left">{{ country }}</td>
+                                                <td class="td-article-count text-center">{{ value }}</td>
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- END DETAILS -->
+
+                <!-- ARTICLES -->
+                <div class="card">
+                    <div class="card-header" id="articles-header">
+                        <h3 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#articles-collapse">
+                                ARTICLES
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="articles-collapse" class="collapse show" data-parent="#accordion">
+                        <div class="card-body">
+                            <ul class="list-group">
+                                {% for article in articles %}
+                                    {% if article %}
+                                        <li class="article-li">
+                                            <div class="row no gutters">
+                                                <div class="col-xs-0 col-xl-1 buffer-left"></div>
+                                                <div class="col-xs-12 col-xl-6 article-text-wrapper">
+                                                    <a href="{{ article.article_url }}" class="img-link">
+                                                        <h4 class="article-title text-center link card-link">{{ article.title }}</h4>
+                                                    </a>
+                                                    <img class="article-img-sm" src="{{ article.img_url }}" alt="{{ article.description }}">
+                                                    <h6 class="article-subtitle-wrapper text-center">
+                                                        <sub class="article-subtitle text-center">
+                                                            By <span class="article-author">{{ article.author }}</span>
+                                                            {{ article.date_published|date:"DATETIME_FORMAT" }}
+                                                        </sub>
+                                                    </h6>
+                                                    <p class="article-body">{{ article.description }}</p>
+                                                </div>
+                                                <div class="col-xs-0 col-xl-4">
+                                                    <img class="article-img-xl" src="{{ article.img_url }}" alt="{{ article.description }}">
+                                                </div>
+                                                <div class="col-xs-0 col-xl-1 buffer-right"></div>
+                                            </div>
+                                        </li>
+                                    {% endif %}
+                                {% empty %}
+                                    <p class="list-group-item">No Articles Found for "{{ result.argument|title }}"</p>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- END ARTICLES -->
+
+                <!-- FORM -->
+                {% if user.pk == query_author.pk%}
+                    <div class="card">
+                        <div class="card-header" id="save-header">
+                            <h3 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#save-collapse">
+                                    SAVE
+                                </button>
+                            </h3>
+                        </div>
+                        <div id="save-collapse" class="collapse show" data-parent="#accordion">
+                            <div class="card-body">
+                                {% if result.archived is False %}
+                                    <form method="post" action="{% url 'new_post' %}" class="text-center">
+                                        <div class="input-group row no-gutters" id="action-form-header">
+                                            <p class="input-group-text text-center col-12">Post Your Results</p>
+                                            <input type="text" id="action-form-input-title" class="form-control col-12" placeholder="Enter Title Here" name="title">
+                                                <label class="input-group-prepend" id="textarea-label">
+                                                <textarea class="form-control" id="action-form-textarea" name="body" rows="11"></textarea>
+                                            </label>
+                                            <div id="pre-textarea" contenteditable="true" placeholder="Share Your Thoughts!"></div>
+                                        </div>
+                                        <div class="input-group row no-gutters" id="action-form-controls">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label" for="private-save-false">Private </label>
+                                                <input type="radio" class="form-check-input" id="private-save-false" name="save_radio" value="False" checked>
+                                            </div>
+                                            <div class="form-check form-check-inline">btn.btn-link 
+                                                <label class="form-check-label" for="public-save-false">Public </label>
+                                                <input type="radio" class="form-check-input" id="public-save-false" name="save_radio" value="True">
+                                            </div>
+                                            <div class="btn-group-sm float-right">
+                                                <a href="#">
+                                                    <button type="submit" class="btn btn-link btn-sm" id="view-query-save-btn">SAVE</button>
+                                                </a>
+                                                <a href="{% url 'delete_result' result.pk %}">
+                                                    <button class="btn btn-link btn-sm" role="link" id="view-query-del-btn">DELETE</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="user_pk" value="{{ user.pk }}">
+                                        <input type="hidden" name="result_pk" value="{{ result.pk }}">
+                                    </form>
+                                {% endif %}
+
+                                {% if result.archived is True %}
+                                    <form method="post" action="{% url 'update_post' post.pk %}">
+                                        {% csrf_token %}
+                                        <div class="input-group">
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label"> Private
+                                                    <input type="radio" class="form-check-input" id="private-save-true" name="save-radio" value="False" checked>
+                                                </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label"> Public
+                                                    <input type="radio" class="form-check-input" id="public-save-true" name="save_radio" value="True">
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-danger">Delete Post</button>
+                                        <sub>* Query will also be deleted</sub>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} <!-- END FORM -->
+            </div> <!-- END ACCORDION -->
+        </div> <!-- END COL -->
+    </div> <!-- END ROW -->
+{% endblock %}

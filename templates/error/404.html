@@ -1,4 +1,4 @@
-{% extends 'general/root.html' %}
+{% extends 'error/base.html' %}
 {% load static %}
 
 {% block title %}
@@ -7,15 +7,23 @@
 
 {% block styles %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{#    <link rel="stylesheet" href="{% static 'css/errors.css' %}">#}
 {% endblock %}
 
-{% block content %}
-    <div class="err-wrapper">
-        <h1 class="err-h1">Somebody snagged a page from our book!</h1>
-        <div class="img-wrapper">
-            <img class="err-img" src="{% static 'img/404e.png' %}" alt="404 Error">
-        </div>
-        <sub class="err-sub">404 Page Not Found</sub>
-    </div>
+{% block status %}
+    <h1 class="err_code">404</h1>
 {% endblock %}
+
+{% block exception %}
+    <h2 class="err_exc">We still haven't found what you're looking for...♪♫♪</h2>
+{% endblock %}
+
+{#{% block content %}#}
+{#    <div class="err-wrapper">#}
+{#        <h1 class="err-h1">Somebody snagged a page from our book!</h1>#}
+{#        <div class="img-wrapper">#}
+{#            <img class="err-img" src="{% static 'img/404e.png' %}" alt="404 Error">#}
+{#        </div>#}
+{#        <sub class="err-sub">404 Page Not Found</sub>#}
+{#    </div>#}
+{#{% endblock %}#}

@@ -105,6 +105,8 @@
     display         : inline-block;
     text-align      : left;
     justify-content : left;
+    width           : 100%;
+    min-width       : 100%;
 }
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
@@ -127,7 +129,7 @@
     margin-top    : 20px;
     margin-bottom : 10px;
     color         : var(--main-link-hover);
-
+    min-width     : 100%;
     width         : 100%;
     height        : auto;
     text-align    : center;

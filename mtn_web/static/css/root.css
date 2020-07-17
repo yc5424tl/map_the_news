@@ -19,9 +19,15 @@
     --aux-accent-6    : #35e8d6;
 }
 
+div {
+    margin: 0;
+    background-color: transparent;
+}
+
 * {
     margin      : 0;
     font-family : 'Josefin Sans', sans-serif;
+    background-color: transparent;
 }
 
 html {
@@ -33,17 +39,20 @@ body {
     height           : 100%;
     padding          : 0;
     margin           : 0;
-    background-color : var(--transp-bg-7);
+    /* background-color : var(--transp-bg-7); */
+    background-color: rgb(66, 75, 84);
     font-size        : 1.2em;
 }
 
 #main {
-    background-color : var(--transp-bg-4);
+    background-color: rgb(66, 75, 84);
+    /* background-color : var(--transp-bg-4); */
     padding          : 0;
 }
 
 .bg-div {
-    background-color : var(--transp-bg-7);
+    background-color: rgb(66, 75, 84);
+    /* background-color : var(--transp-bg-7); */
 }
 
 .container {
@@ -98,14 +107,16 @@ li a:focus {
 
 div.jumbotron {
     color            : var(--aux-accent-5);
-    background-color : var(--transp-bg-1);
+    /* background-color : var(--transp-bg-1); */
+    background-color: rgb(66, 75, 84);
 }
 
 .row {
     width            : 100%;
     padding          : 0;
     margin           : 0;
-    background-color : var(--transp-bg-4);
+    /* background-color : var(--transp-bg-4); */
+    background-color: rgb(66, 75, 84);
     border-radius    : 5pt;
     color            : var(--main-light);
 }
@@ -122,7 +133,8 @@ div.jumbotron {
 
 #content-div {
     margin-bottom : 0;
-    padding       : 1em 1em 60px 1em;
+    padding: 0;
+    /* padding       : 1em 1em 60px 1em; */
 }
 
 /*=================FOOTER===================*/
@@ -175,14 +187,16 @@ td, tr {
 
 #nav-left,
 #nav-right {
-    background-color : rgba(0, 0, 0, 0.6);
+    /* background-color : rgba(0, 0, 0, 0.6); */
+    background-color: rgb(66, 75, 84);
     border-radius    : 5pt;
     z-index          : 499;
 }
 
 #navbar {
     background-image : url('../img/news-bg-paper-rack.jpg');
-    color            : var(--main-grey);
+    /* color            : var(--main-grey); */
+    color: rgb(46, 46, 46);
     min-width        : 100%;
     width            : 100%;
     margin-left      : 0;
@@ -205,13 +219,15 @@ td, tr {
     margin-right  : 0;
 }
 
-.navbar-toggler-icon {
-    background-color : var(--main-light);
-}
-
+/* .navbar-toggler-icon {
+    background-color : transparent;
+    color: var(--main-light);
+} */
+/* 
 .navbar-toggler {
-    background-color : var(--transp-bg-7);
-}
+    /* background-color : var(--transp-bg-7); */
+    /* color: var(--main-light); */
+/* } */
 
 .nav-link {
     border : 1pt solid transparent;
@@ -425,7 +441,8 @@ td, tr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color : var(--transp-bg-7);
+    background-color: rgb(66, 75, 84);
+    /* background-color : var(--transp-bg-7); */
     box-shadow       : inset 0 0 8px var(--main-light);
     border-radius    : 2pt;
 }

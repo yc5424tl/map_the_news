@@ -10,9 +10,9 @@
 .new-query-div {
     text-align   : center;
     height       : 100%;
-    padding      : 3em;
+    padding      : 3em 0;
     min-width    : 400px;
-    width        : 80%;
+    width        : 100%;
     margin-left  : auto;
     margin-right : auto;
 }
@@ -52,6 +52,7 @@
     padding                 : 1em;
     border-top-right-radius : 5pt;
     border-top-left-radius  : 5pt;
+    color: var(--main-link-hover);
 }
 
 #new-query-body-ctr {
@@ -68,13 +69,17 @@
 
 #new-query-form > input[select] {
     width : 100%;
-    color : var(--transp-bg-7);
+    color : var(--transp-bg-1);
+}
+
+#new-query-form > * {
+    padding: 2%;
 }
 
 #id__argument {
     max-width : 100%;
 }
 
-button {
-    color : var(--transp-bg-7);
+button[text] {
+    color : var(--transp-bg-1);
 }

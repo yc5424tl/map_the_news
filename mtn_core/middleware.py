@@ -1,6 +1,7 @@
 import sys
 from better_exceptions import excepthook
 
+
 class BetterExceptionsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response

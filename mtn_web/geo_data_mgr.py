@@ -2,13 +2,13 @@ import json
 import logging
 from typing import NoReturn
 import requests
-from django.templatetags.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
+import pycountry
 
 logger = logging.getLogger(__name__)
 
 
 class GeoDataManager:
-
     def __init__(self, req_data=None, json_data=None, result_dict=None):
         self.filename = "geo_data.txt"
         self.req_data = req_data
@@ -18,45 +18,57 @@ class GeoDataManager:
     def verify_geo_data(self) -> bool:
         have_geo = self.check_geo_data()
         if have_geo:
-            have_json = self.json_to_file()
-            if have_json:
-                self.initialize_result_dict()
-                return True
+            self.initialize_result_dict()
+            return True
         return False
 
     def check_geo_data(self) -> bool:
-        if self.json_data is None or self.req_data is None:
-            return self.get_geo_data() and self.fix_cyprus_country_code()
+        if self.json_data is None:
+            have_geo_data = self.get_geo_data()
+            have_cyprus_fix = self.fix_cyprus_country_code()
+            return bool(have_geo_data and have_cyprus_fix)
 
     def get_geo_data(self) -> bool:
         try:
-            self.req_data = requests.get('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-            if self.req_data.status_code == 200:
-                self.json_data = self.req_data.json()
-            else:
-                with open(static('js/geo_data.json')) as json_file:
-                    self.req_data = json_file
+            geo_data_url = staticfiles_storage.url("js/geo_data.json")
+            response = requests.get(geo_data_url)
+            geo_data_json = response.json()
+            self.json_data = geo_data_json
             return True
-        except requests.exceptions.RequestException as e:
-            logger.log(level=logging.ERROR, msg=f'Error fetching mapping json: {e}')
-            return False
-
-    def initialize_result_dict(self) -> NoReturn:
-        try:
-            self.result_dict = dict.fromkeys([k['id'] for k in json.load(open(static(f'js/{self.filename}')))['features']], 0)
-        except KeyError or FileNotFoundError:
-            self.result_dict = dict.fromkeys([k['id'] for k in json.load(self.json_data)['features']], 0)
-
-    def add_result(self, a3_code:str) -> NoReturn:
-        self.result_dict[a3_code] +=1
+        except FileNotFoundError:
+            try:
+                self.req_data = requests.get(
+                    "https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json"
+                )
+                if self.req_data.status_code == 200:
+                    self.json_data = self.req_data.json()
+                    return True
+                else:
+                    return False
+            except requests.exceptions.RequestException as e:
+                logger.log(level=logging.ERROR, msg=f"Error fetching mapping json: {e}")
+                return False
 
     def fix_cyprus_country_code(self) -> bool:
-        for key in self.json_data:
-            if self.json_data[key] == '-99':
-                self.json_data[key] = 'CYP'
+        for dikt in self.json_data["features"]:
+            if dikt["id"] == "-99":
+                dikt["id"] = "CYP"
         return True
 
+    def initialize_result_dict(self) -> NoReturn:
+        self.result_dict = dict.fromkeys(
+            [k["id"] for k in self.json_data["features"]], 0
+        )
+        self.result_dict["SGP"] = 0
+        self.result_dict["HKG"] = 0
+
+    def add_result(self, a3_code: str) -> NoReturn:
+        self.result_dict[a3_code] += 1
+
+    # TODO look at how to create files in s3 programatically
     def json_to_file(self) -> bool:
-        with open(self.filename, 'w') as outfile:
+        with open(self.filename, "w") as outfile:
             json.dump(self.json_data, outfile)
             return True
+
+

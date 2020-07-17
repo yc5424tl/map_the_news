@@ -1,0 +1,25 @@
+
+version: '2'
+services:
+  web:
+    build:
+      context: https://github.com/yc5424tl/map_the_news.git#sifter_2
+    command: python3 manage.py runserver 0.0.0.0:8990
+    ports:
+      - '8990:8990'
+    env_file: .env
+    depends_on:
+      - db
+    volumes:
+      - .:/mtn
+  db:
+    image: postgres:12.2-alpine
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: sqlAdmin1234!
+  redis:
+    image: library/redis:alpine
+    ports:
+      - '6379:6379'

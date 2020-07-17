@@ -106,7 +106,7 @@
                     </ul>
                 </div>
                 <div class="col-12" id="user-recent-comments">
-                    {% if request.user.pk == member.pk %}
+          "          {% if request.user.pk == member.pk %}
                         <h3 class="view-user-section-head">YOUR RECENT COMMENTS</h3>
                     {% else %}
                         <h3 class="view-user-section-head">{{ member.first_name|upper }}'s RECENT COMMENTS</h3>
