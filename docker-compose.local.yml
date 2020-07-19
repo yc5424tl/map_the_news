@@ -1,25 +1,56 @@
 
-version: '2'
+version: '3'
+
 services:
+
+
+  nginx:
+    image: nginx:1.19.1
+    ports:
+      - 8000:80
+    depends_on:
+      - web
+    volumes:
+      - /mnt/nginx/conf:/etc/nginx/conf.d
+      - static_volume:/opt/services/web/static
+    networks:
+      - nginx_network
+
   web:
     build: .
-      # context: https://github.com/yc5424tl/map_the_news.git#sifter_2
-    command: python3 manage.py runserver 0.0.0.0:8990
-    ports:
-      - '8990:8990'
-    env_file: .env
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --certfile=/etc/certs/localhost.crt --keyfile=/etc/certs/localhost.key mtn_core.wsgi:application --bind 0.0.0.0:443"
+    container_name: mtn_web
+    env_file:
+      - ./config/web/web-variables.env
     depends_on:
       - db
     volumes:
-      - .:/mtn
+      - .:/app/
+      - static_volume:/opt/services/web/static
+    networks:
+      - nginx_network
+      - db_network
+
   db:
     image: postgres:12.2-alpine
-    ports:
-      - '5432:5432'
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: sqlAdmin1234!
-  redis:
-    image: library/redis:alpine
-    ports:
-      - '6379:6379'
+    env_file:
+      - config/db/db_env
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+    networks:
+      - db_network
+
+  # redis:
+  #   image: library/redis:alpine
+  #   ports:
+  #     - '6379:6379'
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+
+volumes:
+  database_volume:
+  static_volume:

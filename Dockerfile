@@ -31,4 +31,7 @@ COPY . .
 
 EXPOSE 8000
 
+# ENV HOME=/home/app
+# RUN mkdir $APP_HOME/staticfiles
+
 CMD ["/bin/bash", "-c", "./entrypoint.sh"]

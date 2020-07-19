@@ -121,9 +121,7 @@ AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
@@ -175,12 +173,16 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = "mtn_core.storage_backends.MediaStorage"
 
 else:
-    STATIC_URL = "/static/"
+    # STATIC_URL = "/static/"
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
     # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATIC_ROOT = "./static"
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "staticfiles")]
+    # STATIC_ROOT = "./static"
+
+    STATIC_URL = "/staticfiles/"
+    # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATIC_ROOT = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), 'staticfiles')
+    # STATICFILES_DIRS = [os.path.join(BASE_DIR, "staticfiles")]
 
 
 
@@ -205,6 +207,9 @@ if "ON_HEROKU" in os.environ:
     ALLOWED_HOSTS = ["map_the_news.herokuapp.com"]
     DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
     django_heroku.settings(locals(), staticfiles=False)
+
+else:
+    PORT = 8000;
 
 if os.getenv("DEBUG") == "TRUE":
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
