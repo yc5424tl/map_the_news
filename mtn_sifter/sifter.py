@@ -1,6 +1,6 @@
 from mtn_web.models import Source, Category
 
-from .data import api_country_codes, categories, country_codes
+from mtn_sifter.data import api_country_codes, categories, country_codes
 import random
 import os
 import requests

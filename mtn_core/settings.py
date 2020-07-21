@@ -18,6 +18,7 @@ import dotenv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+print(f'BASE_DIR = {BASE_DIR}')
 
 DJANGO_READ_DOT_ENV_FILE = True
 dotenv_file = os.path.join(BASE_DIR, ".env")
@@ -28,7 +29,7 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", default="imasecretkey")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", default=False) == "TRUE"
@@ -101,12 +102,13 @@ DATABASES = {
         "PORT": os.getenv("MTN_DB_PORT"),
     }
 }
-DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
+DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"  # "TRUE"
 
 if DOCKER_POSTGRES:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
+            "ENGINE": 'django.db.backends.postgresql_psycopg2',
+            # "ENGINE": "django.db.backends.postgresql",
             "NAME": "postgres",
             "USER": "postgres",
             "HOST": "db",

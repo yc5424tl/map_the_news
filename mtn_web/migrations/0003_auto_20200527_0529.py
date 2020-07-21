@@ -3,7 +3,6 @@
 from django.db import migrations, models
 import mtn_web.models
 
-
 class Migration(migrations.Migration):
 
     dependencies = [

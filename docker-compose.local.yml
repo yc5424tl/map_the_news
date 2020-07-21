@@ -1,56 +1,109 @@
+# volumes
+# image directory:container directory
 
-version: '3'
 
+
+version: '2'
 services:
-
-
-  nginx:
-    image: nginx:1.19.1
-    ports:
-      - 8000:80
-    depends_on:
-      - web
-    volumes:
-      - /mnt/nginx/conf:/etc/nginx/conf.d
-      - static_volume:/opt/services/web/static
-    networks:
-      - nginx_network
-
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --certfile=/etc/certs/localhost.crt --keyfile=/etc/certs/localhost.key mtn_core.wsgi:application --bind 0.0.0.0:443"
-    container_name: mtn_web
-    env_file:
-      - ./config/web/web-variables.env
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
+    env_file: .env
     depends_on:
       - db
     volumes:
-      - .:/app/
-      - static_volume:/opt/services/web/static
-    networks:
-      - nginx_network
-      - db_network
-
+      - .:/app
   db:
     image: postgres:12.2-alpine
-    env_file:
-      - config/db/db_env
+    ports:
+      - '5432:5432'
+    restart: always
+    environment: 
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    # networks:
+    #   - db_network
+  nginx:
+    image: nginx:1.19.1
+    ports:
+    - '8000:80'
+    - '443:443'
     volumes:
-      - database_volume:/var/lib/postgresql/data
-    networks:
-      - db_network
+      - ./config/nginx/:/etc/nginx/conf.d
+      # - static_volume:/opt/services/web/static
+    depends_on:
+      - web
+    # networks:
+    #   - nginx_network
 
-  # redis:
-  #   image: library/redis:alpine
-  #   ports:
-  #     - '6379:6379'
+  # networks:
+  #   nginx_network:
+  #     driver: bridge
+  #   db_network:
+  #     driver: bridge
 
-networks:
-  nginx_network:
-    driver: bridge
-  db_network:
-    driver: bridge
+  # volumes:
+  #   static_volume:
 
-volumes:
-  database_volume:
-  static_volume:
+
+# version: '3'
+# services:
+#   db:
+#     image: postgres:12.2-alpine
+#     env_file:
+#       - ./config/db/db_env
+#     volumes:
+#       - database_volume:/var/lib/postgresql/data/
+#     networks:
+#       - db_network
+#     ports:
+#        - "5432:5432"
+#   web:
+#     build: .
+#     command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && gunicorn --certfile=/etc/certs/localhost.crt --keyfile=/etc/certs/localhost.key mtn_core.wsgi:application --bind 0.0.0.0:443"
+#     # container_name: mtn_app
+#     # env_file:
+#     #   - ./config/web/web-variables.env
+#     depends_on:
+#       - db
+#     volumes:
+#       - .:/src/     # bind app code to container's /src/
+#       - ./config/nginx/certs/:/etc/certs  # bind cert/key to container's /etc/certs
+#       - static_volume:/opt/services/web/static
+#     networks:
+#       - nginx_network
+#       - db_network
+#     expose:
+#       - 443  # open container's port to dependent containers @ https://web:443
+#   nginx:
+#     image: nginx:1.19.1
+#     # container_name: mtn_nginx
+#     ports:
+#       - "443:443"
+#       # - "80:80"
+#       - 8000:80
+#     volumes:
+#       - ./config/nginx/:/etc/nginx/conf.d
+#       # - /mnt/nginx/conf:/etc/nginx/conf.d
+#       - static_volume:/opt/services/web/static
+#     depends_on:
+#       - web
+#     networks:
+#       - nginx_network
+#   # redis:
+#   #   image: library/redis:alpine
+#   #   ports:
+#   #     - '6379:6379'
+# networks:
+#   nginx_network:
+#     driver: bridge
+#   db_network:
+#     driver: bridge
+
+# volumes:
+#   database_volume:
+#   static_volume:

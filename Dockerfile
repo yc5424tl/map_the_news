@@ -2,13 +2,14 @@
 
 FROM ubuntu:eoan-20200410
 SHELL ["/bin/bash", "-c"]
-WORKDIR /app
+WORKDIR /
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBUG False
 
-COPY requirements.txt ./
+# COPY requirements.txt ./
+COPY ./requirements.txt .
 
 RUN \
 apt-get update && \
@@ -27,7 +28,8 @@ apt-get install -y \
 pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2 && \
 pip3 install -r requirements.txt
 
-COPY . .
+# COPY . .
+ADD . .
 
 EXPOSE 8000
 

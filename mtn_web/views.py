@@ -24,12 +24,13 @@ from mtn_web.forms import (
     NewCommentForm,
 )
 
+from mtn_web.constructor import Constructor
 from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager  # , geo_data_mgr
 from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice
 from mtn_web.query_mgr import Query
 
-from .country_data import iso_codes
+from mtn_web.country_data import iso_codes
 
 
 logging.basicConfig(filename="news_map.log", level=logging.INFO)
