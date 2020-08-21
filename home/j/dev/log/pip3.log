@@ -1,0 +1,126 @@
+2020-07-19T03:52:36,000 Non-user install because site-packages writeable
+2020-07-19T03:52:36,095 Created temporary directory: /tmp/pip-ephem-wheel-cache-600ctq_l
+2020-07-19T03:52:36,095 Created temporary directory: /tmp/pip-req-tracker-pmdrdrif
+2020-07-19T03:52:36,095 Initialized build tracking at /tmp/pip-req-tracker-pmdrdrif
+2020-07-19T03:52:36,096 Created build tracker: /tmp/pip-req-tracker-pmdrdrif
+2020-07-19T03:52:36,096 Entered build tracker: /tmp/pip-req-tracker-pmdrdrif
+2020-07-19T03:52:36,096 Created temporary directory: /tmp/pip-install-1vtbq1cj
+2020-07-19T03:52:36,096 Obtaining file:///home/j/dev/repo/map_the_news
+2020-07-19T03:52:36,097   Added file:///home/j/dev/repo/map_the_news to build tracker '/tmp/pip-req-tracker-pmdrdrif'
+2020-07-19T03:52:36,097     Running setup.py (path:/home/j/dev/repo/map_the_news/setup.py) egg_info for package from file:///home/j/dev/repo/map_the_news
+2020-07-19T03:52:36,097     Running command python setup.py egg_info
+2020-07-19T03:52:36,246     running egg_info
+2020-07-19T03:52:36,247     writing code.egg-info/PKG-INFO
+2020-07-19T03:52:36,247     writing dependency_links to code.egg-info/dependency_links.txt
+2020-07-19T03:52:36,247     writing top-level names to code.egg-info/top_level.txt
+2020-07-19T03:52:36,250     reading manifest file 'code.egg-info/SOURCES.txt'
+2020-07-19T03:52:36,250     writing manifest file 'code.egg-info/SOURCES.txt'
+2020-07-19T03:52:36,269   Source in /home/j/dev/repo/map_the_news has version 1.0, which satisfies requirement mtn-core==1.0 from file:///home/j/dev/repo/map_the_news
+2020-07-19T03:52:36,270   Removed mtn-core==1.0 from file:///home/j/dev/repo/map_the_news from build tracker '/tmp/pip-req-tracker-pmdrdrif'
+2020-07-19T03:52:36,373 Installing collected packages: mtn-core
+2020-07-19T03:52:36,374   Running setup.py develop for mtn-core
+2020-07-19T03:52:36,374     Running command /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/home/j/dev/repo/map_the_news/setup.py'"'"'; __file__='"'"'/home/j/dev/repo/map_the_news/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps
+2020-07-19T03:52:36,537     running develop
+2020-07-19T03:52:36,622     running egg_info
+2020-07-19T03:52:36,622     writing code.egg-info/PKG-INFO
+2020-07-19T03:52:36,622     writing dependency_links to code.egg-info/dependency_links.txt
+2020-07-19T03:52:36,623     writing top-level names to code.egg-info/top_level.txt
+2020-07-19T03:52:36,623     reading manifest file 'code.egg-info/SOURCES.txt'
+2020-07-19T03:52:36,624     writing manifest file 'code.egg-info/SOURCES.txt'
+2020-07-19T03:52:36,625     running build_ext
+2020-07-19T03:52:36,659     Creating /usr/local/lib/python3.8/dist-packages/code.egg-link (link to .)
+2020-07-19T03:52:36,659     Adding code 1.0 to easy-install.pth file
+2020-07-19T03:52:36,660     error: [Errno 2] No such file or directory: '/home/j/dev/repo/map_the_news/mtn_core/manage.py'
+2020-07-19T03:52:36,679 Cleaning up...
+2020-07-19T03:52:36,680 Removed build tracker: '/tmp/pip-req-tracker-pmdrdrif'
+2020-07-19T03:52:36,680 ERROR: Command errored out with exit status 1: /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/home/j/dev/repo/map_the_news/setup.py'"'"'; __file__='"'"'/home/j/dev/repo/map_the_news/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps Check the logs for full command output.
+2020-07-19T03:52:36,680 Exception information:
+2020-07-19T03:52:36,680 Traceback (most recent call last):
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/cli/base_command.py", line 186, in _main
+2020-07-19T03:52:36,680     status = self.run(options, args)
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/commands/install.py", line 421, in run
+2020-07-19T03:52:36,680     installed = install_given_reqs(
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/req/__init__.py", line 67, in install_given_reqs
+2020-07-19T03:52:36,680     requirement.install(
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/req/req_install.py", line 792, in install
+2020-07-19T03:52:36,680     install_editable_legacy(
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/operations/install/editable_legacy.py", line 49, in install_editable
+2020-07-19T03:52:36,680     call_subprocess(
+2020-07-19T03:52:36,680   File "/usr/lib/python3/dist-packages/pip/_internal/utils/subprocess.py", line 242, in call_subprocess
+2020-07-19T03:52:36,680     raise InstallationError(exc_msg)
+2020-07-19T03:52:36,680 pip._internal.exceptions.InstallationError: Command errored out with exit status 1: /usr/bin/python3 -c 'import sys, setuptools, tokenize; sys.argv[0] = '"'"'/home/j/dev/repo/map_the_news/setup.py'"'"'; __file__='"'"'/home/j/dev/repo/map_the_news/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' develop --no-deps Check the logs for full command output.
+2020-07-19T04:32:42,431 Non-user install because site-packages writeable
+2020-07-19T04:32:42,539 Created temporary directory: /tmp/pip-ephem-wheel-cache-gban35ch
+2020-07-19T04:32:42,539 Created temporary directory: /tmp/pip-req-tracker-lblvxirf
+2020-07-19T04:32:42,539 Initialized build tracking at /tmp/pip-req-tracker-lblvxirf
+2020-07-19T04:32:42,539 Created build tracker: /tmp/pip-req-tracker-lblvxirf
+2020-07-19T04:32:42,539 Entered build tracker: /tmp/pip-req-tracker-lblvxirf
+2020-07-19T04:32:42,539 Created temporary directory: /tmp/pip-install-ml0xa64h
+2020-07-19T04:32:42,540 Cleaning up...
+2020-07-19T04:32:42,540 Removed build tracker: '/tmp/pip-req-tracker-lblvxirf'
+2020-07-19T04:32:42,540 ERROR: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).
+2020-07-19T04:32:42,540 Exception information:
+2020-07-19T04:32:42,540 Traceback (most recent call last):
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/cli/base_command.py", line 186, in _main
+2020-07-19T04:32:42,540     status = self.run(options, args)
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/commands/install.py", line 325, in run
+2020-07-19T04:32:42,540     self.populate_requirement_set(
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/cli/req_command.py", line 255, in populate_requirement_set
+2020-07-19T04:32:42,540     req_to_add = install_req_from_editable(
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 227, in install_req_from_editable
+2020-07-19T04:32:42,540     parts = parse_req_from_editable(editable_req)
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 198, in parse_req_from_editable
+2020-07-19T04:32:42,540     name, url, extras_override = parse_editable(editable_req)
+2020-07-19T04:32:42,540   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 131, in parse_editable
+2020-07-19T04:32:42,540     raise InstallationError(
+2020-07-19T04:32:42,540 pip._internal.exceptions.InstallationError: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).
+2020-07-19T04:32:44,763 Non-user install because site-packages writeable
+2020-07-19T04:32:44,860 Created temporary directory: /tmp/pip-ephem-wheel-cache-suiya5i4
+2020-07-19T04:32:44,860 Created temporary directory: /tmp/pip-req-tracker-6r4r_jm1
+2020-07-19T04:32:44,860 Initialized build tracking at /tmp/pip-req-tracker-6r4r_jm1
+2020-07-19T04:32:44,860 Created build tracker: /tmp/pip-req-tracker-6r4r_jm1
+2020-07-19T04:32:44,860 Entered build tracker: /tmp/pip-req-tracker-6r4r_jm1
+2020-07-19T04:32:44,860 Created temporary directory: /tmp/pip-install-33da32yl
+2020-07-19T04:32:44,861 Cleaning up...
+2020-07-19T04:32:44,861 Removed build tracker: '/tmp/pip-req-tracker-6r4r_jm1'
+2020-07-19T04:32:44,861 ERROR: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).
+2020-07-19T04:32:44,861 Exception information:
+2020-07-19T04:32:44,861 Traceback (most recent call last):
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/cli/base_command.py", line 186, in _main
+2020-07-19T04:32:44,861     status = self.run(options, args)
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/commands/install.py", line 325, in run
+2020-07-19T04:32:44,861     self.populate_requirement_set(
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/cli/req_command.py", line 255, in populate_requirement_set
+2020-07-19T04:32:44,861     req_to_add = install_req_from_editable(
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 227, in install_req_from_editable
+2020-07-19T04:32:44,861     parts = parse_req_from_editable(editable_req)
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 198, in parse_req_from_editable
+2020-07-19T04:32:44,861     name, url, extras_override = parse_editable(editable_req)
+2020-07-19T04:32:44,861   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 131, in parse_editable
+2020-07-19T04:32:44,861     raise InstallationError(
+2020-07-19T04:32:44,861 pip._internal.exceptions.InstallationError: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).
+2020-07-19T04:32:57,189 Non-user install because site-packages writeable
+2020-07-19T04:32:57,283 Created temporary directory: /tmp/pip-ephem-wheel-cache-hunn1ddb
+2020-07-19T04:32:57,284 Created temporary directory: /tmp/pip-req-tracker-ieqzl25b
+2020-07-19T04:32:57,284 Initialized build tracking at /tmp/pip-req-tracker-ieqzl25b
+2020-07-19T04:32:57,284 Created build tracker: /tmp/pip-req-tracker-ieqzl25b
+2020-07-19T04:32:57,284 Entered build tracker: /tmp/pip-req-tracker-ieqzl25b
+2020-07-19T04:32:57,284 Created temporary directory: /tmp/pip-install-o5hijnof
+2020-07-19T04:32:57,284 Cleaning up...
+2020-07-19T04:32:57,285 Removed build tracker: '/tmp/pip-req-tracker-ieqzl25b'
+2020-07-19T04:32:57,285 ERROR: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).
+2020-07-19T04:32:57,285 Exception information:
+2020-07-19T04:32:57,285 Traceback (most recent call last):
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/cli/base_command.py", line 186, in _main
+2020-07-19T04:32:57,285     status = self.run(options, args)
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/commands/install.py", line 325, in run
+2020-07-19T04:32:57,285     self.populate_requirement_set(
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/cli/req_command.py", line 255, in populate_requirement_set
+2020-07-19T04:32:57,285     req_to_add = install_req_from_editable(
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 227, in install_req_from_editable
+2020-07-19T04:32:57,285     parts = parse_req_from_editable(editable_req)
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 198, in parse_req_from_editable
+2020-07-19T04:32:57,285     name, url, extras_override = parse_editable(editable_req)
+2020-07-19T04:32:57,285   File "/usr/lib/python3/dist-packages/pip/_internal/req/constructors.py", line 131, in parse_editable
+2020-07-19T04:32:57,285     raise InstallationError(
+2020-07-19T04:32:57,285 pip._internal.exceptions.InstallationError: --help is not a valid editable requirement. It should either be a path to a local project or a VCS URL (beginning with svn+, git+, hg+, or bzr+).

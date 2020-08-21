@@ -1,0 +1,7 @@
+build:
+  docker:
+    web: app/Dockerfile.prod
+release:
+  command:
+    - ./release.sh
+  image: web

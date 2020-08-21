@@ -1,0 +1,7 @@
+*.log
+./.vscode
+**/*.code-workspace
+/venv
+notes.txt
+log.out
+home/j/dev/log

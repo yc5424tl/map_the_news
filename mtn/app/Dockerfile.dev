@@ -1,0 +1,109 @@
+#!/bin/bash
+
+##########################
+# BUILDER (of the Wheel) #
+##########################
+
+FROM ubuntu:eoan-20200410 as BUILDER
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEPLOYMENT DEV
+
+RUN apt-get update && \
+    apt-get install -y \
+            curl \
+            gcc \
+            gdal-bin \
+            gdal-data \
+            libgdal-dev \
+            libgdal20 \
+            libpq-dev \
+            musl-dev \
+            python3.7-dev \
+            python3-gdal \
+            python3-pip \
+            python3-rtree
+
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install flake8
+COPY . .
+RUN flake8 --ignore=E501,F401 .
+
+RUN mkdir /requirements
+COPY /requirements ./requirements
+RUN python3 requirements/make_req_file.py
+RUN mv requirements/requirements.txt .
+
+RUN python3 -m pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+
+
+#########
+# FINAL #
+#########
+
+#!/bin/bash
+
+FROM ubuntu:eoan-20200410
+SHELL ["/bin/bash", "-c"]
+
+RUN mkdir -p /home/app
+
+# RUN addgroup --system app && adduser --system --ingroup app app
+
+ENV HOME /home/app
+ENV APP_HOME ${HOME}/web
+
+RUN mkdir ${APP_HOME}
+RUN mkdir ${APP_HOME}/staticfiles
+RUN mkdir ${APP_HOME}/mediafiles
+RUN mkdir ${APP_HOME}/static
+
+WORKDIR ${APP_HOME}
+
+RUN apt-get update && \
+    apt-get install -y \
+            curl \
+            gcc \
+            gdal-bin \
+            gdal-data \
+            libgdal-dev \
+            libgdal20 \
+            libpq-dev \
+            musl-dev \
+            nano \
+            netcat \
+            python3.7-dev \
+            python3-gdal \
+            python3-pip \
+            python3-rtree
+
+COPY --from=BUILDER /usr/src/app/wheels /wheels
+COPY --from=BUILDER /usr/src/app/requirements.txt .
+COPY --from=BUILDER /usr/src/app/requirements /requirements
+
+RUN apt-get update && \
+    apt-get install -y \
+            python3.7-dev \
+            python3-pip
+
+RUN python3 -m pip install wheel
+RUN python3 -m pip install --no-cache /wheels/*
+RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2
+
+COPY ./entrypoint.dev.sh ${APP_HOME}
+
+COPY . ${APP_HOME}
+
+# EXPOSE 587
+
+# RUN chown -R app:app ${APP_HOME}
+# RUN chown -R app:app ${APP_HOME}/*.*
+
+# USER app
+
+ENTRYPOINT ["/home/app/web/entrypoint.dev.sh"]

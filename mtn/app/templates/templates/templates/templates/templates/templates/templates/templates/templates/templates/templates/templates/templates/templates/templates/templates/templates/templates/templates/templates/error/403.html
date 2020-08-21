@@ -1,0 +1,18 @@
+{% extends 'error/base.html' %}
+{% load static %}
+
+{% block title %}
+    403 Forbidden
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block status %}
+    <h1 class="err_code">403</h1>
+{% endblock%}
+
+{% block exception %}
+    <h2 class="err_exc">This Page Is For Bidden!</h2>
+{% endblock %}

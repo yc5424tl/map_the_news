@@ -1,0 +1,29 @@
+
+version: '3.7'
+
+services:
+
+  web:
+    build:
+      context: https://github.com/yc5424tl/map_the_news.git#master
+      dockerfile: Dockerfile.prod
+    command: gunicorn mtn_django.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    volumes:
+      - ./app:/usr/src/app
+
+  db:
+    image: postgres:12.2-alpine
+    ports:
+      - '5432:5432'
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: sqlAdmin1234!
+
+  redis:
+    image: library/redis:alpine
+    ports:
+      - '6379:6379'

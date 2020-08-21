@@ -1,0 +1,18 @@
+{% extends 'error/base.html' %}
+{% load static %}
+
+{% block title %}
+    500 Internal Server Error
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block status %}
+    <h1 class="err_code">500</h1>
+{% endblock %}
+
+{% block exception %}
+    <h2 class="err_exc">Someone cut a wire, started a fire, and/or straight hacked us...or there's some funky code about.</h2>
+{% endblock %}

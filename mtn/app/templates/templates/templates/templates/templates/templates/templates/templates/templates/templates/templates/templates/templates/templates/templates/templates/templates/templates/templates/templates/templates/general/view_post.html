@@ -1,0 +1,166 @@
+{% extends 'general/root.html' %}
+{% load static %}
+{% load alpha3_to_name %}
+
+{% block title %}
+    View Post - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_post.css' %}">
+{% endblock %}
+
+{% block content%}
+    <div class="row" id="view-post-upper">
+        <div class="col-xl col-sm-12 bg-div">
+            <div id="post">
+                <h3 class="lt-header" id="post-header">{{ post.title }}</h3>
+                <small id="post-detail">
+                    <span>By</span>
+                    <a id="author-link" href="{% url 'view_user' post.author.pk %}">{{ post.author.first_name }}</a>
+                    <span>{{ post.date_published }}</span>
+                </small>
+                <blockquote id="post-body">
+                    <pre>{{ post.body }}</pre>
+                </blockquote>
+                {% if user.pk == post.author.id %}
+                    <div class="btn-group-sm float-right">
+                        <a href="{% url 'update_post' post.pk %}">
+                            <button class="btn btn-link" id="upd-post-btn">EDIT</button>
+                        </a>
+                        <a href="{% url 'delete_post' post.pk %}">
+                            <button class="btn btn-link" id="del-post-btn">DELETE</button>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-xl col-sm-12 bg-div">
+            <div id="iframe-div">
+                {{ result.choropleth|safe }}
+            </div>
+        </div>
+        {% if country_articles %}
+            <div class="col-xl-2 col-sm-12 bg-div">
+                <div id="horizontal-table-div">
+                    <table id="vertical-headings">
+                        <tr>
+                            <th>Country</th>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ country }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th>Articles</th>
+                            {% for country, value in country_articles.items %}
+                                {% if value > 0 %}
+                                    <td>{{ value }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+                <div id="vertical-table-div">
+                    <table id="horizontal-headings" class="table-dark">
+                        <tr>
+                            <th>Country</th>
+                            <th>Articles</th>
+                        </tr>
+                        {% for country, value in country_articles.items %}
+                            {% if value > 0 %}
+                                <tr>
+                                    <td>{{ country }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-0 col-lg-1 bg-div"></div>
+            <div class="col-sm-12 col-lg-10 bg-div" id="articles-wrapper">
+                <div class="col" id="articles-col">
+                    <div class="card" id="articles-card">
+                        <div class="card-header title-center"><h1>Mapped Articles</h1></div>
+                        <ul class="list-group" id="articles-list">
+                            {% for article in articles %}
+                                {% if article %}
+                                    <li class="article-li">
+                                        <div class="row article">
+                                            <div class="col-xl-1 col-sm-0 articles-left-buffer"></div>
+                                            <div class="col-xl-7 col-sm-12 article-txt-container">
+                                                <a href="{{ article.article_url }}" class="img-link">
+                                                    <h4 class="article-title title-center">{{ article.title }}</h4>
+                                                </a>
+                                                 <img class="article-img-sm" src="{{ article.image_url }}" alt="article.description }}">
+                                                 <h6 class="title-center article-subtitle-container">
+                                                     <sub class="article-subtitle title-center">
+                                                         By <span class="article-author">{{ article.author }}</span>
+                                                         {{ article.date_published|date:"DATETIME_FORMAT"}}
+                                                    </sub>
+                                                 </h6>
+                                                <p class="article-body">{{ article.description }}</p>
+                                            </div>
+                                            <div class="col-3 article-img-container">
+                                                <img class="article-img-xl" src="{{ article.image_url }}" alt="{{ article.description }}">
+                                            </div>
+                                            <div class="col-xl-1 col-sm-0 articles-right-buffer"></div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% empty %}
+                                <p class="list-group-item">No Articles Found for Query</p>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-0 col-lg-1 bg-div"></div>
+        </div>
+    </div>
+    <div class="row" id="comments-container">
+        <div class="col-12 bg-div">
+             <h3 id="comments-header">Comments</h3>
+            {% for comment in post.comments.all %}
+                <div class="comment">
+                    <blockquote class="comment-body">
+                        <pre>{{ comment.body }}</pre>
+                    </blockquote>
+                    {% if comment.author.pk == user.pk %}
+                        <small class="comment-footer">
+                            Comment by <a href="{% url 'view_user' comment.author.pk %}">You</a> - {{ comment.date_published }}
+                            <span class="btn-group pull-right">
+                                <a role="button" class="btn pull-right" href="{% url 'update_comment' comment.pk %}">
+                                    <button class="btn btn-link upd-comment-btn">EDIT</button>
+                                </a>
+                                <a role="button" class="btn pull-right" href="{% url 'delete_comment' comment.pk %}">
+                                    <button class="btn btn-link del-comment-btn">DELETE</button>
+                                </a>
+                            </span>
+                        </small>
+                    {% else %}
+                        <small class="comment-footer">
+                            Comment by
+                            <a href="{% url 'view_user' comment.author.pk %}">{{ comment.author.first_name }}</a>
+                            - {{ comment.date_published }}
+                        </small>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>No Comments Yet</p>
+            {% endfor %}
+            <a href="{% url 'new_comment' post.pk %}">
+                <button id="add-comment-btn" class="btn btn-default">Add Comment</button>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer-scripts %}
+    super()
+{% endblock %}

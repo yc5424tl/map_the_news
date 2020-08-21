@@ -1,0 +1,41 @@
+
+.login {
+    text-align: center;
+    background-color: var(--main-darker);
+    color: var(--main-light);
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 3%;
+}
+
+tr {
+    margin-top: 4%;
+    margin-bottom: 4rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: var(--main-darkest);
+}
+
+.helptext li {
+    text-align: left;
+}
+
+th label {
+    color: var(--main-link-color);
+}
+
+input[type="submit"] {
+    color: var(--main-light);
+    border: 1pt solid var(--main-light);
+    border-radius: 5pt;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--main-light);
+    color: var(--main-darker);
+    transition: 0.4s;
+}
+
+table {
+    margin-right: 0;
+}

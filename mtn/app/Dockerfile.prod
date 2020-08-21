@@ -1,0 +1,36 @@
+#!/bin/bash
+
+FROM ubuntu:eoan-20200410
+SHELL ["/bin/bash", "-c"]
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
+ENV DEPLOYMENT PROD
+
+COPY /requirements ./requirements
+RUN python requirements/make_req_file.py
+RUN mv /requirements/requirements.txt .
+
+RUN apt-get update && \
+    apt-get install -y \
+            curl \
+            gcc \
+            gdal-bin \
+            gdal-data \
+            libgdal-dev \
+            libgdal20 \
+            python3.7 \
+            python3.7-dev \
+            python3-gdal \
+            python3-pip \
+            python3-rtree && \
+    pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2 && \
+    pip3 install -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["/bin/bash", "-c", "./entrypoint.sh"]

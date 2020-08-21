@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Choropleth - News Mapper</title>
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+              crossorigin="anonymous">
+        <link rel="stylesheet"
+              href="{% static 'css/style.css' %}">
+        <script>
+            function htmlToTemplate(html) {
+                let template = document.createElement('template');
+                html = html.trim();
+                template.innerHTML = html;
+                return template.content.childNodes;
+            }
+            $(document).ready(function() {
+                htmlToTemplate({{ result.choro_html|safe }}    {% comment %} DO  NOT TERMINATE PARENTHESIS {% endcomment %}
+        </script>
+    </head>
+    <body>
+        {{ result.choropleth|safe }}
+    </body>
+</html>

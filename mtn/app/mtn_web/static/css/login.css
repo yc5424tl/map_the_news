@@ -1,0 +1,106 @@
+
+#login-wrapper {
+    text-align: center;
+    background-color: var(--main-darkest);
+    color: var(--main-light);
+    padding: 5%;
+    margin-left: 15%;
+    margin-right: 15%;
+    border-radius: 5pt;
+}
+
+#login-buffer {
+    padding: 3rem;
+    background-color: var(--main-darker);
+    height: 60%;
+}
+
+form.mx-auto,
+#login-table {
+    text-align: center;
+}
+
+.login-form-item {
+    padding: 1rem;
+    border-radius: 5pt;
+}
+
+#login-form input {
+    margin: 3%;
+    padding: 1rem 3rem;
+    color: var(--main-light);
+    border: none;
+    border-bottom: 1pt solid var(--main-light);
+    border-radius: 0;
+}
+
+#login-form input[type='submit']:hover {
+    background-color: var(--main-light);
+    color: var(--main-darker);
+    transition: 0.4s;
+}
+
+#login-form input[type='submit'] {
+    border: 1pt solid var(--main-light);
+    border-radius: 5pt;
+}
+
+.input-box input:focus,
+.input-box input:active {
+    background-color: var(--main-darker);
+    color: var(--main-link-hover);
+    padding: 0;
+    margin: 1rem 3rem;
+    border-radius: 5pt;
+    border: 1pt transparent solid;
+    border-bottom: 1pt solid var(--main-light);
+    border-collapse: collapse;
+}
+
+@media (max-width: 991px) {
+    td label,
+    td input {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        display: initial;
+    }
+}
+
+@media (max-width: 767px) {
+
+    td {
+        display: inline-block;
+    }
+
+    td label {
+        padding-bottom: 0;
+        padding-top: 2rem;
+        margin-bottom: 0;
+    }
+
+    td label,
+    td input {
+        display: block;
+        min-width: 100%;
+    }
+
+    .input-label {
+        padding-bottom: 0;
+        padding-top: 2rem;
+    }
+
+    .input-box {
+        padding-top: 0;
+    }
+
+    #login-wrapper {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+
+    #login-buffer {
+        padding: 1rem;
+    }
+
+}
