@@ -10,6 +10,10 @@ ENV DEBUG 0
 ENV DEPLOYMENT PROD
 
 COPY /requirements ./requirements
+RUN apt-get update && \
+    apt-get install -y \
+    python3.7 \
+    python3.7-dev
 RUN python3 requirements/make_req_file.py
 RUN mv /requirements/requirements.txt .
 
@@ -21,8 +25,8 @@ RUN apt-get update && \
             gdal-data \
             libgdal-dev \
             libgdal20 \
-            python3.7 \
-            python3.7-dev \
+            # python3.7 \
+            # python3.7-dev \
             python3-gdal \
             python3-pip \
             python3-rtree && \
