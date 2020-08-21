@@ -9,13 +9,13 @@ ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
 ENV DEPLOYMENT PROD
 
-COPY /app/requirements ./requirements
+COPY /requirements ./requirements
 RUN apt-get update && \
     apt-get install -y \
     python3.7 \
     python3.7-dev
-RUN python3.7 requirements/make_req_file.py
-RUN mv /requirements/requirements.txt .
+RUN python3.7 ./requirements/make_req_file.py
+RUN mv ./requirements/requirements.txt .
 
 RUN apt-get update && \
     apt-get install -y \
