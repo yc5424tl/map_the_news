@@ -10,7 +10,7 @@ ENV DEBUG 0
 ENV DEPLOYMENT PROD
 
 COPY /requirements ./requirements
-RUN python requirements/make_req_file.py
+RUN python3 requirements/make_req_file.py
 RUN mv /requirements/requirements.txt .
 
 RUN apt-get update && \
