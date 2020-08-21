@@ -35,6 +35,8 @@ RUN apt-get update && \
 
 COPY . .
 
+RUN chmod +x ./app/release.sh
+
 EXPOSE 8000
 
 CMD ["/bin/bash", "-c", "./entrypoint.sh"]
