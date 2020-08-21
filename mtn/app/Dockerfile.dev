@@ -53,7 +53,6 @@ SHELL ["/bin/bash", "-c"]
 
 RUN mkdir -p /home/app
 
-# RUN addgroup --system app && adduser --system --ingroup app app
 
 ENV HOME /home/app
 ENV APP_HOME ${HOME}/web
@@ -98,12 +97,5 @@ RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/inc
 COPY ./entrypoint.dev.sh ${APP_HOME}
 
 COPY . ${APP_HOME}
-
-# EXPOSE 587
-
-# RUN chown -R app:app ${APP_HOME}
-# RUN chown -R app:app ${APP_HOME}/*.*
-
-# USER app
 
 ENTRYPOINT ["/home/app/web/entrypoint.dev.sh"]

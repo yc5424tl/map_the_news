@@ -11,7 +11,7 @@
 #upper,
 #lower {
     height       : 100%;
-    padding      : 3em;
+    padding      : 3em 0;
     min-width    : 400px;
     width        : auto;
     margin-left  : auto;

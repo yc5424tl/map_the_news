@@ -41,6 +41,11 @@
     --mid-gray:      #6c7377;
 }
 
+div {
+    margin: 0;
+    background-color: transparent;
+}
+
 * {
     margin          : 0;
     font-family     : 'Josefin Sans', sans-serif;
@@ -293,7 +298,7 @@ td, tr {
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    
+
     #logo-xl {
         margin-top: 15px;
         display: inline;

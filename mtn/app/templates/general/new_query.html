@@ -20,7 +20,7 @@
     </div>
     <div class="row new-query-div" id="lower">
         <div class="col"></div>
-        <div class="col-6" id="new-query-body-ctr">
+        <div class="col-xs-12 col-lg-10 col-xl-8" id="new-query-body-ctr">
             <form id="new-query-form" method="post" action="{% url 'new_query' %}">
                 {% csrf_token %}
                 {{ search_form.as_p }}
