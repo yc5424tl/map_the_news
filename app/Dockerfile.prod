@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
 ENV DEPLOYMENT PROD
 
-COPY /requirements ./requirements
+COPY /app/requirements ./requirements
 RUN apt-get update && \
     apt-get install -y \
     python3.7 \
