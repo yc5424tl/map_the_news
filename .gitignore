@@ -14,6 +14,3 @@
 log.out
 app/staticfiles/
 app/mtn_web/migrations/0*
-home/j/dev/log
-*.xml
-/.idea
