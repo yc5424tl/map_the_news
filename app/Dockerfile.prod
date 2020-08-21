@@ -35,7 +35,8 @@ RUN apt-get update && \
 
 COPY . .
 
-RUN chmod +x ./app/release.sh
+
+RUN ls -a && chmod +x release.sh
 
 EXPOSE 8000
 
