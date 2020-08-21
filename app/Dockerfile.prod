@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get install -y \
     python3.7 \
     python3.7-dev
-RUN python requirements/make_req_file.py
+RUN python3.7 requirements/make_req_file.py
 RUN mv /requirements/requirements.txt .
 
 RUN apt-get update && \
