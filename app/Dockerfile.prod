@@ -40,4 +40,4 @@ RUN ls -a && chmod +x release.sh
 
 EXPOSE 8000
 
-CMD ["/bin/bash", "-c", "./entrypoint.sh"]
+CMD ["/bin/bash", "-c", "./entrypoint.prod.sh"]
