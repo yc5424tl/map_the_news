@@ -26,6 +26,11 @@ if os.getenv('DEPLOYMENT') == 'DEV':
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
 
+    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
+elif os.getenv('DEPLOYMENT') == 'PROD':
+    ALLOWED_HOSTS = 'map-the-news.herokuapp.com'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -35,7 +40,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='superSecret123!')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
 
 
 # Application definition
@@ -194,7 +199,7 @@ GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
 #  Heroku
 if 'ON_HEROKU' in os.environ:
-    ALLOWED_HOSTS = ["map_the_news.herokuapp.com"]
+    # ALLOWED_HOSTS = ["map_the_news.herokuapp.com"]
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
     django_heroku.settings(locals(), staticfiles=False)
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFileStorage'
