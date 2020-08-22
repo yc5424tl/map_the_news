@@ -51,13 +51,13 @@ class SaveResultForm(forms.ModelForm):
 class EditPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ("title", "body")
+        fields = ("title", "body", "public")
 
 
 class EditCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ["body"]
+        fields = ["body",]
         widgets = {
             "body": forms.Textarea(
                 attrs={
@@ -85,7 +85,7 @@ class UserLoginForm(AuthenticationForm):
 class LoginForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
-        fields = ["email"]
+        fields = ["email",]
 
 
 class LogoutForm(forms.ModelForm):
@@ -97,11 +97,9 @@ class LogoutForm(forms.ModelForm):
 class NewUserForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = [
-            "email",
-        ]
+        fields = ["email",]
 
 
 class UpdateUserForm(UserChangeForm):
     model = get_user_model()
-    fields = ["email"]
+    fields = ["email",]

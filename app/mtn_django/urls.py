@@ -41,6 +41,6 @@ handler404 = 'mtn_web.views.handler404'
 handler500 = 'mtn_web.views.handler500'
 
 
-if os.environ.get('DEBUG') == 'TRUE':
+if int(os.environ.get('DEBUG')) is True:
     import debug_toolbar
     urlpatterns.append(path(r'__debug__', include(debug_toolbar.urls)))
