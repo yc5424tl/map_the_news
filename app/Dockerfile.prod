@@ -10,23 +10,23 @@ ENV DEBUG 0
 ENV DEPLOYMENT PROD
 
 COPY /requirements ./requirements
-RUN apt-get update && \
-    apt-get install -y \
-    python3.7 \
-    python3.7-dev
-RUN python3.7 ./requirements/make_req_file.py
-RUN mv ./requirements/requirements.txt .
 
 RUN apt-get update && \
     apt-get install -y \
+            python3.7 \
+            python3.7-dev
+
+RUN python3.7 ./requirements/make_req_file.py
+
+RUN mv ./requirements/requirements.txt .
+
+RUN apt-get install -y \
             curl \
             gcc \
             gdal-bin \
             gdal-data \
             libgdal-dev \
             libgdal20 \
-            # python3.7 \
-            # python3.7-dev \
             python3-gdal \
             python3-pip \
             python3-rtree && \
@@ -35,8 +35,7 @@ RUN apt-get update && \
 
 COPY . .
 
-
-RUN ls -a && chmod +x release.sh
+RUN ls -a && chmod +x release.sh && chmod +x entrypoint.prod.sh
 
 EXPOSE 8000
 
