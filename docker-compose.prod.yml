@@ -21,7 +21,7 @@ services:
       - '5432:5432'
     restart: always
     environment:
-      POSTGRES_PASSWORD: sqlAdmin1234!
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   redis:
     image: library/redis:alpine

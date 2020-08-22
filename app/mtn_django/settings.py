@@ -69,9 +69,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                'django.
+contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -164,7 +163,7 @@ GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
 
 #  DEBUG
-if DEBUG is True:
+if DEBUG == 1:
     BETTER_EXCEPTIONS = 1
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
     # MIDDLEWARE.append('debug_toolbar.middleware.DebugToolBarMiddleware')
