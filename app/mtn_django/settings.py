@@ -3,13 +3,15 @@ import dj_database_url
 import uuid
 import django_heroku
 
+DEPLOYMENT = os.getenv('DEPLOYMENT')
+USE_S3 = os.getenv('USE_S3') == "TRUE"
+USE_WHITENOISE = os.getenv('USE_WHITENOISE') == "TRUE"
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv('SECRET_KEY', default='superSecret123!')
 
-DEBUG = int(os.environ.get("DEBUG", default=0))
-
-if os.getenv('DEPLOYMENT') == 'DEV':
+if DEPLOYMENT == 'DEV':
 
     import dotenv
 
@@ -20,16 +22,15 @@ if os.getenv('DEPLOYMENT') == 'DEV':
     if os.path.isfile(dotenv_file):
         dotenv.load_dotenv(dotenv_file)
 
-    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
+SECRET_KEY = os.getenv('SECRET_KEY', default='superSecret123!')
 
-elif os.getenv('DEPLOYMENT') == 'PROD':
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
-    ALLOWED_HOSTS = 'map-the-news.herokuapp.com'
+ALLOWED_HOSTS = ['map-the-news.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 INSTALLED_APPS = [
-    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,11 +44,13 @@ INSTALLED_APPS = [
     'storages',
 ]
 
+if DEPLOYMENT == 'DEV':
+    INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
+
 AUTH_USER_MODEL = 'mtn_web.User'
 
 MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,9 +61,11 @@ MIDDLEWARE = [
     'django.contrib.admindocs.middleware.XViewMiddleware',
 ]
 
+if USE_WHITENOISE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
 ROOT_URLCONF = 'mtn_django.urls'
-LOGIN_URL = 'login'
-LOGOUT_REDIRECT_URL = 'index'
+
 
 TEMPLATES = [
     {
@@ -81,13 +86,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mtn_django.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv("MTN_DB_NAME"),
+        "USER": os.getenv("MTN_DB_USER"),
+        "PASSWORD": os.getenv("MTN_DB_PW"),
+        "HOST": os.getenv("MTN_DB_HOST"),
+        "PORT": os.getenv("MTN_DB_PORT"),
     }
 }
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
+
+if DOCKER_POSTGRES:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "HOST": "db",
+            "PORT": 5432,
+            "PASSWORD": "sqlAdmin1234!"
+        }
+    }
+
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
@@ -100,9 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ['*']
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -113,9 +132,6 @@ USE_TZ = True
 # =========================================================== #
 #  -------   STATIC FILES   -------   MEDIA FILES   --------  #
 # =========================================================== #
-
-USE_S3 = os.getenv('USE_S3') == "TRUE"
-USE_WHITENOISE = os.getenv('USE_WHITENOISE') == "TRUE"
 
 if USE_S3:
     # Amazon s3 bucket
@@ -135,8 +151,6 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = "mtn_django.storage_backends.MediaStorage"
 
 if USE_WHITENOISE:
-    INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
-    MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATIC_URL = '/staticfiles/'
     WHITENOISE_AUTOREFRESH = True
@@ -152,6 +166,15 @@ if not USE_WHITENOISE and not USE_S3:
     MEDIA_URL = '/mediafiles/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+ADMIN_MEDIA_PREFIX = f"{STATIC_URL}admin/"
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["*"]
+
+LOGIN_URL = "login"
+LOGOUT_REDIRECT_URL = "index"
 
 # 3rd Party Geo Library Locations
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
@@ -182,7 +205,7 @@ if DEBUG == 1:
         "debug_toolbar.panels.redirects.RedirectsPanel",
     ]
 
-    
+
     DEBUG_TOOLBAR_CONFIG = {
         "INTERCEPT REDIRECTS": False,
         "SHOW_COLLAPSED": True,
