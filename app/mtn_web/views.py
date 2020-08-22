@@ -102,8 +102,8 @@ def register_user(request: requests.request) -> render or redirect:
 #
 def login_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
-        # form = AuthenticationForm(request.POST)
-        form = UserLoginForm(request.POST)
+        form = AuthenticationForm(request.POST)
+        # form = UserLoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
@@ -111,15 +111,15 @@ def login_user(request: requests.request) -> render or redirect:
             if user is not None:
                 login(request, user)
                 return redirect("view_user", user.pk)
-        # form = AuthenticationForm()
-        form = UserLoginForm()
+        form = AuthenticationForm()
+        # form = UserLoginForm()
         messages.error(
             request, "Incorrect Password and/or Username", extra_tags="error"
         )
         return render(request, "general/login_user.html", {"form": form})
     if request.method == "GET":
-        # form = AuthenticationForm()
-        form = UserLoginForm()
+        form = AuthenticationForm()
+        # form = UserLoginForm()
         return render(request, "general/login_user.html", {"form": form})
 
 
