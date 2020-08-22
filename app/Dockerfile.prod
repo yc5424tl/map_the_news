@@ -37,6 +37,4 @@ COPY . .
 
 RUN ls -a && chmod +x release.sh && chmod +x entrypoint.prod.sh
 
-EXPOSE 8000
-
 CMD ["/bin/bash", "-c", "./entrypoint.prod.sh"]
