@@ -29,7 +29,7 @@ elif os.getenv('DEPLOYMENT') == 'PROD':
 
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +47,7 @@ AUTH_USER_MODEL = 'mtn_web.User'
 
 MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -108,13 +108,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-#  Heroku
-if 'ON_HEROKU' in os.environ:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-    django_heroku.settings(locals(), staticfiles=False)
-
-
-
 # =========================================================== #
 #  -------   STATIC FILES   -------   MEDIA FILES   --------  #
 # =========================================================== #
@@ -140,6 +133,8 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = "mtn_django.storage_backends.MediaStorage"
 
 elif USE_WHITENOISE:
+    INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
+    MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATIC_URL = '/staticfiles/'
     WHITENOISE_AUTOREFRESH = True
@@ -160,6 +155,9 @@ else:
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
+if 'ON_HEROKU' in os.environ:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+    django_heroku.settings(locals(), staticfiles=False)
 
 #  DEBUG
 if DEBUG == 1:
