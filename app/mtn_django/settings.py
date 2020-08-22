@@ -181,6 +181,8 @@ if DEBUG == 1:
         "debug_toolbar.panels.logging.LoggingPanel",
         "debug_toolbar.panels.redirects.RedirectsPanel",
     ]
+
+    
     DEBUG_TOOLBAR_CONFIG = {
         "INTERCEPT REDIRECTS": False,
         "SHOW_COLLAPSED": True,
