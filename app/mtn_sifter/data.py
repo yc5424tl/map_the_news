@@ -99,7 +99,7 @@ country_codes = {
     "lt": {"name": "Lithuania", "language": "lt"},
     "lu": {"name": "Luxembourg", "language": "de"},
     "mg": {"name": "Madagascar", "language": "fr"},
-    "mu": {"name": "Mauritius", "language": "en"}, # english and french used in commercial/media 
+    "mu": {"name": "Mauritius", "language": "en"}, # english and french used in commercial/media
     "yt": {"name": "Mayotte", "language": "fr"},
     "md": {"name": "Moldova", "language": "ro"},
     "me": {"name": "Montenegro", "language": "sr"}, # serbian > Montenegrin, Bosnian. Croatian
@@ -114,7 +114,7 @@ country_codes = {
     "sn": {"name": "Senegal", "language": "fr"},
     "es": {"name": "Spain", "language": "es"},
     "ch": {"name": "Switzerland", "language": "de"},  # 'de' @74%, other official: fr @ 21, it @ 4, and romansh @ 1) # ONLY THE 2 LETTER CODE IS IN FOR THESE
-    "to": {"name": "Tonga", "language": "en"} # Some publication only in Tongan (to) as well as many printed both to/en
+    "to": {"name": "Tonga", "language": "en"}, # Some publication only in Tongan (to) as well as many printed both to/en
     "tn": {"name": "Tunisia", "language": "ar"},
     "ug": {"name": "Uganda", "language": "en"}, # 43 languages used in country, en popular in media
     "uy": {"name": "Uruguay", "language": "es"},
@@ -141,7 +141,7 @@ NOT_ENTERED_AT_ALL = {
     "cf": "Central African Republic",
     "cg": "Congo",
     "cm": "Cameroon",
-    "dj": "Djibout   i",
+    "dj": "Djibouti",
     "dk": "Denmark",
     "dz": "Algeria",
     "ee": "Estonia",
