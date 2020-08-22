@@ -134,7 +134,7 @@ if USE_S3:
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
     DEFAULT_FILE_STORAGE = "mtn_django.storage_backends.MediaStorage"
 
-elif USE_WHITENOISE:
+if USE_WHITENOISE:
     INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
     MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -144,7 +144,7 @@ elif USE_WHITENOISE:
     MEDIA_URL = '/mediafiles/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-else:
+if not USE_WHITENOISE and not USE_S3:
     # local static
     STATIC_URL = '/staticfiles/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -157,9 +157,9 @@ else:
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
-if 'ON_HEROKU' in os.environ:
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-    django_heroku.settings(locals())
+# if 'ON_HEROKU' in os.environ:
+#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+#     django_heroku.settings(locals())
 
 #  DEBUG
 if DEBUG == 1:
