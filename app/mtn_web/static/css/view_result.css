@@ -480,7 +480,7 @@ p.article-body-xl {
 
 @media (max-width: 575px) {
     .card {
-        width: 100%;
+        width: 85%;
         margin-left: 5%;
         margin-right: 5%;
     }
