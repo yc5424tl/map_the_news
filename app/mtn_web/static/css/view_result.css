@@ -1,3 +1,6 @@
+#content-wrapper{
+    text-align: center;
+}
 
 .row.no-gutters.text-center {
     width: 100%;
@@ -12,6 +15,7 @@
     bottom:20%;
     top: auto;
     width: 100%;
+    text-align: center;
     background-color: var(--main-darker);
 }
 
@@ -480,7 +484,7 @@ p.article-body-xl {
 
 @media (max-width: 575px) {
     .card {
-        width: 100%;
+        width: 85%;
         margin-left: 5%;
         margin-right: 5%;
     }
