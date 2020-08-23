@@ -1,3 +1,5 @@
 python3 manage.py migrate mtn_web
 python3 manage.py migrate sessions
 python3 manage.py migrate admin
+python3 manage.py migrate
+python3 manage.py collectstatic --noinput
