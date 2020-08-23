@@ -1,7 +1,7 @@
 
 #login-wrapper {
     text-align: center;
-    background-color: var(--main-darkest);
+    background-color: var(--off-black);
     color: var(--main-light);
     padding: 5%;
     margin-left: 15%;
@@ -11,7 +11,7 @@
 
 #login-buffer {
     padding: 3rem;
-    background-color: var(--main-darker);
+    background-color: var(--off-black);
     height: 60%;
 }
 
@@ -36,7 +36,7 @@ form.mx-auto,
 
 #login-form input[type='submit']:hover {
     background-color: var(--main-light);
-    color: var(--main-darker);
+    color: var(--off-black);
     transition: 0.4s;
 }
 
@@ -47,23 +47,23 @@ form.mx-auto,
 
 .input-box input:focus,
 .input-box input:active {
-    background-color: var(--main-darker);
-    color: var(--main-link-hover);
-    padding: 0;
-    margin: 1rem 3rem;
-    border-radius: 5pt;
-    border: 1pt transparent solid;
-    border-bottom: 1pt solid var(--main-light);
-    border-collapse: collapse;
+    background-color: var(--off-black);
+    color           : var(--main-link-hover);
+    padding         : 0;
+    margin          : 1rem 3rem;
+    border-radius   : 5pt;
+    border          : 1pt transparent solid;
+    border-bottom   : 1pt solid var(--main-light);
+    border-collapse : collapse;
 }
 
 @media (max-width: 991px) {
     td label,
     td input {
-        width: 100%;
-        margin-left: auto;
+        width       : 100%;
+        margin-left : auto;
         margin-right: auto;
-        display: initial;
+        display     : initial;
     }
 }
 
@@ -75,19 +75,19 @@ form.mx-auto,
 
     td label {
         padding-bottom: 0;
-        padding-top: 2rem;
-        margin-bottom: 0;
+        padding-top   : 2rem;
+        margin-bottom : 0;
     }
 
     td label,
     td input {
-        display: block;
+        display  : block;
         min-width: 100%;
     }
 
     .input-label {
         padding-bottom: 0;
-        padding-top: 2rem;
+        padding-top   : 2rem;
     }
 
     .input-box {
@@ -95,7 +95,7 @@ form.mx-auto,
     }
 
     #login-wrapper {
-        margin-left: 3%;
+        margin-left : 3%;
         margin-right: 3%;
     }
 
