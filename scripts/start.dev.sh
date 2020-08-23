@@ -6,7 +6,7 @@
 
 
 set -o allexport;
-source .env.dev;
+source ../.env.dev;
 set +o allexport;
 
 echo -e "...\n...\n..."
@@ -30,7 +30,6 @@ echo "DATABASE: up!"
 
 echo -e "...\n...\n..."
 
-
 docker exec -i mtn_web_1 bash ./mtn_web/migrations/ a+x *.py
 
 echo "DJANGO: migrating..."
@@ -51,8 +50,7 @@ wait $pid
 echo "......"
 echo "DATABASE: complete!"
 
-
-# echo -e "...\n...\n..."
+echo -e "...\n...\n..."
 
 echo "DATABASE: migrating..."
 ./start.migrate.sh &
@@ -83,8 +81,7 @@ echo "DJANGO: collecting static files complete"
 
 echo -e "...\n...\n..."
 
-
-
+# specific to current dump file, source has already been updated
 echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i mtn_db_1 psql -U $DB_USER -d $DB_DATABASE;
 
 echo "Map The News -- Depoyment Complete"
