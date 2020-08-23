@@ -226,15 +226,20 @@ def view_result(request: requests.request, result_pk: int) -> render:
     print(f'result.query_type = {result.query_type}')
     print(f'result.author = {result.author}')
     print(f'result.archived = {result.archived}')
+    print(f'result.filename = {result.filename}')
+    print(f'result.choro_html[:250] = {result.choro_html[:250]}')
+    print(f'result.article_count = {result.article_count}')
+    print(f'result.article_data_len = {result.article_data_len}')
     log.error(f'result.articles_per_country == {result.articles_per_country}')
 
     #  Builds a new dictionary replacing iso 2 letter code keys with full country names,
     #  easier for user to understand when viewed in page
     country_articles = full_name_result_set(result.articles_per_country)
-
+    print(f'country_articles = {country_articles}')
+    print(f'type(result.articles.all()) = {type(result.articles.all())}')
     return render(
         request,
-        "general/view_result_.html",
+        "general/view_result.html",
         {
             "result": result,
             "query_author": result.author,
@@ -315,7 +320,7 @@ def delete_result(request, result_pk: int):
     result = get_object_or_404(Result, pk=result_pk)
     result.delete()
     messages.info(request, message="Result Successfully Deleted")
-    return redirect("new_result", messages=messages)
+    return redirect("new_query", messages=messages)
 
 
 #
@@ -510,7 +515,7 @@ def view_post(request, post_pk):
                     "result": result,
                     "articles": articles,
                     'country_articles': result.articles_per_country
-                },
+                }
             )
         else:
             return render(
@@ -520,8 +525,8 @@ def view_post(request, post_pk):
                     "post": post,
                     "result": result,
                     "articles": articles,
-                    'country_articles': result.articles_per_country
-                },
+                    "country_articles": result.articles_per_country
+                }
             )
 
 
@@ -562,10 +567,12 @@ def view_sources(request):
         }
         for category in Category.objects.all()
     ]
+    print(f'sources_dict_list = {sources_dict_list}')
+    print(f'category_dict_list = {category_dict_list}')
     return render(
         request,
         "general/view_sources.html",
-        {"sources": source_dict_list, "categories": category_dict_list},
+        {"sources": source_dict_list, "categories": category_dict_list}
     )
 
 
