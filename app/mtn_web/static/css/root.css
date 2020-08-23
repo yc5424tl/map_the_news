@@ -50,7 +50,7 @@ div {
     margin          : 0;
     font-family     : 'Josefin Sans', sans-serif;
     background-color: transparent;
-}
+}<span class="text-muted" id="txt"></span>
 
 html {
     height  : 100%;
@@ -121,6 +121,8 @@ a:focus {
 #footer-div a {
     color: var(--main-link-hover);
     text-decoration-line: underline;
+    text-align: center;
+    justify-content: center;
 }
 
 div.jumbotron {
