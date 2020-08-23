@@ -542,6 +542,16 @@ def view_post(request, post_pk):
 #  ``╚═══╝``╚═╝╚══════╝`╚══╝╚══╝`````╚══════╝`╚═════╝``╚═════╝`╚═╝``╚═╝`╚═════╝╚══════╝╚══════╝
 #  ````````````````````````````````````````````````````````````````````````````````````````````
 def view_sources(request):
+
+    for source in Source.objects.all():
+        print(f'source.country_full_name = {source.country_full_name}')
+        print(f'source.name = {source.name}')
+        print(f'source.language_full_name = {source.language_full_name}')
+        print(f'source.url = {source.url}')
+        print('source categories:')
+        for cat in source.categories.all():
+            print(f'cat = {cat.name}')
+
     source_dict_list = [
         {
             "country": source.country_full_name,
@@ -552,6 +562,10 @@ def view_sources(request):
         }
         for source in Source.objects.all()
     ]
+
+    for category in Category.objects.all():
+        print(f'category.name = {category.name}')
+
     category_dict_list = [
         {
             "cat": category.name,
@@ -567,7 +581,7 @@ def view_sources(request):
         }
         for category in Category.objects.all()
     ]
-    print(f'sources_dict_list = {sources_dict_list}')
+    print(f'source_dict_list = {source_dict_list}')
     print(f'category_dict_list = {category_dict_list}')
     return render(
         request,
