@@ -90,6 +90,6 @@ echo "Map The News -- Depoyment Complete"
 # Set execute permission to:
 #   - this file
 #   - start_compose.sh
-#   - populate.sh
+#   - any .sh file which runs during the build
 #
 # with --> $ chmod a+x file

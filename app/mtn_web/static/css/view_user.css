@@ -28,11 +28,6 @@
     padding-top: 3rem;
 }
 
-#last-post-wrapper {
-    padding-left: 5rem;
-    padding-right: 5rem;
-}
-
 #last-post-wrapper > div,
 #post-history-wrapper > div {
     padding: 1rem 2rem;
@@ -42,6 +37,8 @@
 .red-span,
 #post-history-wrapper h4 {
     color: var(--main-link-hover);
+    text-align: center;
+    text-justify: center;
 }
 
 #post-history-wrapper h4:first-child {
@@ -104,7 +101,7 @@ hr {
 }
 
 #view-last-post-btn,
-#view-last-comments-btn {
+.view-last-comments-btn {
     background-color: var(--off-black);
     border: 1pt solid var(--main-gold);
     color: var(--main-gold);
@@ -135,6 +132,15 @@ button.btn-inactive {
 #user-recent-queries {
     margin: 1rem;
 }
+
+@media (min-width: 768px) {
+
+    #last-post-wrapper {
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+}
+
 
 @media (min-width: 992px) {
 

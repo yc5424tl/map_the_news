@@ -9,8 +9,8 @@
  */
 
 #post {
-    background-color : rgb(0, 0, 0);
-    border           : 2pt solid var(--main-light);
+    background-color : var(--off-black);
+    /* border           : 2pt solid var(--main-light); */
     border-radius    : 5pt;
     color            : var(--main-light);
     margin           : 1em;
@@ -44,34 +44,38 @@
 #post-detail,
 #post-header,
 #post-body {
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     transition       : 0.4s;
+}
+
+#post-body {
+    text-align: center;
+    text-justify: center;
 }
 
 #post-header {
     color         : var(--aux-accent-6);
-    border-bottom : 1pt solid var(--aux-accent-3);
-    margin-bottom : 1em;
+    border-bottom : 1pt solid var(--main-link-hover);
 }
 
 #add-comment-btn:hover,
 #add-comment-btn:focus {
-    background-color : var(--transp-bg-7);
-    border           : 2pt solid var(--aux-accent-1);
-    color            : var(--aux-accent-1);
+    background-color : var(--off-black);
+    border           : 2pt solid var(--main-link-hover);
+    color            : var(--main-link-hover);
     transition       : 0.5s;
 }
 
 #add-comment-btn {
-    background-color : var(--transp-bg-7);
-    border           : 2pt solid var(--aux-accent-3);
-    color            : var(--aux-accent-3);
+    background-color : var(--off-black);
+    border           : 2pt solid var(--main-link-hover);
+    color            : var(--main-link-hover);
     margin           : 1em 0;
 }
 
 .del-comment-btn,
 .upd-comment-btn {
-    color                : var(--aux-accent-1);
+    color                : var(--main-link-hover);
     font-size            : 0.8em;
     margin               : 0;
     padding              : 0;
@@ -90,7 +94,7 @@
 
 #upd-post-btn,
 #del-post-btn {
-    border     : 2pt solid var(--aux-accent-3);
+    border     : 2pt solid var(--main-link-hover);
     margin     : auto 1em 2em 1em;
     transition : 0.4s;
 }
@@ -99,7 +103,7 @@
 #del-post-btn:hover,
 #upd-post-btn:focus,
 #del-post-btn:focus {
-    background-color     : var(--aux-accent-1);
+    background-color     : var(--main-link-hover);
     color                : var(--main-light);
     text-decoration-line : none;
     transition           : 0.5s;
@@ -113,7 +117,7 @@
 
 #iframe-div > div > div > iframe,
 #iframe-div > div {
-    border : 2pt solid var(--main-grey);
+    border : 2pt solid var(--off-black);
 }
 
 .comment-body > pre,
@@ -130,6 +134,7 @@ table {
     border: 1pt solid var(--main-light);
     border-collapse: collapse;
     color: var(--aux-accent-6);
+    background-color: var(--off-black);
 }
 
 th {
@@ -150,13 +155,13 @@ th, tr {
 /*====================================ARTICLES===================================*/
 
 #articles-wrapper {
-    background-color : black;
-    border-radius    : 8pt;
+    background-color : var(--off-black);
+    border-radius    : 5pt;
     padding          : 0;
 }
 
 #articles-col {
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     color            : var(--main-light);
     border-radius    : 5pt;
     padding          : 0;
@@ -167,7 +172,7 @@ th, tr {
 #articles-card {
     height           : calc(100vh - 60px);
     max-height       : calc(100vh - 60px);
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     color            : var(--main-light);
     border-radius    : 5pt;
     margin           : 0;
@@ -178,11 +183,11 @@ th, tr {
 .card-header {
     border-top-right-radius : 5pt;
     border-top-left-radius  : 5pt;
-    border-top              : 1pt solid var(--transp-bg-7);
-    border-right            : 1pt solid var(--transp-bg-7);
-    border-left             : 1pt solid var(--transp-bg-7);
+    border-top              : 1pt solid var(--off-black);
+    border-right            : 1pt solid var(--off-black);
+    border-left             : 1pt solid var(--off-black);
     border-bottom           : none;
-    background-color        : var(--transp-bg-7);
+    background-color        : var(--off-black);
     color                   : var(--main-light);
     text-align              : center;
     align-content           : center;
@@ -194,10 +199,10 @@ th, tr {
     overflow-y                 : scroll;
     -webkit-overflow-scrolling : touch;
     border-bottom              : 1pt solid var(--main-light);
-    border-left                : 1pt solid var(--transp-bg-7);
-    border-right               : 1pt solid var(--transp-bg-7);
-    border-top                 : 1pt solid var(--transp-bg-7);
-    background-color           : black;
+    border-left                : 1pt solid var(--off-black);
+    border-right               : 1pt solid var(--off-black);
+    border-top                 : 1pt solid var(--off-black);
+    background-color           : var(--off-black);
     margin                     : 0;
     height                     : 100%;
 }
@@ -210,19 +215,19 @@ th, tr {
     padding-bottom   : 20px;
     padding-top      : 10px;
     height           : auto;
-    border-top       : 1pt solid var(--aux-accent-3);
-    border-bottom    : 1pt solid var(--aux-accent-3);
-    border-left      : 1pt solid var(--transp-bg-7);
+    border-top       : 1pt solid var(--main-link-hover);
+    border-bottom    : 1pt solid var(--main-link-hover);
+    border-left      : 1pt solid var(--off-black);
     color            : var(--main-light);
-    background-color : var(--transp-bg-7);
-    border-right     : 1pt solid var(--transp-bg-7);
+    background-color : var(--off-black);
+    border-right     : 1pt solid var(--off-black);
     margin           : 0;
     list-style       : none;
     border-collapse  : collapse;
 }
 
 .article-li * {
-    background-color : black;
+    background-color : var(--off-black);
     color            : var(--main-light);
 }
 
@@ -232,17 +237,15 @@ th, tr {
 
 .row.article {
     height           : 100%;
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     color            : var(--main-light);
 }
 
 .articles-left-buffer,
 .articles-right-buffer {
-    background : rgb(0, 0, 0);
+    background : var(--off-black);
     margin     : 0;
 }
-
-
 
 @media screen and (min-width: 1600px) {
     .articles-right-buffer {
@@ -263,14 +266,14 @@ th, tr {
 }
 
 .article-txt-container {
-    background-color : rgb(0, 0, 0);
+    background-color : var(--off-black);
     color            : var(--main-light);
     padding-left     : 0;
     padding-right    : 0;
 }
 
 .article-txt-container > * {
-    background : var(--transp-bg-7);
+    background : var(--off-black);
     color      : var(--main-light);
 }
 
@@ -288,7 +291,7 @@ th, tr {
     margin-bottom           : 0;
     overflow-x              : hidden;
     color                   : var(--aux-accent-6);
-    background-color        : var(--transp-bg-7);
+    background-color        : var(--off-black);
     border-top-right-radius : 5pt;
     border-top-left-radius  : 5pt;
 }
@@ -296,7 +299,7 @@ th, tr {
 .article-subtitle-container {
     text-align       : left;
     align-content    : start;
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     color            : var(--main-light);
     margin-top       : 0;
     margin-bottom    : 0;
@@ -305,7 +308,7 @@ th, tr {
 }
 
 .article-subtitle {
-    background-color : var(--transp-bg-7);
+    background-color : var(--off-black);
     color            : var(--main-light);
     padding-top      : 0;
     margin-top       : 0;
@@ -316,13 +319,13 @@ th, tr {
 }
 
 .article-author {
-    color            : #bc4b51;
-    background-color : var(--transp-bg-7);
+    color            : var(--main-link-hover);
+    background-color : var(--off-black);
 }
 
 .article-body {
-    background-color : var(--main-accent-1);
-    color            : var(--transp-bg-7);
+    background-color : var(--mid-gray);
+    color            : var(--off-black);
     padding          : 2em 1em 1em 1em;
     margin-top       : 0;
     margin-bottom    : 0;
@@ -330,7 +333,7 @@ th, tr {
 }
 
 .article-img-container {
-    background-color : rgb(0, 0, 0);
+    background-color : var(--off-black);
     color            : var(--main-light);
     padding          : 10px;
 }
@@ -345,7 +348,7 @@ th, tr {
     .article-img-container {
         display          : block;
         text-align       : center;
-        background-color : rgb(0, 0, 0);
+        background-color : var(--off-black);
     }
 
     .article-img-xl {
@@ -382,7 +385,7 @@ th, tr {
         width            : 100%;
         height           : auto;
         border-radius    : 10pt;
-        background-color : rgb(0, 0, 0);
+        background-color : var(--off-black);
     }
 
     #horizontal-table-div {
@@ -396,11 +399,11 @@ th, tr {
 /*===============================  COMMENTS =============================================*/
 
 .comment {
-    background-color : rgba(32, 36, 40, 0.8);
+    background-color : var(--off-black);
     color            : var(--main-light);
     padding          : 2rem;
     text-align       : justify;
-    text-wrap        : normal;
+    word-wrap        : normal;
 }
 
 #comments-header {
@@ -409,7 +412,7 @@ th, tr {
 }
 
 #comments-container {
-    background-color        : var(--transp-bg-7);
+    background-color        : var(--off-black);
     border-top-left-radius  : 0;
     border-top-right-radius : 0;
     text-align              : center;
@@ -438,9 +441,9 @@ small.comment-footer {
 }
 
 .comment {
-    background-color : var(--main-grey);
+    background-color : var(--mid-gray);
     border-radius    : 5pt;
-    color            : var(--main-light);
+    color            : var(--off-black);
     margin           : 1em;
     padding          : 1em;
 }

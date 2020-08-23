@@ -44,9 +44,9 @@
                                 <button class="btn btn-link" id="view-last-post-btn">View Full Post</button>
                             </a>
                             {% for comment in last_post.comments.all|slice:':1' %}
-                                <button class="btn btn-link" id="view-last-comments-btn">View Comments</button>
+                                <button class="btn btn-link view-last-comments-btn">View Comments</button>
                             {% empty %}
-                                <button class="btn btn-inactive">View Comments</button>
+                                <button class="btn btn-inactive view-last-comments-btn">View Comments</button>
                             {% endfor %}
                         </div>
                     </div>

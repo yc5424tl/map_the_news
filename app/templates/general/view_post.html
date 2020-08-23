@@ -18,7 +18,7 @@
                 <h3 class="lt-header" id="post-header">{{ post.title }}</h3>
                 <small id="post-detail">
                     <span>By</span>
-                    <a id="author-link" href="{% url 'view_user' post.author.pk %}">{{ post.author.first_name }}</a>
+                    <a id="author-link" href="{% url 'view_user' post.author.pk %}">{{ post.author.username }}</a>
                     <span>{{ post.date_published }}</span>
                 </small>
                 <blockquote id="post-body">
