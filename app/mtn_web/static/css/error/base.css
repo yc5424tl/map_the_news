@@ -1,6 +1,6 @@
 
 .row {
-    background-color: var(--transp-bg-4);
+    background-color: var(--off-black);
 }
 
 .col-sm-10.col-lg-6 {
@@ -8,27 +8,27 @@
 }
 
 #error_msg_div {
-    background-color: var(--transp-bg-7);
-    color: var(--main-light);
+    background-color: var(--off-black);
+    color           : var(--main-light);
 }
 
 #error_contact_div {
-    background-color: var(--btn-hover-bg);
-    color: var(--main-accent-2);
+    background-color: var(--off-black);
+    color           : var(--main-link-hover);
 }
 
 /* Passed into status block */
 .err_code {
-    font-size: xx-large;
-    color: var(--main-light);
-    text-align: center;
+    font-size  : xx-large;
+    color      : var(--main-light);
+    text-align : center;
     font-weight: bolder;
 }
 
 /* Passed into exception block */
 .err_exc {
-    font-size: x-large;
-    color: var(--main-light);
-    text-align: center;
+    font-size  : x-large;
+    color      : var(--main-light);
+    text-align : center;
     font-weight: bolder;
 }

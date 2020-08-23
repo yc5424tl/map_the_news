@@ -26,7 +26,7 @@
 }
 
 .view-posts-container {
-    background-color : var(--main-grey);
+    background-color : var(--off-black;
     padding          : 1rem;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .list-group-item.view-posts-list-item {
-    background-color : var(--main-grey);
+    background-color : var(--off-black);
     border-radius    : 5pt;
     padding-top      : 1rem;
     border-collapse  : collapse;
@@ -47,7 +47,7 @@
 .view-posts-post-link:hover,
 .view-posts-post-link:focus {
     color           : var(--main-link-hover);
-    transition      : 0.3s;
+    transition      : 0.4s;
     text-decoration : none;
 }
 
@@ -57,14 +57,14 @@
 
 .view-posts-comment-link,
 .view-posts-comment-detail {
-    background-color : var(--main-accent-2);
+    background-color : var(--main-link-visited);
 }
 
 .view-posts-post-link:link,
 .view-post-comment-link,
 .view-posts-comment-link:link,
 .view-post-comment-link:visited {
-    color                : var(--main-grey);
+    color                : var(--mid-dark-gray);
     text-decoration-line : none;
     transition           : 0.4s;
 }
@@ -72,7 +72,7 @@
 .view-posts-comment-link:hover,
 .view-posts-comment-link:hover {
     color      : var(--main-link-hover);
-    transition : 0.5s;
+    transition : 0.4s;
 }
 
 .view-posts-card-title,
@@ -93,12 +93,12 @@
 }
 
 .view-posts-card-subtitle-container.text-muted {
-    margin-bottom : 1em;
+    margin-bottom : 1rem;
 }
 
 .view-posts-comment-body {
-    background-color : var(--main-accent-2);
-    padding          : 1em;
+    background-color : var(--main-link-visited);
+    padding          : 1rem;
     margin-bottom    : 0;
     border-radius    : 5pt;
     color            : var(--main-light);

@@ -1,18 +1,18 @@
 
 #login-wrapper {
-    text-align: center;
+    text-align      : center;
     background-color: var(--off-black);
-    color: var(--main-light);
-    padding: 5%;
-    margin-left: 15%;
-    margin-right: 15%;
-    border-radius: 5pt;
+    color           : var(--main-light);
+    padding         : 5%;
+    margin-left     : 15%;
+    margin-right    : 15%;
+    border-radius   : 5pt;
 }
 
 #login-buffer {
-    padding: 3rem;
+    padding         : 3em;
     background-color: var(--off-black);
-    height: 60%;
+    height          : 60%;
 }
 
 form.mx-auto,
@@ -21,27 +21,27 @@ form.mx-auto,
 }
 
 .login-form-item {
-    padding: 1rem;
+    padding      : 1em;
     border-radius: 5pt;
 }
 
 #login-form input {
-    margin: 3%;
-    padding: 1rem 3rem;
-    color: var(--main-light);
-    border: none;
+    margin       : 3%;
+    padding      : 1em 3em;
+    color        : var(--main-light);
+    border       : none;
     border-bottom: 1pt solid var(--main-light);
     border-radius: 0;
 }
 
 #login-form input[type='submit']:hover {
     background-color: var(--main-light);
-    color: var(--off-black);
-    transition: 0.4s;
+    color           : var(--off-black);
+    transition      : 0.4s;
 }
 
 #login-form input[type='submit'] {
-    border: 1pt solid var(--main-light);
+    border       : 1pt solid var(--main-light);
     border-radius: 5pt;
 }
 
@@ -75,7 +75,7 @@ form.mx-auto,
 
     td label {
         padding-bottom: 0;
-        padding-top   : 2rem;
+        padding-top   : 2em;
         margin-bottom : 0;
     }
 
@@ -87,7 +87,7 @@ form.mx-auto,
 
     .input-label {
         padding-bottom: 0;
-        padding-top   : 2rem;
+        padding-top   : 2em;
     }
 
     .input-box {
@@ -100,7 +100,7 @@ form.mx-auto,
     }
 
     #login-buffer {
-        padding: 1rem;
+        padding: 1em;
     }
 
 }
