@@ -103,7 +103,7 @@ h2.sort-style {
 .src-cats {
     color      : var(--main-gold);
     font-weight: 700;
-    display    : block;
+    display    : inline-block;
     word-wrap  : break-word;
     white-space: normal;
 }
