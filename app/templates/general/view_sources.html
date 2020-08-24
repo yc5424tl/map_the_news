@@ -103,8 +103,8 @@
                                     {% for source in language.list %}
                                         <li class="list-group-item src-by-lang col-sm-12 col-md-4">
                                             <a class="src-url" href="{{ source.url }}">{{ source.name }}</a>
-                                            <p class="src-details"> {{ source.country|safe }}</p>
-                                            <sub class="src-cats">[ {{source.categories|join:", "}} ]</sub>
+                                            <p class="src-details">{{ source.country|safe }}</p>
+                                            <sub class="src-cats">[ {{ source.categories|join:", " }} ]</sub>
                                             <br>
                                         </li>
                                     {% endfor %}
