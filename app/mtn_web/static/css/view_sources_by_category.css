@@ -1,0 +1,105 @@
+.src-name {
+    color        : var(--main-link-color);
+    transition   : 0.4s;
+    margin-bottom: 0;
+}
+
+.src-name:link {
+    color: var(--main-link-color);
+}
+
+.src-name:visited {
+    color: var(--aux-accent-6);
+}
+
+.src-name:hover,
+.src-name:focus,
+.src-name:active {
+    color: var(--main-link-hover);
+}
+
+.src-lang {
+    color: var(--main-gold);
+    font-size: smaller;
+}
+
+.src-list {
+    flex-direction: row;
+    flex-wrap     : wrap;
+    padding-bottom: 60px;
+    margin-right  : 0;
+}
+
+.list-group-item {
+    background-color: var(--off-black);
+}
+
+#wrapper {
+    margin          : 2rem 0.5rem 2rem;
+    text-align      : left;
+    padding         : 0.5em 0;
+    border-radius   : 5pt;
+    background-color: var(--off-black);
+    max-width       : 100%;
+}
+
+button.category-header {
+    font-size     : 2rem;
+    font-weight   : 800;
+    margin-top    : 20px;
+    margin-bottom : 10px;
+    color         : var(--main-link-hover);
+    min-width     : 100%;
+    width         : 100%;
+    height        : auto;
+    text-align    : center;
+    display       : block;
+    border-top    : 1pt solid var(--main-link-hover);
+    border-bottom : 1pt solid var(--main-link-hover);
+}
+
+button.category-header:hover {
+    text-decoration: underline 1pt solid var(--main-light);
+    transition     : 0.4s;
+    border-top     : 1pt solid var(--main-link-hover);
+    border-bottom  : 1pt solid var(--main-link-hover);
+    color          : var(--aux-accent-6);
+}
+
+button.category-header:focus {
+    color           : var(--main-link-hover);
+    background-color: var(--main-light);
+    border-top      : 1pt solid var(--main-link-hover);
+    border-bottom   : 1pt solid var(--main-link-hover);
+    transition      : 0.4s;
+    text-decoration : none;
+}
+
+.src-lang {
+    color      : var(--main-gold);
+    font-weight: 700;
+    display    : block;
+    font-size: smaller;
+}
+
+.src-by-cat {
+    justify-content: space-between;
+    max-width      : 100%;
+    width          : 100%;
+    word-wrap      : break-word;
+    white-space    : normal;
+    text-align     : center;
+    padding-bottom : 0.75em;
+    padding-top    : 0.75em;
+}
+
+.src-country {
+    margin-bottom: 0.5rem;
+    color        : var(--main-light);
+}
+
+hr {
+    background-color: var(--mid-dark-gray);
+    color           : var(--mid-dark-gray);
+    margin-top      : 0;
+}

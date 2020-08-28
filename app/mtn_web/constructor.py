@@ -8,19 +8,36 @@ api_key = os.getenv("MTN_WEB_API_KEY")
 
 
 class Constructor:
+
     def new_article(self, api_response: dict, result: Result) -> Article or False:
+
         source = self.verify_source(api_response["source"]["name"])
         date_published = self.verify_date(api_response["publishedAt"])
         description = None
+
         try:
             if api_response['description'] is not None:
                 if self.verify_str(api_response['description']):
                     description = self.verify_str(api_response['description'])
+                if description == '':
+                    try:
+                        content = api_response['content'][:2500]
+                        if content is not None and content != '':
+                            description = content
+                        else:
+                            description = 'Unavailable'
+                    except UnicodeDecodeError as e:
+                        log.debug(f'UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}')
+                        description = 'Unavailable'
+                    except KeyError as e:
+                        log.debug(f'KeyError while parsing content for new article: {e}\nSource Data: {api_response}')
+                        description = 'Unavailable'
             else:
                 description = 'Unavailable'
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}")
             description = "Unavailable"
+
         try:
             title = self.verify_str(api_response["title"])
             if title is None:
@@ -35,6 +52,7 @@ class Constructor:
         except UnicodeEncodeError as e:
             log.debug(f"UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}")
             author = "Unavailable"
+
         if source:
             article_url = api_response["url"]
             image_url = (

@@ -69,6 +69,7 @@ def index(request: requests.request) -> render:
 # ==================================================================================================== #
 
 def register_user(request: requests.request) -> render or redirect:
+
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -83,9 +84,13 @@ def register_user(request: requests.request) -> render or redirect:
                 template_name="general/new_user.html",
                 context={"form": form}
             )
+
     if request.method == "GET":
         form = CustomUserCreationForm()
         return render(request, "general/new_user.html", {"form": form})
+
+    else:  # request.method != 'GET' or 'POST'
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 
 # ============================================================================== #
@@ -115,10 +120,14 @@ def login_user(request: requests.request) -> render or redirect:
             request, "Incorrect Password and/or Username", extra_tags="error"
         )
         return render(request, "general/login_user.html", {"form": form})
-    if request.method == "GET":
+
+    elif request.method == "GET":
         form = AuthenticationForm()
         # form = UserLoginForm()
         return render(request, "general/login_user.html", {"form": form})
+
+    else:  # request.method != 'GET or 'POST'
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 
 # ============================================================================================ #
@@ -565,39 +574,126 @@ def view_post(request, post_pk):
 
 def view_sources(request):
 
-    source_dict_list = [
-        {
-            "country": source.country_full_name,
-            "name": source.name,
-            "language": source.language_full_name,
-            "categories": [category.name for category in source.categories.all()],
-            "url": source.url
-        }
-        for source in Source.objects.all()
-    ]
+    if request.method == 'GET':
 
-    category_dict_list = [
-        {
-            "cat": category.name,
-            "src_list": [
-                {
-                    "name": source.name,
-                    "country": source.country_full_name,
-                    "language": source.language_full_name,
-                    "url": source.url
-                }
-                for source in category.sources.all()
-            ],
-        }
-        for category in Category.objects.all()
-    ]
+        source_dict_list = [
+            {
+                "country": source.country_display_name,
+                "name": source.name,
+                "language_readable": source.language_readable_full_name,
+                "language_alphanum": source.language_alphanum_full_name,
+                "categories": [category.name for category in source.categories.all()],
+                "url": source.url
+            }
+            for source in Source.objects.all()
+        ]
 
-    return render(
-        request,
-        "general/view_sources.html",
-        {"sources": source_dict_list, "categories": category_dict_list}
-    )
+        category_dict_list = [
+            {
+                "cat": category.name,
+                "src_list": [
+                    {
+                        "name": source.name,
+                        "country": source.country_display_name,
+                        "language": source.language_readable_full_name,
+                        "url": source.url
+                    }
+                    for source in category.sources.all()
+                ],
+            }
+            for category in Category.objects.all()
+        ]
 
+        return render(
+            request,
+            "general/view_sources.html",
+            {"sources": source_dict_list, "categories": category_dict_list}
+        )
+
+    else:  # request.method != 'GET'
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+def view_sources_by_category(request):
+
+    if request.method == "GET":
+
+        category_dict_list = [
+            {
+                "cat": category.name,
+                "src_list": [
+                    {
+                        "name": source.name,
+                        "country": source.country_display_name,
+                        "language": source.language_readable_full_name,
+                        "url": source.url
+                    }
+                    for source in category.sources.all()
+                ],
+            }
+            for category in Category.objects.all()
+        ]
+
+        return render(
+            request,
+            "general/view_sources_by_category.html",
+            {"categories": category_dict_list}
+        )
+
+    else:  # request.method != 'GET'
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+def view_sources_by_country(request):
+
+    if request.method == "GET":
+
+        source_dict_list = [
+            {
+                "country_display_name": source.country_display_name,
+                # "country_alphanumerical_name": source.country_alphanum_name,
+                "name": source.name,
+                "language": source.language_readable_full_name,
+                "categories": [category.name for category in source.categories.all()],
+                "url": source.url
+            }
+            for source in Source.objects.all()
+        ]
+
+        return render(
+            request,
+            "general/view_sources_by_country.html",
+            {"sources": source_dict_list}
+        )
+
+    else:  # request.method != 'GET'
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+def view_sources_by_language(request):
+
+    if request.method == "GET":
+
+        source_dict_list = [
+            {
+                "country": source.country_display_name,
+                "name": source.name,
+                "language_readable": source.language_readable_full_name,
+                "language_alphanum": source.language_alphanum_full_name,
+                "categories": [category.name for category in source.categories.all()],
+                "url": source.url
+            }
+            for source in Source.objects.all()
+        ]
+
+        return render(
+            request,
+            "general/view_sources_by_language.html",
+            {"sources": source_dict_list}
+        )
+
+    else:  # request.method != 'GET'
+        return HttpResponseBadRequest('Unsupported Request Method')
 
 # ========================================================================================= #
 #                                                                                           #
@@ -609,6 +705,7 @@ def view_sources(request):
 #  ╚═════╝`╚══════╝╚══════╝╚══════╝```╚═╝```╚══════╝````╚═╝``````╚═════╝`╚══════╝```╚═╝```  #
 #  ```````````````````````````````````````````````````````````````````````````````````````  #
 # ========================================================================================= #
+
 
 @login_required()
 def delete_post(request):
@@ -627,7 +724,6 @@ def delete_post(request):
         messages.error(request, "Action Not Authorized")
         return redirect("view_post", pk=pk)
 
-
 # ==================================================================================================== #
 #                                                                                                      #
 #  ███╗```██╗███████╗██╗````██╗`````██████╗`██████╗`███╗```███╗███╗```███╗███████╗███╗```██╗████████╗  #
@@ -638,6 +734,7 @@ def delete_post(request):
 #  ╚═╝``╚═══╝╚══════╝`╚══╝╚══╝``````╚═════╝`╚═════╝`╚═╝`````╚═╝╚═╝`````╚═╝╚══════╝╚═╝``╚═══╝```╚═╝```  #
 #  ``````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ==================================================================================================== #
+
 
 @login_required()
 def new_comment(request, post_pk):

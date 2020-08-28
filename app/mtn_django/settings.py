@@ -27,6 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='superSecret123!')
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
+
 ALLOWED_HOSTS = ['map-the-news.herokuapp.com', 'localhost', '127.0.0.1']
 
 
@@ -50,7 +51,6 @@ if DEPLOYMENT == 'DEV':
 AUTH_USER_MODEL = 'mtn_web.User'
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 if USE_WHITENOISE:
@@ -87,28 +89,28 @@ WSGI_APPLICATION = 'mtn_django.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("MTN_DB_NAME"),
-        "USER": os.getenv("MTN_DB_USER"),
-        "PASSWORD": os.getenv("MTN_DB_PW"),
-        "HOST": os.getenv("MTN_DB_HOST"),
-        "PORT": os.getenv("MTN_DB_PORT"),
+        "ENGINE": os.getenv("DB_ENGINE"),
+        "NAME": os.getenv("DB_DATABASE"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
-DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
+# DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
 
-if DOCKER_POSTGRES:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "postgres",
-            "USER": "postgres",
-            "HOST": "db",
-            "PORT": 5432,
-            "PASSWORD": "sqlAdmin1234!"
-        }
-    }
+# if DOCKER_POSTGRES:
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": "django.db.backends.postgresql",
+#             "NAME": "postgres",
+#             "USER": "postgres",
+#             "HOST": "db",
+#             "PORT": 5432,
+#             "PASSWORD": "sqlAdmin1234!"
+#         }
+#     }
 
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
@@ -127,6 +129,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+
+# local static
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# local media
+MEDIA_URL = '/mediafiles/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 
 # =========================================================== #
@@ -154,17 +164,17 @@ if USE_WHITENOISE:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATIC_URL = '/staticfiles/'
     WHITENOISE_AUTOREFRESH = True
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticManifestFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
     MEDIA_URL = '/mediafiles/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-if not USE_WHITENOISE and not USE_S3:
-    # local static
-    STATIC_URL = '/staticfiles/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # local media
-    MEDIA_URL = '/mediafiles/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+# if not USE_WHITENOISE and not USE_S3:
+#     # local static
+#     STATIC_URL = '/staticfiles/'
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#     # local media
+#     MEDIA_URL = '/mediafiles/'
+#     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'mtn_web/static'), )
 STATICFILES_FINDERS = [
@@ -190,12 +200,16 @@ GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 #     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 #     django_heroku.settings(locals())
 
+
 #  DEBUG
 if DEBUG == 1:
+    # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+    # MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     BETTER_EXCEPTIONS = 1
-    INTERNAL_IPS = ["127.0.0.1", "localhost"]
-    # MIDDLEWARE.append('debug_toolbar.middleware.DebugToolBarMiddleware')
-    INSTALLED_APPS.append("debug_toolbar")
+    # INTERNAL_IPS = ("127.0.0.1", "localhost", os.getenv('MTN_WEB_1_IP'))
+    INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
     DEBUG_TOOLBAR_PANELS = [
         "debug_toolbar.panels.versions.VersionsPanel",
         "debug_toolbar.panels.timer.TimerPanel",
@@ -209,11 +223,14 @@ if DEBUG == 1:
         "debug_toolbar.panels.signals.SignalsPanel",
         "debug_toolbar.panels.logging.LoggingPanel",
         "debug_toolbar.panels.redirects.RedirectsPanel",
+        "debug_toolbar.panels.profiling.ProfilingPanel",
     ]
 
+    def show_toolbar(request):
+        return True
 
     DEBUG_TOOLBAR_CONFIG = {
-        "INTERCEPT REDIRECTS": False,
-        "SHOW_COLLAPSED": True,
-        "SQL_WARNING_THRESHOLD": 100,
+        "SHOW_TOOLBAR_CONFIG": show_toolbar,
+        "SHOW_COLLAPSED": False,
+        "SQL_WARNING_THRESHOLD": 500,
     }

@@ -1,1 +1,1 @@
-docker cp ../app/templates mtn_web_1:/home/app/web/templates
+docker cp ../app/templates map_the_news_web_1:/home/app/web/templates

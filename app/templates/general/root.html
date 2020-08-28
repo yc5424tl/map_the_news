@@ -46,8 +46,13 @@
                         <a class="nav-link" href="{% url 'new_query' %}">MAP</a>
                         <a class="nav-link" href="{% url 'view_public_posts' %}">FORUM</a>
                     </nav>
-                    <nav class="nav" id="nav-right">
-                        <a class="nav-link" href="{% url 'view_sources' %}">SOURCES</a>
+                    <nav class="nav dropdown" id="nav-right">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SOURCES <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_category' %}">By Category</a></li>
+                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_country' %}">By Country</a></li>
+                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_language' %}">By Language</a></li>
+                        </ul>
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'view_user' user.pk %}">PROFILE</a>
                             <a class="nav-link" href="{% url 'logout' %}">LOGOUT</a>

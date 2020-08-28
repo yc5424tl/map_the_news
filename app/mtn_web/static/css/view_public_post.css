@@ -26,7 +26,7 @@
 }
 
 .view-posts-container {
-    background-color : var(--off-black;
+    background-color : var(--off-black);
     padding          : 1rem;
 }
 
@@ -111,6 +111,8 @@
     width        : 100%;
     color        : var(--main-light);
     text-align   : center;
+    padding-bottom: 60px;
+    background-color: var(--off-black);
 }
 /***
  *    ███████╗███╗   ██╗██████╗     ██╗   ██╗██╗███████╗██╗    ██╗    ██████╗ ██╗   ██╗██████╗ ██╗     ██╗ ██████╗    ██████╗  ██████╗ ███████╗████████╗

@@ -23,24 +23,24 @@ echo -e "...\n...\n..."
 
 
 echo "DATABASE: starting..."
-echo "while ! nc -z db 5432;do sleep 0.1;done;" | docker exec -i mtn_web_1 bash
+echo "while ! nc -z db 5432;do sleep 0.1;done;" | docker exec -i map_the_news_web_1 bash
 echo "......"
 echo "DATABASE: up!"
 
 
 echo -e "...\n...\n..."
 
-docker exec -i mtn_web_1 bash ./mtn_web/migrations/ a+x *.py
+docker exec -i map_the_news_web_1 bash ./mtn_web/migrations/ a+x *.py
 
-echo "DJANGO: migrating..."
-./start.migrate.sh &
-pid=$!
-wait $pid
-echo "......"
-echo "DJANGO: migrated!"
+# echo "DJANGO: migrating..."
+# ./start.migrate.sh &
+# pid=$!
+# wait $pid
+# echo "......"
+# echo "DJANGO: migrated!"
 
 
-echo -e "...\n...\n..."
+# echo -e "...\n...\n..."
 
 
 echo "DATABASE: restoring..."
@@ -65,7 +65,7 @@ echo -e "...\n...\n..."
 
 # Createsuperuser values @ env vars DJANGO_SUPERUSER_(PASSWORD - USERNAME - EMAIL - DATABASE)
 echo "DJANGO: creating superuser..."
-echo "python3 manage.py createsuperuser --noinput" | docker exec -i mtn_web_1 bash
+echo "python3 manage.py createsuperuser --noinput" | docker exec -i map_the_news_web_1 bash
 echo "......"
 echo "DJANGO: superuser created"
 
@@ -74,7 +74,7 @@ echo -e "...\n...\n..."
 
 
 echo "DJANGO: collecting static files..."
-echo "python3 manage.py collectstatic --noinput" | docker exec -i mtn_web_1 bash
+echo "python3 manage.py collectstatic --noinput" | docker exec -i map_the_news_web_1 bash
 echo "......"
 echo "DJANGO: collecting static files complete"
 
@@ -82,7 +82,8 @@ echo "DJANGO: collecting static files complete"
 echo -e "...\n...\n..."
 
 # specific to current dump file, source has already been updated
-echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i mtn_db_1 psql -U $DB_USER -d $DB_DATABASE;
+echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+echo "update mtn_web_source set country = 'uy' where country = 'ur';update mtn_web_source set country = 'cn' where country = 'zh';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
 
 echo "Map The News -- Depoyment Complete"
 

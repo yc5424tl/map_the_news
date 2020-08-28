@@ -1,0 +1,47 @@
+
+{% extends 'general/root.html' %}
+
+
+{% load static %}
+
+
+{% block title %}
+    News Sources by Category - {{ block.super }}
+{% endblock %}
+
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_sources_by_category.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="row no-gutters container">
+        <div class="col-12 accordion" id="category-accordion">
+            <ul class="list-group list-group-flush src-ul">
+                {% for category in categories %}
+                    <li class="list-group-item">
+                        <h3 id="{{ category.cat }}-heading">
+                            <button class="btn btn-link collapsed category-header" data-toggle="collapse" data-target="#{{ category.cat }}-collapse" aria-expanded="false" aria-controls="#{{ category.cat }}-collapse">
+                                {{ category.cat|capfirst }}
+                            </button>
+                        </h3>
+                        <div id="{{ category.cat }}-collapse" class="collapse" data-parent="#category-accordion" aria-labelledby="{{ category.cat }}-heading">
+                            <ul class="list-group list-group-flush src-list row">
+                                {% for source in category.src_list %}
+                                    <li class="list-group-item src-by-cat col-sm-12 col-md-4">
+                                        <p class="src-name">{{ source.name }}</p>
+                                        <p class="src-country">{{ source.country }}</p>
+                                        <p class="src-lang">{{ source.language }}</p>
+                                        <hr>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

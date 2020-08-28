@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, re_path
 from mtn_web import views
 from mtn_web.forms import UserLoginForm
 
@@ -19,6 +19,9 @@ urlpatterns = [
     url(r"^comment/update/(?P<comment_pk>\d+)$", views.update_comment, name="update_comment", ),
     url(r"^accounts/register/$", views.register_user, name="register_user"),
     url(r"^accounts/view/(?P<member_pk>\d+)$", views.view_user, name="view_user"),
+    url(r"^sources/category/$", views.view_sources_by_category, name="view_sources_by_category"),
+    url(r"^sources/country/$", views.view_sources_by_country, name="view_sources_by_country"),
+    url(r"^sources/language/$", views.view_sources_by_language, name="view_sources_by_language"),
     url(r"^sources/$", views.view_sources, name="view_sources"),
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
     url(r"^error/report/$", views.report_error, name="report_error"),

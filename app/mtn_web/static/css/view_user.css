@@ -9,7 +9,7 @@
  */
 
 #view-user-wrapper {
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 }
 
 #view-user-banner {
@@ -49,11 +49,16 @@
     text-align: center;
     text-justify: left;
     list-style: none;
+    padding-left: 0;
 }
 
 #last-post-wrapper > .jumbotron {
     margin-bottom: 0;
     background-color: var(--main-light);
+}
+
+#examples li {
+    color: var(--main-gold);
 }
 
 #how-to > h2 {
@@ -100,6 +105,12 @@ hr {
     flex-flow: column;
 }
 
+#last-post .btn {
+    width: 100%;
+    flex: 0 1 auto;
+    position: relative;
+}
+
 #view-last-post-btn,
 .view-last-comments-btn {
     background-color: var(--off-black);
@@ -110,12 +121,16 @@ hr {
 }
 
 #view-last-post-btn:hover,
-#view-last-comments-btn:hover,
+.view-last-comments-btn:hover,
 #view-last-post-btn:focus,
-#view-last-comments-btn:focus {
+.view-last-comments-btn:focus {
     background-color: var(--main-gold);
     color: var(--off-black);
     transition: 0.4s;
+}
+
+.view-last-comments-btn {
+    margin: 0.75rem;
 }
 
 button.btn-inactive {

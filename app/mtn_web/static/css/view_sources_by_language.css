@@ -1,0 +1,106 @@
+.src-name {
+    color: var(--main-link-color);
+}
+.src-name:link {
+    color: var(--main-link-color);
+}
+
+.src-name:visited {
+    color: var(--aux-accent-6);
+}
+
+.src-name:hover,
+.src-name:focus,
+.src-name:active {
+    color: var(--main-link-hover);
+}
+
+.src-list {
+    flex-direction: row;
+    flex-wrap     : wrap;
+}
+
+.list-group-item {
+    background-color: var(--off-black);
+}
+
+#wrapper {
+    padding         : 2rem 0.5rem 2rem;
+    text-align      : left;
+    margin: 0;
+    border-radius   : 5pt;
+    background-color: var(--off-black);
+    max-width       : 100%;
+}
+
+button.language-header {
+    font-size     : 2rem;
+    font-weight   : 800;
+    margin-top    : 20px;
+    margin-bottom : 10px;
+    color         : var(--main-link-hover);
+    min-width     : 100%;
+    width         : 100%;
+    height        : auto;
+    text-align    : center;
+    display       : block;
+    border-top    : 1pt solid var(--main-link-hover);
+    border-bottom : 1pt solid var(--main-link-hover);
+    transition    : 0.5s;
+    padding-left  : 0;
+    padding-right : 0;
+}
+
+button.language-header:hover {
+    text-decoration: underline 1pt solid var(--main-light);
+    transition     : 0.4s;
+    border-top     : 1pt solid var(--main-link-hover);
+    border-bottom  : 1pt solid var(--main-link-hover);
+    color          : var(--aux-accent-6);
+}
+
+button.language-header:focus {
+    color           : var(--main-link-hover);;
+    background-color: var(--main-light);
+    border-top      : 1pt solid var(--main-link-hover);
+    border-bottom   : 1pt solid var(--main-link-hover);
+    transition      : 0.4s;
+    text-decoration : none;
+}
+
+.language-h3 {
+    transition: 0.6s;
+}
+
+.src-cats {
+    color      : var(--main-gold);
+    font-weight: 700;
+    display    : block;
+    word-wrap  : break-word;
+    white-space: normal;
+    width: 100%;
+    text-justify: center;
+    text-align: center;
+    font-size: smaller;
+}
+
+.src-by-lang {
+    justify-content: space-between;
+    max-width      : 100%;
+    width          : 100%;
+    word-wrap      : break-word;
+    white-space    : normal;
+    text-align     : center;
+    padding-bottom: 0.75em;;
+    padding-top    : 0.75em;
+}
+
+.src-country {
+    margin-bottom: 0.5rem;
+    color        : var(--main-light);
+}
+
+hr {
+    background-color: var(--mid-dark-gray);
+    color           : var(--mid-dark-gray);
+}

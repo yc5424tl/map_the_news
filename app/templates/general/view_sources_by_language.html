@@ -1,0 +1,45 @@
+{% extends 'general/root.html' %}
+
+{% load static %}
+
+{% block title %}
+    News Sources by Language- {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_sources_by_language.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="row no-gutters container" id="wrapper">
+        <div class="col-12 accordion" id="language-accordion">
+            <ul class="list-group list-group-flush src-ul">
+                {% regroup sources|dictsort:'language_alphanum' by language_alphanum as sources_by_language %}
+                {% for language in sources_by_language %}
+                    <li class="list-group-item">
+                        <h3 id="{{ language.grouper }}-heading" class="language-h3">
+                            <button class="btn btn-link collapsed language-header gradient" data-toggle="collapse" data-target="#{{ language.grouper }}-collapse" aria-expanded="false" aria-controls="#{{ language.grouper }}-collapse">
+                                {% with language=language.list|first %}
+                                    {{ language.language_readable }}
+                                {% endwith %}
+                            </button>
+                        </h3>
+                        <div id="{{ language.grouper }}-collapse" class="collapse" data-parent="#language-accordion" aria-labelledby="{{ language.grouper }}-heading">
+                            <ul class="list-group list-group-flush src-list row">
+                                {% for source in language.list %}
+                                    <li class="list-group-item src-by-lang col-sm-12 col-md-4">
+                                        <p class="src-name">{{ source.name }}</p>
+                                        <p class="src-country">{{ source.country }}</p>
+                                        <p class="src-cats">[ {{ source.categories|join:", "}} ]</p>
+                                        <hr>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

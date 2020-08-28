@@ -7,7 +7,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.dev
-    command: gunicorn mtn_django.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn mtn_django.wsgi:application --bind 0.0.0.0:8000 --timeout 120
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
@@ -24,7 +24,7 @@ services:
       context: ./db
       dockerfile: Dockerfile
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.env.dev.db
     environment:

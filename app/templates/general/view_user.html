@@ -1,4 +1,5 @@
 {% extends 'general/root.html' %}
+
 {% load static %}
 
 {% block title %}
@@ -40,13 +41,17 @@
                             <blockquote>{{ last_post.body }}</blockquote>
                         </div>
                         <div class="btn-group">
-                            <a href="{% url 'view_post' last_post.pk %}">
-                                <button class="btn btn-link" id="view-last-post-btn">View Full Post</button>
-                            </a>
+                            <button class="btn btn-link" id="view-last-post-btn">
+                                <a href="{% url 'view_post' last_post.pk %}">View Full Post</a>
+                            </button>
                             {% for comment in last_post.comments.all|slice:':1' %}
-                                <button class="btn btn-link view-last-comments-btn">View Comments</button>
+                                <button class="btn btn-link view-last-comments-btn">
+                                    <a href="{% url 'view_comment' comment.pk %}">View Comments</a>
+                                </button>
                             {% empty %}
-                                <button class="btn btn-inactive view-last-comments-btn">View Comments</button>
+                                <button class="btn btn-link btn-inactive view-last-comments-btn">
+                                    <a href='#'>View Comments</a>
+                                </button>
                             {% endfor %}
                         </div>
                     </div>
@@ -57,7 +62,7 @@
                         <p> Start by selecting <span class="red-span">'MAP'</span> from the navigation bar above. You will be presented with a search bar, type in a search term and press enter or click 'submit'.</p>
                         <h5 class="white-span">For best results, use internationally recognized pronouns</h5></span>
                         <p>
-                            <ul>
+                            <ul id="examples">
                                 <li>Names:
                                     <code>'Elon Musk'</code>,
                                     <code>'Hezbollah'</code>,
@@ -137,9 +142,9 @@
                     {% if request.user.pk == member.pk %}
                         <h4>MORE RECENT POSTS</h4>
                     {% else %}
-                        <h4>{{ member.first_name|upper }}'s RECENT POSTS</h4>
+                        <h4>{{ member.username|upper }}'s RECENT POSTS</h4>
                     {% endif %}
-                    <ul>
+                    <ul class="recent-ul">
                         {% for post in posts %}
                             {% if post %}
                                 <li><a href="{% url 'view_post' post.pk %}">{{ post.title }}</a></li>
@@ -154,7 +159,7 @@
                     {% if request.user.pk == member.pk %}
                         <h4>YOUR RECENT COMMENTS</h4>
                     {% else %}
-                        <h4>{{ member.first_name|upper }}'s RECENT COMMENTS</h4>
+                        <h4>{{ member.username|upper }}'s RECENT COMMENTS</h4>
                     {% endif %}
                     <ul>
                         {% for comment in comments %}
@@ -181,7 +186,7 @@
                                     <li><a href="{% url 'view_result' result.pk %}">Result</a></li>
                                 {% endif %}
                             {% empty %}
-                                <li>None - Get Started!</li>
+                                <li>No Searches Yet</li>
                             {% endfor %}
                         </ul>
                     </div>
