@@ -40,7 +40,6 @@
                                 <ul class="list-group list-group-flush src-list row">
                                     {% for source in country.list %}
                                         <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
-                                            {% comment %} <a class="src-url" href="{{ source.url }}">{{ source.name }}</a> {% endcomment %}
                                             <p class="src-url">{{ source.name }}</p>
                                             <p class="src-details">{{ source.language_readable }}</p>
                                             <p><sub class="src-cats">[ {{ source.categories|join:", "}} ]</sub></p>

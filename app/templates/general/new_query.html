@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row new-query-div" id="upper">
+    <div class="row new-query-div no-gutters" id="upper">
         <div class="col"></div>
         <div class="col-6" id="new-query-title-ctr">
             <h2>Map the News:</h2>
         </div>
         <div class="col"></div>
     </div>
-    <div class="row new-query-div" id="lower">
+    <div class="row new-query-div no-gutters" id="lower">
         <div class="col"></div>
         <div class="col-xs-12 col-lg-10 col-xl-8" id="new-query-body-ctr">
             <form id="new-query-form" method="post" action="{% url 'new_query' %}">

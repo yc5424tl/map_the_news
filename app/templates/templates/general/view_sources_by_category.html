@@ -31,8 +31,9 @@
                             <ul class="list-group list-group-flush src-list row">
                                 {% for source in category.src_list %}
                                     <li class="list-group-item src-by-cat col-sm-12 col-md-4">
-                                        <p class="src-url">{{ source.name }}</p>
-                                        <p class="src-details">{{ source.country }} - {{ source.language }}</p>
+                                        <p class="src-name">{{ source.name }}</p>
+                                        <p class="src-country">{{ source.country }}</p>
+                                        <p class="src-lang">{{ source.language }}</p>
                                         <hr>
                                     </li>
                                 {% endfor %}

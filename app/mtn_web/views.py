@@ -580,8 +580,8 @@ def view_sources(request):
             {
                 "country": source.country_display_name,
                 "name": source.name,
-                "language_readable": source.language_readable_full_name,
-                "language_alphanum": source.language_alphanum_full_name,
+                "language_readable": source.language_display_name,
+                "language_alphanum": source.language_alphanum_name,
                 "categories": [category.name for category in source.categories.all()],
                 "url": source.url
             }
@@ -595,7 +595,7 @@ def view_sources(request):
                     {
                         "name": source.name,
                         "country": source.country_display_name,
-                        "language": source.language_readable_full_name,
+                        "language": source.language_display_name,
                         "url": source.url
                     }
                     for source in category.sources.all()
@@ -625,7 +625,7 @@ def view_sources_by_category(request):
                     {
                         "name": source.name,
                         "country": source.country_display_name,
-                        "language": source.language_readable_full_name,
+                        "language": source.language_display_name,
                         "url": source.url
                     }
                     for source in category.sources.all()
@@ -651,9 +651,8 @@ def view_sources_by_country(request):
         source_dict_list = [
             {
                 "country_display_name": source.country_display_name,
-                # "country_alphanumerical_name": source.country_alphanum_name,
                 "name": source.name,
-                "language": source.language_readable_full_name,
+                "language": source.language_display_name,
                 "categories": [category.name for category in source.categories.all()],
                 "url": source.url
             }
@@ -666,7 +665,7 @@ def view_sources_by_country(request):
             {"sources": source_dict_list}
         )
 
-    else:  # request.method != 'GET'
+    else:  # request.method != 'GET':
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
@@ -674,17 +673,28 @@ def view_sources_by_language(request):
 
     if request.method == "GET":
 
-        source_dict_list = [
-            {
-                "country": source.country_display_name,
-                "name": source.name,
-                "language_readable": source.language_readable_full_name,
-                "language_alphanum": source.language_alphanum_full_name,
-                "categories": [category.name for category in source.categories.all()],
-                "url": source.url
-            }
-            for source in Source.objects.all()
-        ]
+        # source_dict_list = [
+        #     {
+        #         "country": source.country_display_name,
+        #         "name": source.name,
+        #         "language_readable": source.language_display_name,
+        #         "language_alphanum": source.language_alphanum_name,
+        #         # "categories": [category.name for category in source.categories.all()],
+        #         # "categories":  source.categories.values('name')
+
+        #         "url": source.url
+        #     }
+        #     for source in Source.objects.all()
+        # ]
+
+        source_dict_list = Source.objects.values(
+            'name',
+            'country_alpha2_code',
+            'country_display_name',
+            'country_alphanum_name',
+            'language_alpha2_code',
+            'language_display_name',
+            'language_alphanum_name')
 
         return render(
             request,

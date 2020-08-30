@@ -45,7 +45,7 @@
                         </h3>
                     </div>
                     <div id="details-collapse" class="collapse card-collapse" data-parent="#accordion">
-                        <div class="card-body row" id="details-outer-padding">
+                        <div class="card-body row no-gutters" id="details-outer-padding">
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Query: </span>{{ result.argument }}</div>
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Date: </span>{{ result.date_created_readable }}</div>
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Hits: </span>{{ article_count }}</div>
@@ -103,7 +103,7 @@
                                 {% for article in articles %}
                                     {% if article %}
                                         <li class="article-li">
-                                            <div class="row article-row">
+                                            <div class="row article-row no-gutters">
                                                 <div class="col-xs-12 col-xl-6 article-text-wrapper">
                                                     <a href="{{ article.article_url }}" class="img-link">
                                                         <h4 class="article-title text-center link card-link">{{ article.title }}</h4>
@@ -154,7 +154,7 @@
                                             </label>
                                             <div id="pre-textarea" contenteditable="true" placeholder="Share Your Thoughts!"></div>
                                         </div>
-                                        <div class="input-group row" id="action-form-controls">
+                                        <div class="input-group row no-gutters" id="action-form-controls">
                                             <div class="col-xs-12 col-md-8" id="save-control-wrapper">
                                                 <div id="save-btn-wrapper">
                                                     <a href="#">

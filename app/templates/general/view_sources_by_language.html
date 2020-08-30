@@ -12,14 +12,31 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row no-gutters container" id="wrapper">
+
+    <div>
+        <ul>
+            {% for source in sources %}
+                <li>
+                    <p>Source Name      : {{ source.name }}</p>
+                    <p>Country Alpha2   : {{source.country_alpha2_code }}</p>
+                    <p>Country Display  : {{ source.country_display_name }}</p>
+                    <p>Country AlNum    : {{ source.country_alphanum_name }}</p>
+                    <p>Language Alpha2  : {{ source.language_alpha2_code }}</p>
+                    <p>Language Display : {{ source.language_display_name }}<p>
+                    <p>Language AlNum   : {{ source.language_alphanum_name }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% comment %} <div class="row no-gutters container" id="wrapper">
         <div class="col-12 accordion" id="language-accordion">
             <ul class="list-group list-group-flush src-ul">
                 {% regroup sources|dictsort:'language_alphanum' by language_alphanum as sources_by_language %}
                 {% for language in sources_by_language %}
                     <li class="list-group-item">
                         <h3 id="{{ language.grouper }}-heading" class="language-h3">
-                            <button class="btn btn-link collapsed language-header gradient" data-toggle="collapse" data-target="#{{ language.grouper }}-collapse" aria-expanded="false" aria-controls="#{{ language.grouper }}-collapse">
+                            <button class="btn btn-link collapsed language-header" data-toggle="collapse" data-target="#{{ language.grouper }}-collapse" aria-expanded="false" aria-controls="#{{ language.grouper }}-collapse">
                                 {% with language=language.list|first %}
                                     {{ language.language_readable }}
                                 {% endwith %}
@@ -41,5 +58,5 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
+    </div> {% endcomment %}
 {% endblock %}

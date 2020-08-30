@@ -26,12 +26,6 @@ class Result(models.Model):
     date_range_start = models.DateField(default=None, null=True, blank=True)
     filename = models.TextField(max_length=700, blank=True, null=True)
     filepath = models.TextField(max_length=1000, blank=True, null=True)
-    public = models.BooleanField(default=False)
-    query_type = models.CharField(
-        max_length=50,
-        choices=[(tag, tag.value) for tag in QueryTypeChoice],
-        default=QueryTypeChoice.ALL,
-    )
     author = models.ForeignKey(
         "mtn_web.User", on_delete=models.PROTECT, related_name="results"
     )
@@ -59,31 +53,47 @@ class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
 
+
+class Country(models.Model):
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
+    display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+
+
 class Source(models.Model):
     name = models.CharField(max_length=500)
     country = models.CharField(max_length=3)
+    # publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name=“publishers”)
+    # readership_countries = models.ManyToManyField(Source, related_name="sources")
+    # languages = models.ManyToManyField(Language, related_name="sources")
     language = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name="sources")
     url = models.URLField(blank=True, default="", max_length=150)
     verified = models.BooleanField(default=False)
+    country_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
+    country_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
+    country_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
+    language_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
+    language_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
+    language_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
 
     def __str__(self) -> str:
         return f"{self.name}"
 
+    u'''
+
     @property
-    def country_display_name(self) -> str:
+    def get_country_display_name(self) -> str:
         try:
             full_name = pycountry.countries.lookup(self.country).name
             comma_index = full_name.find(',')
             if comma_index == -1:  # no comma in string
                 return full_name
             else:
-                '''
                 substring up to first comma, i.e. "Bolivia, Plurinational State of" will return "Bolivia".
                 This is done as the country names are used to:
                     - generate element id's in templates, and neither spaces or commas are allowed.
                     - As a user-friendly alternative to presenting iso-alpha2/3 codes in templates.
-                '''
                 substring = full_name[:comma_index]
                 return substring
         except LookupError:
@@ -102,7 +112,7 @@ class Source(models.Model):
             return self.country
 
     @property
-    def language_readable_full_name(self) -> str:
+    def language_display_name(self) -> str:
         try:
             display_name = pycountry.languages.get(alpha_2=self.language).name
             return display_name
@@ -110,7 +120,7 @@ class Source(models.Model):
             return self.language
 
     @property
-    def language_alphanum_full_name(self) -> str:
+    def language_alphanum_name(self) -> str:
         try:
             full_name = pycountry.languages.get(alpha_2=self.language).name
             alphanum_filter = filter(str.isalnum, full_name)
@@ -118,6 +128,7 @@ class Source(models.Model):
             return alphanum_string
         except LookupError:
             return self.language
+    '''
 
 
 class Article(models.Model):

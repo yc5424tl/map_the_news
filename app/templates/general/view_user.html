@@ -110,7 +110,7 @@
                                     <hr>
                                     <blockquote>{{ comment.body }}</blockquote>
                                     {% if user.pk == comment.author.id %}
-                                        <div class="row" id="last-post-comments-crud">
+                                        <div class="row no-gutters" id="last-post-comments-crud">
                                             <div class="col-lg-2 col-sm-4">
                                                 <form method="get" action={% url 'update_comment' comment.pk %}>
                                                     {% csrf_token %}
