@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from mtn_web.models import Article, Category, Comment, Post, Result, Source
+from mtn_web.models import Article, Category, Comment, Post, Result, Source, Country, Language
 
 from .models import User
 
@@ -10,7 +10,16 @@ admin.site.register(User, UserAdmin)
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "author", "date_published", "source", "result", "image_url", "article_url")
+    list_display = (
+        "id",
+        "title",
+        "author",
+        "date_published",
+        "source",
+        "result",
+        "image_url",
+        "article_url"
+    )
     list_editable = ("image_url", "article_url")
     list_filter = ("author", "source", "date_published", "result")
     list_display_links = ("author", "source", "result")
@@ -61,12 +70,48 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "country", "language", "country_alpha2_code", "country_display_name", "country_alphanum_name", "language_alpha2_code", "language_display_name", "language_alphanum_name", "url", "verified")
-    list_editable = ("country", "language", "url", "verified")
-    list_filter = ("country", "language", "verified")
+    list_display = (
+        "id",
+        "name",
+        "country",
+        "language",
+        "country_alpha2_code",
+        "country_display_name",
+        "country_alphanum_name",
+        "language_alpha2_code",
+        "language_display_name",
+        "language_alphanum_name",
+        "url",
+        "verified"
+    )
+    list_editable = (
+        "country",
+        "language",
+        "url",
+        "verified",
+        "country_alpha2_code",
+        "country_display_name",
+        "country_alphanum_name",
+        "language_alpha2_code",
+        "language_display_name",
+        "language_alphanum_name"
+    )
+    list_filter = ("country", "language", "verified", )
     list_display_links = ["name"]
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
+    list_editable = ("alpha2_code", "display_name", "alphanum_name")
+
+
+@admin.register(Language)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
+    list_editable = ("alpha2_code", "display_name", "alphanum_name")

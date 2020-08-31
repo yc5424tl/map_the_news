@@ -200,6 +200,13 @@ GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 #     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 #     django_heroku.settings(locals())
 
+# LOGGING = {
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
 
 #  DEBUG
 if DEBUG == 1:

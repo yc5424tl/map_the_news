@@ -73,6 +73,17 @@ echo "DJANGO: superuser created"
 echo -e "...\n...\n..."
 
 
+echo "DATABASE: migrating..."
+./start.migrate.sh &
+pid=$!
+wait $pid
+echo "......"
+echo "DATABASE: migrated!"
+
+
+echo -e "...\n...\n..."
+
+
 echo "DJANGO: collecting static files..."
 echo "python3 manage.py collectstatic --noinput" | docker exec -i map_the_news_web_1 bash
 echo "......"
@@ -84,6 +95,8 @@ echo -e "...\n...\n..."
 # specific to current dump file, source has already been updated
 echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
 echo "update mtn_web_source set country = 'uy' where country = 'ur';update mtn_web_source set country = 'cn' where country = 'zh';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
+echo "python3 manage.py transfer_a2_codes;python3 manage.py expand_country_alpha2;" | docker exec -i map_the_news_web_1 bash
 
 echo "Map The News -- Depoyment Complete"
 

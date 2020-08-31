@@ -8,6 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
+from django.db.models import Prefetch
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.template import RequestContext
@@ -673,6 +674,14 @@ def view_sources_by_language(request):
 
     if request.method == "GET":
 
+        sources = Source.objects.prefetch_related(Prefetch('categories', queryset=Category.objects.only('name')))
+
+        data = []
+
+        for source in sources:
+            categories = [category.name for category in source.categories.all()]
+            data.append({"country_display_name": source.country_display_name, "language_display_name": source.language_display_name, "language_alphanum_name": source.language_alphanum_name, "name": source.name, "categories": categories})
+
         # source_dict_list = [
         #     {
         #         "country": source.country_display_name,
@@ -686,27 +695,36 @@ def view_sources_by_language(request):
         #     }
         #     for source in Source.objects.all()
         # ]
-
-        source_dict_list = Source.objects.values(
-            'name',
-            'country_alpha2_code',
-            'country_display_name',
-            'country_alphanum_name',
-            'language_alpha2_code',
-            'language_display_name',
-            'language_alphanum_name')
+        # source_dict_list = Source.objects.prefetch_related('categories__name').only('country_display_name', 'language_display_name', 'language_alphanum_name', 'categories__name', 'name')
+        # source_dict_list = Source.objects.values(
+        #     'name',
+        #     'country_alpha2_code',
+        #     'country_display_name',
+        #     'country_alphanum_name',
+        #     'language_alpha2_code',
+        #     'language_display_name',
+        #     'language_alphanum_name',
+        #     'categories'.objects.values('name'))
 
         return render(
             request,
             "general/view_sources_by_language.html",
-            {"sources": source_dict_list}
+            {"sources": data}
         )
 
     else:  # request.method != 'GET'
         return HttpResponseBadRequest('Unsupported Request Method')
 
 # ========================================================================================= #
-#                                                                                           #
+#                                                                    source_dict_list = Source.objects.values(
+        #     'name',
+        #     'country_alpha2_code',
+        #     'country_display_name',
+        #     'country_alphanum_name',
+        #     'language_alpha2_code',
+        #     'language_display_name',
+        #     'language_alphanum_name',
+        #     'categories'.objects.values('name'))                       #
 #  ██████╗`███████╗██╗`````███████╗████████╗███████╗````██████╗``██████╗`███████╗████████╗  #
 #  ██╔══██╗██╔════╝██║`````██╔════╝╚══██╔══╝██╔════╝````██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝  #
 #  ██║``██║█████╗``██║`````█████╗`````██║```█████╗``````██████╔╝██║```██║███████╗```██║```  #

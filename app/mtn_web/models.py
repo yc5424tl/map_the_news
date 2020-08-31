@@ -3,8 +3,7 @@ from typing import NoReturn
 import pycountry
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from django.contrib.postgres.fields import JSONField
-from django.db.models import JSONField
+from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 
 
 class QueryTypeChoice(Enum):
@@ -26,18 +25,24 @@ class Result(models.Model):
     date_range_start = models.DateField(default=None, null=True, blank=True)
     filename = models.TextField(max_length=700, blank=True, null=True)
     filepath = models.TextField(max_length=1000, blank=True, null=True)
+    query_type = models.CharField(
+        max_length=50,
+        choices=[(tag, tag.value) for tag in QueryTypeChoice],
+        default=QueryTypeChoice.ALL
+    )
     author = models.ForeignKey(
         "mtn_web.User", on_delete=models.PROTECT, related_name="results"
     )
     archived = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
     article_data_len = models.IntegerField(default=0)
     articles_per_country = JSONField(max_length=20000, null=True, blank=True)
 
     def __str__(self):
         details = (
-            f"Argument: {self.argument}\n Query Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n"
-            f"Public: {self.public}\n Data[:500]: {self.data[:500]}\n ChoroHTML: {self.choro_html[:500]}"
+            f"Argument: {self.argument}\nAuthor: {self.author}\nArchived: {self.archived}\n"
+            f"Public: {self.public}\nData[:500]: {self.data[:500]}\nChoroHTML: {self.choro_html[:500]}"
         )
         if self.filename:
             details = f"{details}\nFilename = {self.filename}"
@@ -49,14 +54,19 @@ class Result(models.Model):
 
 
 class Category(models.Model):
-
     name = models.CharField(max_length=50, unique=True)
-
 
 
 class Country(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    # languages = models.ManyToManyField(Language, related_name="countries")
+
+
+class Language(models.Model):
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
+    display_name = models.CharField(max_length=100, blank=False, null=False, default='--')
     alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
 
 
@@ -80,8 +90,7 @@ class Source(models.Model):
     def __str__(self) -> str:
         return f"{self.name}"
 
-    u'''
-
+    '''
     @property
     def get_country_display_name(self) -> str:
         try:
