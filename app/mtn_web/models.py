@@ -56,12 +56,21 @@ class Result(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
+    def __str__(self):
+        return f"Type: {type(self)} Name: {self.name}"
+
+    # def get_sources(self):
+    #     return [src for src in self.sources]
+
 
 class Country(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
     alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
     # languages = models.ManyToManyField(Language, related_name="countries")
+
+    def __str__(self):
+        return f"{self.display_name} ({self.alpha2_code})"
 
 
 class Language(models.Model):
@@ -71,18 +80,25 @@ class Language(models.Model):
 
 
 class Source(models.Model):
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, unique=True)
     country = models.CharField(max_length=3)
     # publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name=“publishers”)
     # readership_countries = models.ManyToManyField(Source, related_name="sources")
     # languages = models.ManyToManyField(Language, related_name="sources")
+
+    languages = models.ManyToManyField(Language, related_name="sources")
+    publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name="publishers", null=True, blank=True)
+    readership_countries = models.ManyToManyField(Country, related_name="markets")
+
     language = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name="sources")
     url = models.URLField(blank=True, default="", max_length=150)
     verified = models.BooleanField(default=False)
+
     country_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
     country_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
     country_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
+
     language_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
     language_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
     language_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")

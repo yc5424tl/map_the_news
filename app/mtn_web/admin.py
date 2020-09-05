@@ -4,6 +4,10 @@ from django.contrib.auth.admin import UserAdmin
 from mtn_web.models import Article, Category, Comment, Post, Result, Source, Country, Language
 
 from .models import User
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.utils.translation import ugettext_lazy as _
+from django.db import models
+from django import forms
 
 admin.site.register(User, UserAdmin)
 
@@ -81,6 +85,7 @@ class SourceAdmin(admin.ModelAdmin):
         "language_alpha2_code",
         "language_display_name",
         "language_alphanum_name",
+        "publishing_country",
         "url",
         "verified"
     )
@@ -94,7 +99,8 @@ class SourceAdmin(admin.ModelAdmin):
         "country_alphanum_name",
         "language_alpha2_code",
         "language_display_name",
-        "language_alphanum_name"
+        "language_alphanum_name",
+        "publishing_country",
     )
     list_filter = ("country", "language", "verified", )
     list_display_links = ["name"]

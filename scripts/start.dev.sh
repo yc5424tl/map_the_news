@@ -93,12 +93,45 @@ echo "DJANGO: collecting static files complete"
 echo -e "...\n...\n..."
 
 # specific to current dump file, source has already been updated
+echo "Applying corrections to fields..."
 echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
 echo "update mtn_web_source set country = 'uy' where country = 'ur';update mtn_web_source set country = 'cn' where country = 'zh';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
 
-echo "python3 manage.py transfer_a2_codes;python3 manage.py expand_country_alpha2;" | docker exec -i map_the_news_web_1 bash
+echo -e "...\n...\n..."
+echo "Transfering alpha2 codes..."
+echo "python3 manage.py transfer_a2_codes" | docker exec -i map_the_news_web_1 bash
+
+echo -e "...\n...\n..."
+echo "Deriving Display and AlphaNum names..."
+echo "python3 manage.py expand_country_alpha2;" | docker exec -i map_the_news_web_1 bash
+
+echo -e "...\n...\n..."
+echo "Populating Countries..."
+echo "python3 manage.py populate_countries_from_sources;" | docker exec -i map_the_news_web_1 bash
+
+echo -e "...\n...\n..."
+echo "Populating Languages..."
+echo "python3 manage.py populate_languages_from_sources;" | docker exec -i map_the_news_web_1 bash
+
+
+echo -e "...\n...\n..."
+echo "Establishing Source & Publishing-Country relations..."
+echo "python3 manage.py build_source_publishing_country_relations" | docker exec -i map_the_news_web_1 bash
+
+
+echo -e "...\n...\n..."
+echo "Establishing Source & Readership-Country relations..."
+echo "python3 manage.py build_source_readership_country_relations" | docker exec -i map_the_news_web_1 bash
+
+
+echo -e "...\n...\n..."
+echo "Establishing Source & Language relations..."
+echo "python3 manage.py build_source_language_relations" | docker exec -i map_the_news_web_1 bash
+
 
 echo "Map The News -- Depoyment Complete"
+
+
 
 
 # Set execute permission to:

@@ -25,7 +25,7 @@ from mtn_web.forms import (
 
 from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager
-from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice, Article
+from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice, Article, Country, Language
 from mtn_web.query_mgr import Query
 
 from .country_data import iso_codes
@@ -619,6 +619,57 @@ def view_sources_by_category(request):
 
     if request.method == "GET":
 
+        categories = Category.objects.prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'readership_countries', 'languages')))
+
+        data = []
+
+        # source.name
+        # source.publishing_country.display_name
+        # source.languages.display_name
+
+        for cat in categories:
+            sources = [
+                'src_list': {
+                    'name': source.name,
+                    # 'publishing_country': {
+                    #     'display_name': source.publishing_country.display_name,
+                    #     'alphanum_name': source.publishing_country.alphanum_name,
+                    #     'alpha2_code': source.publishing_country.alpha2_code
+                    # },
+                    'publishing_country': source.publishing_country.display_name,
+                    # 'readership_countries': [{
+                    #     'display_name': country.display_name,
+                    #     'alphanum_name': country.alphanum_name,
+                    #     'alpha2_code': country.alpha2_code
+                    # } for country in source.readership_countries.all()],
+                    'readership_countries': [{
+                        'display_name': country.display_name
+                    } for country in source.readership_countries.all().only('display_name')]
+                    # 'languages': [{
+                    #     'display_name': language.display_name,
+                    #     'alphanum_name': language.alphanum_name,
+                    #     'alpha2_code': language.alpha2_code
+                    # } for language in source.languages.all()]
+                    'languages': [{
+                        'display_name': language.display_name
+                    } for language in source.languages.all().only('display_name')]
+                } for source in cat.sources.all(),
+                'cat': cat.name]
+            data.append(sources)
+
+        return render(
+            request,
+            "general/view_sources_by_category.html",
+            {"categories": data}
+        )
+
+    else:  # request.method != 'GET'
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+'''
+    if request.method == "GET":
+
         category_dict_list = [
             {
                 "cat": category.name,
@@ -640,13 +691,81 @@ def view_sources_by_category(request):
             "general/view_sources_by_category.html",
             {"categories": category_dict_list}
         )
-
-    else:  # request.method != 'GET'
-        return HttpResponseBadRequest('Unsupported Request Method')
+'''
 
 
 def view_sources_by_country(request):
 
+    if request.method == "GET":
+
+        # countries = Country.objects.prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'readership_countries', 'languages', 'categories')))
+        publisher_countries = Country.objects.prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'publishing_country', 'readership_countries', 'languages', 'categories')))
+        publisher_data = []
+
+    # country.display_name,
+    # country.alphanum_name,
+    # source.name
+    # languages.display_name
+    # categories.name
+
+        for country in publisher_countries:
+            sources = [{
+                'name': source.name,
+                'publishing_country': {
+                    'display_name': source.publishing_country.display_name,
+                    'alphanum_name': source.publishing_country.alphanum_name,
+                    'alpha2_code': source.publishing_country.alpha2_code
+                },
+                'readership_countries': [{
+                    'display_name': country.display_name,
+                    'alphanum_name': country.alphanum_name,
+                    'alpha2_code': country.alpha2_code
+                } for country in source.readership_countries.all()],
+                'languages': [{
+                    'display_name': language.display_name,
+                    'alphanum_name': language.alphanum_name,
+                    'alpha2_code': language.alpha2_code
+                } for language in source.languages.all()],
+                'categories': [category.name for category in source.categories.all()]
+            } for source in country.sources.all()]
+            publisher_data.append({country.alpha2_code: sources})
+
+        market_countries = Country.objects.prefetch_related(Prefetch('markets', queryset=Source.objects.only('name', 'publishing_country', 'readership_countries', 'languages', 'categories')))
+        market_data = []
+
+        for country in market_countries:
+            sources = [{
+                'name': source.name,
+                'publishing_country': {
+                    'display_name': source.publishing_country.display_name,
+                    'alphanum_name': source.publishing_country.alphanum_name,
+                    'alpha2_code': source.publishing_country.alpha2_code
+                },
+                'readership_countries': [{
+                    'display_name': country.display_name,
+                    'alphanum_name': country.alphanum_name,
+                    'alpha2_code': country.alpha2_code
+                } for country in source.readership_countries.all()],
+                'languages': [{
+                    'display_name': language.display_name,
+                    'alphanum_name': language.alphanum_name,
+                    'alpha2_code': language.alpha2_code
+                } for language in source.languages.all()],
+                'categories': [category.name for category in source.categories.all()]
+            } for source in country.sources.all()]
+            market_data.append({country.alpha2_code: sources})
+
+        return render(
+            request,
+            "general/view_sources_by_country.html",
+            {'publishers': publisher_data, 'markets': market_data}
+        )
+
+    else:  # request.method != 'GET':
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+'''
     if request.method == "GET":
 
         source_dict_list = [
@@ -665,13 +784,50 @@ def view_sources_by_country(request):
             "general/view_sources_by_country.html",
             {"sources": source_dict_list}
         )
-
-    else:  # request.method != 'GET':
-        return HttpResponseBadRequest('Unsupported Request Method')
+'''
 
 
 def view_sources_by_language(request):
 
+    if request.method == "GET":
+
+        languages = Language.objects.prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'readership_countries', 'categories', 'languages')))
+
+        data = []
+
+        for language in languages:
+            sources = [{
+                'name': source.name,
+                'publishing_country': {
+                    'alpha2_code': source.publishing_country.alpha2_code,
+                    'display_name': source.publishing_country.display_name,
+                    'alphanum_name': source.publishing_country.alphanum_name
+                },
+                'readership_countries': [{
+                    'display_name': country.display_name,
+                    'alpha2_code': country.alpha2_code,
+                    'alphanum_name': country.alphanum_name
+                } for country in source.readership_countries.all()],
+                'languages': [{
+                    'display_name': language.display_name,
+                    'alphanum_name': language.alphanum_name,
+                    'alpha2_code': language.alpha2_code
+                } for language in source.languages.all()],
+                'categories': [category.name for category in source.categories.all()]
+            } for source in language.sources.all()]
+            data.append({language.alpha2_code: sources})
+
+        return render(
+            request,
+            'general/view_sources_by_language.html',
+            {'languages': data}
+        )
+
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+'''
     if request.method == "GET":
 
         sources = Source.objects.prefetch_related(Prefetch('categories', queryset=Category.objects.only('name')))
@@ -681,6 +837,7 @@ def view_sources_by_language(request):
         for source in sources:
             categories = [category.name for category in source.categories.all()]
             data.append({"country_display_name": source.country_display_name, "language_display_name": source.language_display_name, "language_alphanum_name": source.language_alphanum_name, "name": source.name, "categories": categories})
+
 
         # source_dict_list = [
         #     {
@@ -714,19 +871,12 @@ def view_sources_by_language(request):
 
     else:  # request.method != 'GET'
         return HttpResponseBadRequest('Unsupported Request Method')
-
+'''
 # ========================================================================================= #
-#                                                                    source_dict_list = Source.objects.values(
-        #     'name',
-        #     'country_alpha2_code',
-        #     'country_display_name',
-        #     'country_alphanum_name',
-        #     'language_alpha2_code',
-        #     'language_display_name',
-        #     'language_alphanum_name',
-        #     'categories'.objects.values('name'))                       #
+#                                                                                           #
 #  ██████╗`███████╗██╗`````███████╗████████╗███████╗````██████╗``██████╗`███████╗████████╗  #
 #  ██╔══██╗██╔════╝██║`````██╔════╝╚══██╔══╝██╔════╝````██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝  #
+
 #  ██║``██║█████╗``██║`````█████╗`````██║```█████╗``````██████╔╝██║```██║███████╗```██║```  #
 #  ██║``██║██╔══╝``██║`````██╔══╝`````██║```██╔══╝``````██╔═══╝`██║```██║╚════██║```██║```  #
 #  ██████╔╝███████╗███████╗███████╗```██║```███████╗````██║`````╚██████╔╝███████║```██║```  #

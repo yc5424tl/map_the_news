@@ -8,6 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         count = 0
+        named_from_exception = 0
         for source in Source.objects.all():
 
             country_full_name = pycountry.countries.lookup(source.country_alpha2_code).name
@@ -27,36 +28,36 @@ class Command(BaseCommand):
                     '''
                     substring = country_full_name[:comma_index]
                     source.country_display_name = substring
-                    # source.save()
             except LookupError:
                 source.country_display_name = country_full_name
-                # source.save()
+                named_from_exception += 1
+
             # COUNTRY ALPHANUMERICAL NAME
             try:
                 alphanum_filter = filter(str.isalnum, country_full_name)  # only alphanum chars remain
                 alphanum_name = "".join(alphanum_filter)
                 source.country_alphanum_name = alphanum_name
-                # source.save()
             except LookupError:
                 source.country_alphanum_name = source.country_alpha2_code
-                # source.save()
+                named_from_exception += 1
+
             # LANGUAGE DISPLAY NAME
             try:
                 source.language_display_name = language_full_name
-                # source.save()
             except LookupError:
                 source.language_display_name = source.language_alpha2_code
-                # source.save()
+                named_from_exception += 1
+
             # LANGUAGE ALPHANUMERICAL NAME
             try:
                 alphanum_filter = filter(str.isalnum, language_full_name)
                 alphanum_name = "".join(alphanum_filter)
                 source.language_alphanum_name = alphanum_name
-                # source.save()
             except LookupError:
                 source.language_alphanum_name = source.language_alpha2_code
-                # source.save()
+                named_from_exception += 1
+
             source.save()
             count += 1
-
-            self.stdout.write(self.style.SUCCESS(f"Successfully Expanded alpha2 for Record {count}"))
+            # self.stdout.write(self.style.SUCCESS(f"Successfully Expanded alpha2 for Record {count}"))
+        self.stdout.write(self.style.SUCCESS(f'COMPLETE -- Expand Country Alpha2 (Total: {count} Names_From_Exception_Block: {named_from_exception} **up to 4 per source'))

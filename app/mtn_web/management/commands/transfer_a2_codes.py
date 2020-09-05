@@ -12,4 +12,5 @@ class Command(BaseCommand):
             source.language_alpha2_code = source.language
             source.save()
             count += 1
-            self.stdout.write(self.style.SUCCESS(f'Successfully transfered alpha2 codes to new columns -- record {count}'))
+            # self.stdout.write(self.style.SUCCESS(f'Successfully transfered alpha2 codes to new columns -- record {count}'))
+        self.stdout.write(self.style.SUCCESS(f'COMPLETE - Transfer Alpha2 To New Columns (Total: {count})'))
