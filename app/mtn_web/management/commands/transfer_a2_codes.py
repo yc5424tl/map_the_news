@@ -7,7 +7,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         count = 0
-        for source in Source.objects.all():
+        for source in Source.objects.all().only('country_alpha2_code', 'language_alpha2_code', 'country', 'language'):
             source.country_alpha2_code = source.country
             source.language_alpha2_code = source.language
             source.save()

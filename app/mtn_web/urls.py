@@ -19,13 +19,13 @@ urlpatterns = [
     url(r"^comment/update/(?P<comment_pk>\d+)$", views.update_comment, name="update_comment", ),
     url(r"^accounts/register/$", views.register_user, name="register_user"),
     url(r"^accounts/view/(?P<member_pk>\d+)$", views.view_user, name="view_user"),
-    url(r"^sources/category/$", views.view_sources_by_category, name="view_sources_by_category"),
-    url(r"^sources/country/$", views.view_sources_by_country, name="view_sources_by_country"),
-    url(r"^sources/language/$", views.view_sources_by_language, name="view_sources_by_language"),
-    url(r"^sources/$", views.view_sources, name="view_sources"),
+    url(r"^sources/category/$", views.view_category_sources, name="view_category_sources"),
+    url(r"^sources/country/publisher/$", views.view_country_publisher_sources, name="view_country_publisher_sources"),
+    url(r"^sources/language/$", views.view_language_sources, name="view_language_sources"),
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
     url(r"^error/report/$", views.report_error, name="report_error"),
     url(r"^accounts/login/$", views.login_user, name="login_user"),
+    # path('mtn_web/<country>/', CountryPublisherList.as_view()),
     # path('login/', views.login_user(template_name="registration/login.hmtl", authentication_form=UserLoginForm), name='login')
 ]
 

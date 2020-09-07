@@ -13,11 +13,64 @@
 {% endblock %}
 
 {% block content %}
-    Publishers:
-    {{ publishers }}
 
-    Markets:
-    {{ markets }}
+    <div class="row no-gutters container">
+        <div class="col-12 accordion" id="country-accordion">
+            <ul class="list-group list-group-flush src-ul">
+                {% for country in page_obj %}
+                    <li class="list-group-item">
+                        <h3 id="{{ country.alphanum_name }}-heading">
+                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ country.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ country.alphanum_name }}-collapse">
+                                {{ country.display_name }}
+                            </button>
+                        </h3>
+                        <div id="{{ country.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ country.alphanum_name }}-heading">
+                            {% comment %} <h6 class="publishers-header">Publishers</h6> {% endcomment %}
+                            <ul class="list-group list-group-flush src-list row flex-container">
+                                {% for source in country.publishers %}
+                                    <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
+                                        <p class="publisher-name">{{ source.name }}</p>
+                                        <p class="publisher-languages">[ {{ source.languages|join:", "}} ]</p>
+                                        <p class="publisher-categories">[ {{ source.categories|join:", "}} ]</p>
+                                        <hr>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% comment %} {% if country_readerships[country.alpha2_code]|length > 0 %}
+                                <h6 class="readerships-header">Readerships</h6>
+                                <ul class="list-group list-group-flush src-list row">
+                                    {% for source in country_readerships[country.alpha2_code] %}
+                                        <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
+                                            <p class="src-name">{{ source.name }}</p>
+                                            <p class="src-languages">[ {% for language in source.languages %} {{language.display_name }} {% endfor %} ]</p>
+                                            <p class="src-cats">[ {{source.categories.join:' '}} ]</p>
+                                            <hr>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %} {% endcomment %}
+                        </div>
+                    </li>
+                {% endfor %}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </ul>
+        </div>
+    </div>
+
     <!--
     <div class="row no-gutters container">
         <div class="col-12 accordion" id="country-accordion">

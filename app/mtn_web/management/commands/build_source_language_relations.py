@@ -13,7 +13,7 @@ class Command(BaseCommand):
             language_object = Language.objects.get(alpha2_code=alpha2_code)
             language_mapper[alpha2_code] = language_object
 
-        for source in Source.objects.all():
+        for source in Source.objects.all().only('language', 'languages'):
             alpha2_code = source.language
             language_object = language_mapper[alpha2_code]
             if language_object not in source.languages.all():
