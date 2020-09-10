@@ -9,8 +9,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         count = 0
         named_from_exception = 0
-        for source in Source.objects.all().defer('country', 'language', 'name', 'languages', 'publishing_country', 'readership_countries', 'categories', 'url', 'verified'):
-
+        sources = Source.objects.all().defer('country', 'language', 'name', 'languages', 'publishing_country', 'readership_countries', 'categories', 'url', 'verified')
+        for source in sources:
             country_full_name = pycountry.countries.lookup(source.country_alpha2_code).name
             language_full_name = pycountry.languages.get(alpha_2=source.language_alpha2_code).name
 
@@ -57,7 +57,6 @@ class Command(BaseCommand):
                 source.language_alphanum_name = source.language_alpha2_code
                 named_from_exception += 1
 
-            source.save()
             count += 1
-            # self.stdout.write(self.style.SUCCESS(f"Successfully Expanded alpha2 for Record {count}"))
+        Source.objects.bulk_update(sources, ['language_alphanum_name', 'language_display_name', 'country_alphanum_name', 'country_display_name'], batch_size=2000)
         self.stdout.write(self.style.SUCCESS(f'COMPLETE -- Expand Country Alpha2 (Successful: {count} Exceptions*: {named_from_exception} **up to 4/src**'))

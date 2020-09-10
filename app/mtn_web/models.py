@@ -99,55 +99,6 @@ class Source(models.Model):
     def __str__(self) -> str:
         return f"{self.name}"
 
-    '''
-    @property
-    def get_country_display_name(self) -> str:
-        try:
-            full_name = pycountry.countries.lookup(self.country).name
-            comma_index = full_name.find(',')
-            if comma_index == -1:  # no comma in string
-                return full_name
-            else:
-                substring up to first comma, i.e. "Bolivia, Plurinational State of" will return "Bolivia".
-                This is done as the country names are used to:
-                    - generate element id's in templates, and neither spaces or commas are allowed.
-                    - As a user-friendly alternative to presenting iso-alpha2/3 codes in templates.
-                substring = full_name[:comma_index]
-                return substring
-        except LookupError:
-            return self.country
-
-    @property
-    def country_alphanum_name(self) -> str:
-        try:
-            full_name = pycountry.countries.lookup(self.country).name
-            if full_name.contains(' '):
-                filter_alphanum = filter(str.isalnum, full_name)
-                alphanum_string = "".join(filter_alphanum)
-                return alphanum_string
-            return full_name
-        except LookupError:
-            return self.country
-
-    @property
-    def language_display_name(self) -> str:
-        try:
-            display_name = pycountry.languages.get(alpha_2=self.language).name
-            return display_name
-        except LookupError:
-            return self.language
-
-    @property
-    def language_alphanum_name(self) -> str:
-        try:
-            full_name = pycountry.languages.get(alpha_2=self.language).name
-            alphanum_filter = filter(str.isalnum, full_name)
-            alphanum_string = "".join(alphanum_filter)
-            return alphanum_string
-        except LookupError:
-            return self.language
-    '''
-
 
 class Article(models.Model):
     article_url = models.URLField(max_length=1000)

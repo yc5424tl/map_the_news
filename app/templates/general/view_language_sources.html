@@ -1,0 +1,70 @@
+{% extends 'general/root.html' %}
+
+{% load static %}
+
+{% block title %}
+    Sources by Language - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static "css/view_sources_by_country.css" %}'>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row no-gutters container">
+        <div class="col-12 accordion" id="country-accordion">
+            <ul class="list-group list-group-flush src-ul">
+                {% for language in languages %}
+                    <li class="list-group-item">
+                        <h3 id="{{ language.alphanum_name }}-heading">
+                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ language.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ language.alphanum_name }}-collapse">
+                                {{ language.display_name }}
+                            </button>
+                        </h3>
+                        <div id="{{ language.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ language.alphanum_name }}-heading">
+                            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                                {% for source in language.src_list %}
+                                    <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
+                                        <p class="publisher-name">{{ source.name }}</p>
+                                        <p class="publishing_country">{{ source.publishing_country }}</p>
+                                        <p class="publisher-categories">{{ source.categories|join:", " }}</p>
+                                        <hr>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% comment %} <div class="row no-gutters container">
+        <div class="col-12 accordion" id="country-accordion">
+            <ul class="list-group list-group-flush src-ul">
+                {% for language in language_sources %}
+                    <li class="list-group-item">
+                        <h3 id="{{ language.alphanum_name }}-heading">
+                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ language.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ language.alphanum_name }}-collapse">
+                                {{ language.display_name }}
+                            </button>
+                        </h3>
+                        <div id="{{ language.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ language.alphanum_name }}-heading">
+                            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                                {% for source in language.src_list %}
+                                    <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
+                                        <p class="publisher-name">{{ source.name }}</p>
+                                        <p class="publisher-categories">{{ source.categories|join:", " }}</p>
+                                        <hr>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div> {% endcomment %}
+{% endblock %}

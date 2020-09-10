@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Publishers for Country - {{ block.super }}
+    Sources by Category - {{ block.super }}
 {% endblock %}
 
 {% block styles %}
@@ -15,19 +15,20 @@
     <div class="row no-gutters container">
         <div class="col-12 accordion" id="country-accordion">
             <ul class="list-group list-group-flush src-ul">
-                {% for country in countries %}
+                {% for category in category_sources %}
                     <li class="list-group-item">
-                        <h3 id="{{ country.alphanum_name }}-heading">
-                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ country.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ country.alphanum_name }}-collapse">
-                                {{ country.display_name }}
+                        <h3 id="{{ category.name }}-heading">
+                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ category.name }}-collapse" aria-expanded="false" aria-controls="#{{ category.name }}-collapse">
+                                {{ category.name|capfirst }}
                             </button>
                         </h3>
-                        <div id="{{ country.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ country.alphanum_name }}-heading">
+                        <div id="{{ category.name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ category.name }}-heading">
                             <ul class="list-group list-group-flush src-list row no-gutters flex-container">
-                                {% for source in country.src_list %}
+                                {% for source in category.src_list %}
                                     <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
                                         <p class="publisher-name">{{ source.name }}</p>
-                                        <p class="publisher-categories">{{ source.categories|join:", " }}</p>
+                                        <p class="publishing-country">{{ source.publishing_country }}</p>
+                                        <p class="publisher-categories">{{ source.languages|join:", " }}</p>
                                         <hr>
                                     </li>
                                 {% endfor %}

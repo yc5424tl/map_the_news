@@ -115,6 +115,18 @@ DATABASES = {
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
 
+if 'ENABLE_SERVER_SIDE_CURSORS' in os.environ:
+    DISABLE_SERVER_SIDE_CURSORS = False
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 86400
+    }
+}
+
+
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 AUTH_PASSWORD_VALIDATORS = [

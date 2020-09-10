@@ -25,6 +25,7 @@
     flex-wrap     : wrap;
     padding-bottom: 60px;
     margin-right: 0;
+    margin-bottom: 60px;
 }
 
 .list-group-item {
@@ -122,4 +123,8 @@ hr {
     background-color: var(--mid-dark-gray);
     color           : var(--mid-dark-gray);
     margin-bottom: 0;
+}
+
+.src-ul {
+    margin-bottom: 3rem;
 }

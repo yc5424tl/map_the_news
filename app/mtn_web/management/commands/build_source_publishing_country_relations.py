@@ -8,16 +8,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         count = 0
         exceptions = 0
-        for source in Source.objects.all().only('country_alpha2_code', 'publishing_country'):
+        sources = Source.objects.all().only('country_alpha2_code', 'publishing_country')
+        for source in sources:
             alpha2_code = source.country_alpha2_code
             try:
                 source.publishing_country = Country.objects.get(alpha2_code=alpha2_code)
-                # country_pk = Country.objects.get(alpha2_code=alpha2_code).pk
-                # source.publishing_country = Country.objects.get(pk=country_pk)
-                source.save()
                 count += 1
             except Country.DoesNotExist:
                 exceptions += 1
                 self.stdout.write(self.style.NOTICE(f'Country.DoesNotExist exception from alpha2={alpha2_code} for source={source.name}'))
-            # self.stdout.write(self.style.SUCCESS(f'Established Relation for {source.name}.alpha2_code={source.country_alpha2_code} to Country.alpha2_code={Country.objects.get(pk=country_pk).alpha2_code} (No. {count})'))
+        Source.objects.bulk_update(sources, ['publishing_country'], batch_size=2000)
         self.stdout.write(self.style.SUCCESS(f'COMPLETE -- Established Source Publishing Country Relations (Successful: {count}  Exceptions: {exceptions})'))

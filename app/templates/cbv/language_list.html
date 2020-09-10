@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Publishers for Country - {{ block.super }}
+    Sources by Language - {{ block.super }}
 {% endblock %}
 
 {% block styles %}
@@ -12,22 +12,24 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="row no-gutters container">
         <div class="col-12 accordion" id="country-accordion">
             <ul class="list-group list-group-flush src-ul">
-                {% for country in countries %}
+                {% for language in languages %}
                     <li class="list-group-item">
-                        <h3 id="{{ country.alphanum_name }}-heading">
-                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ country.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ country.alphanum_name }}-collapse">
-                                {{ country.display_name }}
+                        <h3 id="{{ language.alphanum_name }}-heading">
+                            <button class="btn btn-link collapsed country-header" data-toggle="collapse" data-target="#{{ language.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ language.alphanum_name }}-collapse">
+                                {{ language.display_name }}
                             </button>
                         </h3>
-                        <div id="{{ country.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ country.alphanum_name }}-heading">
+                        <div id="{{ language.alphanum_name }}-collapse" class="collapse" data-parent="#country-accordion" aria-labelledby="{{ language.alphanum_name }}-heading">
                             <ul class="list-group list-group-flush src-list row no-gutters flex-container">
-                                {% for source in country.src_list %}
+                                {% for source in language.sources.all %}
                                     <li class="list-group-item src-by-ctry col-sm-12 col-md-4">
                                         <p class="publisher-name">{{ source.name }}</p>
-                                        <p class="publisher-categories">{{ source.categories|join:", " }}</p>
+                                        <p class="publishing-country">{{ source.publishing_country.display_name }}</p>
+                                        <p class="publisher-categories">{% for category in source.categories.all %} {{ category.name }} {% endfor %}</p>
                                         <hr>
                                     </li>
                                 {% endfor %}
@@ -38,4 +40,5 @@
             </ul>
         </div>
     </div>
+
 {% endblock %}

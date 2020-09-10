@@ -1,4 +1,5 @@
 import os
+import requests
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mtn_django.settings")
