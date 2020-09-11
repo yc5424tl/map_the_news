@@ -22,6 +22,7 @@ def sift():
         alpha2_iso_code=rand_country, src_cat=rand_category
     )
     if country_src_data is not None:
+        log.info(f'Sift(): (src_data={country_src_data[:200]})  (alpha2_iso_code={rand_country})  (src_cat={rand_category})')
         build_country_src_data(
             src_data=country_src_data, alpha2_iso_code=rand_country, src_cat=rand_category
         )
@@ -56,7 +57,7 @@ def verify_base_src():
                             url=src["url"],
                         )
                     # new_src.categories.add(cat)
-                    new_src.save()
+                    # new_src.save()
                     new_src.categories.add(cat)
                     # new_src.publishing_country = country
                     new_src.languages.add(language)
@@ -175,17 +176,17 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                     # country=alpha2_iso_code,
                     # language=api_country_codes.get(alpha2_iso_code).get("language"),
                 )
-                new_src.save()
+                # new_src.save()
                 new_src.languages.add(language)
                 new_src.categories.add(cat)
-        else:
-            # if cat not in src.categories.all():
-            #     src.categories.add(cat)
+        elif type(src) is Source:
             src.categories.add(cat)
             src.languages.add(language)
             if src.publishing_country is not country:
                 src.readership_countries.add(country)
-    return True
+        else:
+            log.error(f'{type(src)} passed when expecting {type(Source)} or type{None} ')
+    return
 
 
 def req_top_src_data():
@@ -208,8 +209,8 @@ def build_top_src_data(src_data):
         source = check_for_source(src["name"])
         language = get_or_create_language(src['language'])
         country = get_or_create_country(src['country'])
-        if source is None:
-            if language and country:
+        if language and country:
+            if source is None:
                 new_src = Source.objects.create(
                     name=src["name"],
                     publishing_country=country,
@@ -217,16 +218,20 @@ def build_top_src_data(src_data):
                     # language=src["language"],
                     url=src["url"],
                 )
-                new_src.save()
+                # new_src.save()
                 new_src.categories.add(cat)
                 new_src.languages.add(language)
+            elif type(source) is Source:
+                # if cat not in src.categories.all():
+                #     src.categories.add(cat)
+                source.categories.add(cat)
+                source.languages.add(language)
+                if source.publishing_country is not country:
+                    source.readership_countries.add(country)
+            else:
+                log.warning('Unexpected type returned from check_for_source()')
         else:
-            # if cat not in src.categories.all():
-            #     src.categories.add(cat)
-            source.categories.add(cat)
-            source.languages.add(language)
-            if src.publishing_country is not country:
-                src.readership_countries.add(country)
+            log.info(f'get_or_create failed for one or more value:\n    language: {src["language"]}\n    country: {src["country"]}')
     return True
 
 
