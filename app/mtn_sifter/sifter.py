@@ -179,7 +179,10 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                 # new_src.save()
                 new_src.languages.add(language)
                 new_src.categories.add(cat)
+
         elif type(src) is Source:
+
+
             src.categories.add(cat)
             src.languages.add(language)
             if src.publishing_country is not country:
@@ -209,8 +212,12 @@ def build_top_src_data(src_data):
         source = check_for_source(src["name"])
         language = get_or_create_language(src['language'])
         country = get_or_create_country(src['country'])
+
         if language and country:
             if source is None:
+
+
+
                 new_src = Source.objects.create(
                     name=src["name"],
                     publishing_country=country,
@@ -232,6 +239,7 @@ def build_top_src_data(src_data):
                 log.warning('Unexpected type returned from check_for_source()')
         else:
             log.info(f'get_or_create failed for one or more value:\n    language: {src["language"]}\n    country: {src["country"]}')
+
     return True
 
 

@@ -13,3 +13,6 @@ if __name__ == "__main__":
     sift()
 
     response = requests.get('http://map-the-news.herokuapp.com')
+
+ 
+
