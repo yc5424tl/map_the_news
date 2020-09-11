@@ -42,11 +42,13 @@ class GeoMapManager:
                 columns=["id", "article_count"],
                 key_on="feature.id",
                 fill_color="Dark2",
+                # fill_color="YlGrBu",
                 bins=[
                     float(x) for x in threshold_scale
                 ],  # https://github.com/python-visualization/folium/issues/1130
-                fill_opacity=0.7,
+                fill_opacity=0.8,
                 line_opacity=0.2,
+                # highlight=True
             ).add_to(global_map)
             # ----------------------------------------------------------#
             #             Alternative fill_color options                #
@@ -74,10 +76,11 @@ class GeoMapManager:
         if articles_per_country.values.max() <= 16:
             threshold_scale = np.linspace(
                 articles_per_country.values.min(),
-                articles_per_country.values.max(),
+                articles_per_country.values.max() + 1,
                 6,
                 dtype=int,
             ).tolist()
+            # threshold_scale = [-2, -1, 0, 1, 2, 4, 8, 12, 17]
         elif 160 >= articles_per_country.values.max() > 16:
             threshold_scale = [
                 0,
@@ -85,12 +88,25 @@ class GeoMapManager:
                 articles_per_country.values.max() // 8,
                 articles_per_country.values.max() // 4,
                 articles_per_country.values.max() // 2,
-                articles_per_country.values.max(),
+                articles_per_country.values.max() + 1,
             ]
+            # threshold_scale = [
+            #     -2,
+            #     -1,
+            #     0,
+            #     1,
+            #     articles_per_country.values.max() // 8,
+            #     articles_per_country.values.max() // 4,
+            #     articles_per_country.values.max() // 2,
+            #     articles_per_country.values.max(),
+            #     articles_per_country.values.max() + 1,
+            # ]
         elif articles_per_country.values.max > 160:
-            threshold_scale = [0, 1, 2, 5, 10, articles_per_country.values.max()]
+            # threshold_scale = [-2, -1, 0, 1, 2, 5, 10, 20, articles_per_country.values.max() + 1]
+            threshold_scale = [0, 1, 3, 7, 15, articles_per_country.values.max() + 1]
         else:
             log.error("threshold-scale not being set in choropleth by articles_per_country.max")
+            # threshold_scale = [-2, -1, 0, 1, 2, 3, 4, 5, 6]
             threshold_scale = [0, 1, 2, 3, 4, 5]
         return threshold_scale
 
