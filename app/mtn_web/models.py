@@ -3,8 +3,7 @@ from typing import NoReturn
 import pycountry
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from django.contrib.postgres.fields import JSONField
-from django.db.models import JSONField
+from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 
 
 class QueryTypeChoice(Enum):
@@ -26,24 +25,24 @@ class Result(models.Model):
     date_range_start = models.DateField(default=None, null=True, blank=True)
     filename = models.TextField(max_length=700, blank=True, null=True)
     filepath = models.TextField(max_length=1000, blank=True, null=True)
-    public = models.BooleanField(default=False)
     query_type = models.CharField(
         max_length=50,
         choices=[(tag, tag.value) for tag in QueryTypeChoice],
-        default=QueryTypeChoice.ALL,
+        default=QueryTypeChoice.ALL
     )
     author = models.ForeignKey(
         "mtn_web.User", on_delete=models.PROTECT, related_name="results"
     )
     archived = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
     article_data_len = models.IntegerField(default=0)
     articles_per_country = JSONField(max_length=20000, null=True, blank=True)
 
     def __str__(self):
         details = (
-            f"Argument: {self.argument}\n Query Type: {self.query_type}\n Author: {self.author}\n Archived: {self.archived}\n"
-            f"Public: {self.public}\n Data[:500]: {self.data[:500]}\n ChoroHTML: {self.choro_html[:500]}"
+            f"Argument: {self.argument}\nAuthor: {self.author}\nArchived: {self.archived}\n"
+            f"Public: {self.public}\nData[:500]: {self.data[:500]}\nChoroHTML: {self.choro_html[:500]}"
         )
         if self.filename:
             details = f"{details}\nFilename = {self.filename}"
@@ -55,69 +54,50 @@ class Result(models.Model):
 
 
 class Category(models.Model):
-
     name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return f"Type: {type(self)} Name: {self.name}"
+
+
+class Country(models.Model):
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
+    display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+
+    def __str__(self):
+        return f"{self.display_name} ({self.alpha2_code})"
+
+
+class Language(models.Model):
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
+    display_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
 
 
 class Source(models.Model):
-    name = models.CharField(max_length=500)
+
     country = models.CharField(max_length=3)
     language = models.CharField(max_length=100)
+
+    name = models.CharField(max_length=500, unique=True)
+    languages = models.ManyToManyField(Language, related_name="sources")
+    publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name="publishers", null=True, blank=True)
+    readership_countries = models.ManyToManyField(Country, related_name="markets")
     categories = models.ManyToManyField(Category, related_name="sources")
     url = models.URLField(blank=True, default="", max_length=150)
     verified = models.BooleanField(default=False)
 
+    country_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
+    country_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
+    country_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
+
+    language_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
+    language_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
+    language_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
+
     def __str__(self) -> str:
         return f"{self.name}"
-
-    @property
-    def country_display_name(self) -> str:
-        try:
-            full_name = pycountry.countries.lookup(self.country).name
-            comma_index = full_name.find(',')
-            if comma_index == -1:  # no comma in string
-                return full_name
-            else:
-                '''
-                substring up to first comma, i.e. "Bolivia, Plurinational State of" will return "Bolivia".
-                This is done as the country names are used to:
-                    - generate element id's in templates, and neither spaces or commas are allowed.
-                    - As a user-friendly alternative to presenting iso-alpha2/3 codes in templates.
-                '''
-                substring = full_name[:comma_index]
-                return substring
-        except LookupError:
-            return self.country
-
-    @property
-    def country_alphanum_name(self) -> str:
-        try:
-            full_name = pycountry.countries.lookup(self.country).name
-            if full_name.contains(' '):
-                filter_alphanum = filter(str.isalnum, full_name)
-                alphanum_string = "".join(filter_alphanum)
-                return alphanum_string
-            return full_name
-        except LookupError:
-            return self.country
-
-    @property
-    def language_readable_full_name(self) -> str:
-        try:
-            display_name = pycountry.languages.get(alpha_2=self.language).name
-            return display_name
-        except LookupError:
-            return self.language
-
-    @property
-    def language_alphanum_full_name(self) -> str:
-        try:
-            full_name = pycountry.languages.get(alpha_2=self.language).name
-            alphanum_filter = filter(str.isalnum, full_name)
-            alphanum_string = "".join(alphanum_filter)
-            return alphanum_string
-        except LookupError:
-            return self.language
 
 
 class Article(models.Model):

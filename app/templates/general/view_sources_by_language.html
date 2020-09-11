@@ -15,22 +15,19 @@
     <div class="row no-gutters container" id="wrapper">
         <div class="col-12 accordion" id="language-accordion">
             <ul class="list-group list-group-flush src-ul">
-                {% regroup sources|dictsort:'language_alphanum' by language_alphanum as sources_by_language %}
-                {% for language in sources_by_language %}
+                {% for language in languages %}
                     <li class="list-group-item">
-                        <h3 id="{{ language.grouper }}-heading" class="language-h3">
-                            <button class="btn btn-link collapsed language-header gradient" data-toggle="collapse" data-target="#{{ language.grouper }}-collapse" aria-expanded="false" aria-controls="#{{ language.grouper }}-collapse">
-                                {% with language=language.list|first %}
-                                    {{ language.language_readable }}
-                                {% endwith %}
+                        <h3 id="{{ language.alphanum_name }}-heading" class="language-h3">
+                            <button class="btn btn-link collapsed language-header" data-toggle="collapse" data-target="#{{ language.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ language.alphanum_name }}-collapse">
+                                {{ language.display_name }}
                             </button>
                         </h3>
-                        <div id="{{ language.grouper }}-collapse" class="collapse" data-parent="#language-accordion" aria-labelledby="{{ language.grouper }}-heading">
+                        <div id="{{ language.alphanum_name }}-collapse" class="collapse" data-parent="#language-accordion" aria-labelledby="{{ language.alphanum_name }}-heading">
                             <ul class="list-group list-group-flush src-list row">
-                                {% for source in language.list %}
+                                {% for source in language.sources %}
                                     <li class="list-group-item src-by-lang col-sm-12 col-md-4">
                                         <p class="src-name">{{ source.name }}</p>
-                                        <p class="src-country">{{ source.country }}</p>
+                                        <p class="src-country">{{ source.publishing_country }}</p>
                                         <p class="src-cats">[ {{ source.categories|join:", "}} ]</p>
                                         <hr>
                                     </li>

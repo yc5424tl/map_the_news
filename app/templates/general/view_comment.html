@@ -20,7 +20,7 @@
         <small class="view-comment-subtitle">Published {{ comment.date_published }}</small>
         <blockquote class="view-comment-body">{{ comment.body }}</blockquote>
         {% if user.pk == comment.author.id %}
-            <div class="row">
+            <div class="row no-gutters">
             <div class="col-4"></div>
                 <div class="col">
                     <form method="get" action={% url 'update_comment' comment.pk %}>

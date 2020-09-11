@@ -8,6 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
+from django.db.models import Prefetch
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.template import RequestContext
@@ -24,10 +25,17 @@ from mtn_web.forms import (
 
 from mtn_web.geo_data_mgr import GeoDataManager
 from mtn_web.geo_map_mgr import GeoMapManager
-from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice, Article
+from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice, Article, Country, Language
 from mtn_web.query_mgr import Query
 
+from mtn_web.decorators import query_inspection
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from .country_data import iso_codes
+
+from django.views.generic import ListView, DetailView, TemplateView, DeleteView
 
 import logging
 log = logging.getLogger(__name__)
@@ -572,128 +580,85 @@ def view_post(request, post_pk):
 #  ````````````````````````````````````````````````````````````````````````````````````````````  #
 # ============================================================================================== #
 
-def view_sources(request):
+
+def view_category_sources(request):
+
+    category_sources = []
 
     if request.method == 'GET':
-
-        source_dict_list = [
-            {
-                "country": source.country_display_name,
-                "name": source.name,
-                "language_readable": source.language_readable_full_name,
-                "language_alphanum": source.language_alphanum_full_name,
-                "categories": [category.name for category in source.categories.all()],
-                "url": source.url
+        categories = Category.objects.all().order_by('name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'languages').order_by('name').select_related('languages', 'publishing_country'))).iterator()
+        for cat in categories:
+            sources = {
+                'src_list': [{
+                    'name': source.name,
+                    'publishing_country': source.publishing_country.display_name,
+                    'languages': [language for language in source.languages.values_list('display_name', flat=True)]
+                } for source in cat.sources.all().iterator()],
+                'name': cat.name
             }
-            for source in Source.objects.all()
-        ]
-
-        category_dict_list = [
-            {
-                "cat": category.name,
-                "src_list": [
-                    {
-                        "name": source.name,
-                        "country": source.country_display_name,
-                        "language": source.language_readable_full_name,
-                        "url": source.url
-                    }
-                    for source in category.sources.all()
-                ],
-            }
-            for category in Category.objects.all()
-        ]
+            category_sources.append(sources)
 
         return render(
             request,
-            "general/view_sources.html",
-            {"sources": source_dict_list, "categories": category_dict_list}
+            'general/view_category_sources.html',
+            {'category_sources': category_sources}
         )
-
-    else:  # request.method != 'GET'
+    else:
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
-def view_sources_by_category(request):
-
-    if request.method == "GET":
-
-        category_dict_list = [
-            {
-                "cat": category.name,
-                "src_list": [
-                    {
-                        "name": source.name,
-                        "country": source.country_display_name,
-                        "language": source.language_readable_full_name,
-                        "url": source.url
-                    }
-                    for source in category.sources.all()
-                ],
+def view_country_publisher_sources(request):
+    country_sources = []
+    if request.method == 'GET':
+        countries = Country.objects.all().order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('categories', 'publishing_country'))).iterator()
+        for country in countries:
+            sources = {
+                'src_list': [{
+                    'name': source.name,
+                    'categories': [category for category in source.categories.values_list('name', flat=True)]
+                } for source in country.sources.all().iterator()],
+                'display_name': country.display_name,
+                'alphanum_name': country.alphanum_name
             }
-            for category in Category.objects.all()
-        ]
+            country_sources.append(sources)
 
         return render(
             request,
-            "general/view_sources_by_category.html",
-            {"categories": category_dict_list}
+            'general/view_country_publishers.html',
+            {'countries': country_sources}
         )
 
-    else:  # request.method != 'GET'
+    else:
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
-def view_sources_by_country(request):
+def view_language_sources(request):
 
-    if request.method == "GET":
+    language_sources = []
 
-        source_dict_list = [
-            {
-                "country_display_name": source.country_display_name,
-                # "country_alphanumerical_name": source.country_alphanum_name,
-                "name": source.name,
-                "language": source.language_readable_full_name,
-                "categories": [category.name for category in source.categories.all()],
-                "url": source.url
+    if request.method == 'GET':
+        languages = Language.objects.all().order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'categories').order_by('name').select_related('categories', 'publishing_country'))).iterator()
+        for language in languages:
+            sources = {
+                'src_list': [{
+                    'name': source.name,
+                    'publishing_country': source.publishing_country.display_name,
+                    'categories': [category for category in source.categories.values_list('display_name', flat=True)]
+                } for source in language.sources.all().iterator()],
+                'display_name': language.display_name,
+                'alphanum_name': language.alphanum_name
             }
-            for source in Source.objects.all()
-        ]
+            language_sources.append(sources)
 
         return render(
             request,
-            "general/view_sources_by_country.html",
-            {"sources": source_dict_list}
+            'general/view_language_sources.html',
+            {'languages': language_sources}
         )
 
-    else:  # request.method != 'GET'
+    else:
         return HttpResponseBadRequest('Unsupported Request Method')
 
-
-def view_sources_by_language(request):
-
-    if request.method == "GET":
-
-        source_dict_list = [
-            {
-                "country": source.country_display_name,
-                "name": source.name,
-                "language_readable": source.language_readable_full_name,
-                "language_alphanum": source.language_alphanum_full_name,
-                "categories": [category.name for category in source.categories.all()],
-                "url": source.url
-            }
-            for source in Source.objects.all()
-        ]
-
-        return render(
-            request,
-            "general/view_sources_by_language.html",
-            {"sources": source_dict_list}
-        )
-
-    else:  # request.method != 'GET'
-        return HttpResponseBadRequest('Unsupported Request Method')
 
 # ========================================================================================= #
 #                                                                                           #
@@ -783,6 +748,7 @@ def view_comment(request, comment_pk):
 #  ``╚═══╝``╚═╝╚══════╝`╚══╝╚══╝``````╚═════╝╚═╝``╚═╝`╚═════╝`╚═╝``╚═╝`╚═════╝`  #
 #  ````````````````````````````````````````````````````````````````````````````  #
 # ============================================================================== #
+
 def view_choro(request: requests.request, result_pk) -> render:
     result = get_object_or_404(Result, pk=result_pk)
     return render(request, "general/view_choro.html", {"result": result})
@@ -947,3 +913,27 @@ def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
         log.error(f"query_type not found in get_query_type for qm_focus of {qm_focus}")
         query_type = None
     return query_type
+
+
+# =================================================================================================================
+
+@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
+class CategoryList(ListView):
+    queryset = Category.objects.order_by('name').prefetch_related(
+        Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country__display_name', 'languages__display_name').order_by('name'))).iterator()
+    template_name = 'cbv/category_list.html'
+    context_object_name = 'categories'
+
+
+@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
+class CountryList(ListView):
+    queryset = Country.objects.order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories__name', 'languages__display_name').order_by('name').prefetch_related('categories__name', 'languages__display_name'))).iterator()  # DON'T CHANGE - FAST
+    template_name = 'cbv/country_list.html'
+    context_object_name = 'countries'
+
+
+@method_decorator(cache_page(60 * 60 * 23 + 3480), name='dispatch')  # 60sec * 60min *23hr + 58min
+class LanguageList(ListView):
+    queryset = Language.objects.only('display_name', 'alphanum_name').order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('publishing_country'))).iterator()  # DON'T CHANGE - FAST
+    template_name = 'cbv/language_list.html'
+    context_object_name = 'languages'

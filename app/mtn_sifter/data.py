@@ -72,7 +72,7 @@ api_country_codes = {
     "ve": {"name": "Venezuela", "language": "es"},
 }
 
-# Not used in this module, contains countries of sifted sources initially  returned under one of the 54 countries above.
+# Not used in this module, contains countries of sifted sources initially returned under one of the 54 countries above, manually updated via django admin
 country_codes = {
     "ao": {"name": "Angola", "language": "pt"},
     "az": {"name": "Azerbaijan", "language": "az"}, # some russian, some english

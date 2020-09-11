@@ -19,7 +19,7 @@
             <div class="col-xs-12 col-lg-8" id="last-post-wrapper">
 
                 <div id="view-user-banner">
-                     <div class="jumbotron">
+                    <div class="jumbotron">
                         {% if request.user.pk == member.pk %}
                             <h1>Welcome, {{ member.username }}!</h1>
                         {% else %}
@@ -110,7 +110,7 @@
                                     <hr>
                                     <blockquote>{{ comment.body }}</blockquote>
                                     {% if user.pk == comment.author.id %}
-                                        <div class="row" id="last-post-comments-crud">
+                                        <div class="row no-gutters" id="last-post-comments-crud">
                                             <div class="col-lg-2 col-sm-4">
                                                 <form method="get" action={% url 'update_comment' comment.pk %}>
                                                     {% csrf_token %}

@@ -56,9 +56,6 @@ def verify_base_src():
             src_data = req_top_src_data()
             if src_data:
                 build_top_src_data(src_data)
-                # scheduler.pause()
-                # t = Timer(360.0, scheduler.resume())
-                # t.start()
                 return True
             else:
                 return False
@@ -100,11 +97,9 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                 language=api_country_codes.get(alpha2_iso_code).get("language"),
             )
             new_src.categories.add(cat)
-            new_src.save()
         else:
             if cat not in src.categories.all():
                 src.categories.add(cat)
-                src.save()
     return True
 
 
@@ -125,8 +120,6 @@ def req_top_src_data():
 def build_top_src_data(src_data):
     for src in src_data:
         cat, created = Category.objects.get_or_create(name=src["category"])
-        if created:
-            cat.save()
         source = check_for_source(src["name"])
         if source is None:
             new_src = Source.objects.create(
@@ -136,11 +129,9 @@ def build_top_src_data(src_data):
                 url=src["url"],
             )
             new_src.categories.add(cat)
-            new_src.save()
         else:
             if cat not in src.categories.all():
                 src.categories.add(cat)
-                src.save()
     return True
 
 

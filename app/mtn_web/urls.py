@@ -2,6 +2,8 @@ from django.conf.urls import url
 from django.urls import path, re_path
 from mtn_web import views
 from mtn_web.forms import UserLoginForm
+from mtn_web.models import Category, Language, Country, Source
+from mtn_web.views import CountryList, LanguageList, CategoryList
 
 urlpatterns = [
     url(r"^$", views.index, name="index"),
@@ -19,13 +21,23 @@ urlpatterns = [
     url(r"^comment/update/(?P<comment_pk>\d+)$", views.update_comment, name="update_comment", ),
     url(r"^accounts/register/$", views.register_user, name="register_user"),
     url(r"^accounts/view/(?P<member_pk>\d+)$", views.view_user, name="view_user"),
-    url(r"^sources/category/$", views.view_sources_by_category, name="view_sources_by_category"),
-    url(r"^sources/country/$", views.view_sources_by_country, name="view_sources_by_country"),
-    url(r"^sources/language/$", views.view_sources_by_language, name="view_sources_by_language"),
-    url(r"^sources/$", views.view_sources, name="view_sources"),
+    url(r"^sources/category/$", views.view_category_sources, name="view_category_sources"),
+    url(r"^sources/country/publisher/$", views.view_country_publisher_sources, name="view_country_publisher_sources"),
+    url(r"^sources/language/$", views.view_language_sources, name="view_language_sources"),
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
     url(r"^error/report/$", views.report_error, name="report_error"),
     url(r"^accounts/login/$", views.login_user, name="login_user"),
+    path('categories/', CategoryList.as_view(), name="category_list"),
+    path('countries/', CountryList.as_view(), name="country_list"),
+    path('languages/', LanguageList.as_view(), name="language_list"),
+
+    # url(r"^category/view/(?P<category_pk>\d+)$", view.view_category, name="view_category"),
+    # url(r"^language/view/(?P<language_pk>\d+)$", views.view_language, name="view_language"),
+    # url(r"^country/view/(?P<country_pk>\d+)$", views.view_country, name="view_country"),
+
+    # url(r'all-categories', views.ListView.as_view(model=Category)),
+    # url(r'all-languages', views.ListView.as_view(model=Language)),
+    # url(r'all-countries', views.ListView.as_view(model=Country)),
     # path('login/', views.login_user(template_name="registration/login.hmtl", authentication_form=UserLoginForm), name='login')
 ]
 

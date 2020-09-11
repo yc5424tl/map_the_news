@@ -59,8 +59,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-
 ]
 
 if USE_WHITENOISE:
@@ -98,22 +96,20 @@ DATABASES = {
     }
 }
 
-# DOCKER_POSTGRES = os.getenv("DOCKER_POSTGRES") == "TRUE"
-
-# if DOCKER_POSTGRES:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql",
-#             "NAME": "postgres",
-#             "USER": "postgres",
-#             "HOST": "db",
-#             "PORT": 5432,
-#             "PASSWORD": "sqlAdmin1234!"
-#         }
-#     }
 
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)
+
+if 'ENABLE_SERVER_SIDE_CURSORS' in os.environ:
+    DISABLE_SERVER_SIDE_CURSORS = False
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 86400
+    }
+}
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
@@ -134,6 +130,7 @@ USE_TZ = True
 # local static
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # local media
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
@@ -144,6 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 # =========================================================== #
 
 if USE_S3:
+
     # Amazon s3 bucket
     AWS_DEFAULT_ACL = "public-read"
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -151,10 +149,12 @@ if USE_S3:
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.us-east-2.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+
     # Amazon s3 static
     STATIC_LOCATION = "static"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
     STATICFILES_STORAGE = "mtn_django.storage_backends.StaticStorage"
+
     # Amazon s3 media
     MEDIA_LOCATION = "media"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/"
@@ -168,15 +168,7 @@ if USE_WHITENOISE:
     MEDIA_URL = '/mediafiles/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-# if not USE_WHITENOISE and not USE_S3:
-#     # local static
-#     STATIC_URL = '/staticfiles/'
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#     # local media
-#     MEDIA_URL = '/mediafiles/'
-#     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'mtn_web/static'), )
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -200,13 +192,18 @@ GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 #     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 #     django_heroku.settings(locals())
 
+# LOGGING = {
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
 
-#  DEBUG
+
 if DEBUG == 1:
-    # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
-    # MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
     BETTER_EXCEPTIONS = 1
     # INTERNAL_IPS = ("127.0.0.1", "localhost", os.getenv('MTN_WEB_1_IP'))
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()

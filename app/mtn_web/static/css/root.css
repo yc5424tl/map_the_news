@@ -1,290 +1,310 @@
 :root {
-    --off-black        : #111e26;
-    --main-accent-1    : #A1A499;
-    --main-light       : #d4d4d4;
-    --main-link-color  : #09c0ee;
-    --main-link-hover  : #ED254E;
-    --mid-dark-gray    : #394349;
-    --mid-gray         : #6c7377;
-    --aux-accent-6     : #35e8d6;
-    --main-link-visited: #cc7b8c;
-    --main-gold        : #bba25f;
-    --main-darkest     : rgba(7,21,29, 0.5);
+    --off-black         : rgb(17, 30, 38);
+    --main-accent-1     : #A1A499;
+    --main-light        : #d4d4d4;
+    --main-link-color   : #09c0ee;
+    --main-link-hover   : #ED254E;
+    --mid-dark-gray     : #394349;
+    --mid-gray          : #6c7377;
+    --aux-accent-6      : #35e8d6;
+    --main-link-visited : #cc7b8c;
+    --main-gold         : #bba25f;
+    --main-darkest      : rgba(7,21,29, 0.5);
 }
 
 
 div {
-    margin          : 0;
-    background-color: transparent;
+    margin           : 0;
+    background-color : transparent;
 }
 
 * {
-    margin          : 0;
-    font-family     : 'Josefin Sans', sans-serif;
-    background-color: transparent;
+    margin           : 0;
+    padding          : 0;
+    max-width        : 100%;
+    font-family      : 'Josefin Sans', sans-serif;
+    background-color : transparent;
 }
 
 html {
-    height            : 100%;
-    padding           : 0;
-    scrollbar-width   : none;
-    -ms-overflow-style: none;
-    overflow          : scroll;
+    height             : 100%;
+    padding            : 0;
+    scrollbar-width    : none;
+    -ms-overflow-style : none;
+    overflow           : scroll;
 }
 
 body {
-    height          : 100%;
-    padding         : 0;
-    background-color: var(--off-black);
-    font-size       : 1.2em;
-    color: var(--main-light);
+    height           : 100%;
+    padding          : 0;
+    background-color : var(--off-black);
+    font-size        : 1.2em;
+    color            : var(--main-light);
 }
 
 #main {
-    padding         : 0;
-    background-color: var(--off-black);
+    padding          : 0;
+    background-color : var(--off-black);
 }
 
 .bg-div {
-    background-color: var(--off-black);
+    background-color : var(--off-black);
 }
 
 .container {
-    width    : 100%;
-    max-width: 100%;
-    min-width: 100%;
-    padding  : 0;
+    width     : 100%;
+    max-width : 100%;
+    min-width : 100%;
+    padding   : 0;
 }
 
 .container-fluid {
-    padding   : 0;
-    width     : 100%;
-    min-height: 100%;
-    position  : relative;
+    padding    : 0;
+    width      : 100%;
+    min-height : 100%;
+    position   : relative;
 }
 
 /*==========MESSAGES============*/
 .messages {
-    color    : var(--aux-accent-4);
-    font-size: 12pt;
+    color     : var(--aux-accent-4);
+    font-size : 12pt;
 }
 
 #messages-container {
-    padding-top: 1rem;
+    padding-top : 1rem;
 }
 
 .messages > li {
-    font-size: larger;
+    font-size : larger;
 }
 
 a,
 a:link {
-    color          : var(--main-light);
-    margin         : auto;
-    text-decoration: none;
-    transition     : 0.4s;
+    color           : var(--main-light);
+    margin          : auto;
+    text-decoration : none;
+    transition      : 0.4s;
 }
 
 a:hover,
 a:focus {
-    color     : var(--main-link-hover);
-    transition: 0.4s;
+    color      : var(--main-link-hover);
+    transition : 0.4s;
 }
 
 #footer-div a {
-    color               : var(--main-link-hover);
-    text-decoration-line: underline;
-    text-align          : center;
-    justify-content     : center;
+    color                : var(--main-link-hover);
+    text-decoration-line : underline;
+    text-align           : center;
+    justify-content      : center;
 }
 
 div.jumbotron {
-    color           : var(--off-black);
-    background-color: var(--main-light);
+    color            : var(--off-black);
+    background-color : var(--main-light);
 }
 
 .row {
-    width  : 100%;
-    padding: 0;
+    width   : 100%;
+    padding : 0;
 }
 
 .article-image-iframe {
-    width : 500px;
-    height: 500px;
+    width  : 500px;
+    height : 500px;
 }
 
 #content-div {
-    padding: 0;
-    margin : 0;
+    padding : 0;
+    margin  : 0;
 }
 
 /*=================FOOTER===================*/
 
 .comment-footer {
-    padding-top: 1rem;
-    color      : var(--main-accent-1);
+    padding-top : 1rem;
+    color       : var(--main-accent-1);
 }
 
 footer {
-    line-height     : 1.5625;
-    display         : block;
-    width           : 100%;
-    background-color: var(-main-light);
-    text-align      : center;
-    bottom          : 0;
-    position        : absolute;
-    height          : 60px;
-    align-content   : center;
-    padding-top     : 1rem;;
-    padding-bottom  : 5px;
-    align-items     : center;
+    line-height      : 1.5625;
+    display          : block;
+    width            : 100%;
+    background-color : var(-main-light);
+    text-align       : center;
+    bottom           : 0;
+    position         : absolute;
+    height           : 60px;
+    align-content    : center;
+    padding-top      : 1rem;;
+    padding-bottom   : 5px;
+    align-items      : center;
 }
 
 #footer-div {
-    padding-top   : 1rem;
-    padding-bottom: 1rem;
-    float         : right;
-    align-content : center;
-    text-justify  : center;
-    color         : var(--off-black);
+    padding-top    : 1rem;
+    padding-bottom : 1rem;
+    float          : right;
+    align-content  : center;
+    text-justify   : center;
+    color          : var(--off-black);
 }
 
 td, tr {
-    font-size : 18pt;
-    width     : auto;
-    text-align: center;
+    font-size  : 18pt;
+    width      : auto;
+    text-align : center;
 }
 
 .lt-header {
-    padding-bottom: 0;
+    padding-bottom : 0;
 }
 
 .resizable {
-    resize   : both;
-    max-width: 90%;
+    resize    : both;
+    max-width : 90%;
 }
 
 #logo-container {
-    position        : absolute;
-    width           : 100%;
-    display         : block;
-    align-content   : center;
-    text-align      : center;
-    background-color: transparent;
+    position         : absolute;
+    width            : 100%;
+    display          : block;
+    align-content    : center;
+    text-align       : center;
+    background-color : transparent;
 }
 
 #nav-left,
 #nav-right {
-    background-color: var(--main-darkest);
-    border-radius   : 5pt;
-    z-index         : 499;
-    display         : flex;
+    background-color : var(--main-darkest);
+    border-radius    : 5pt;
+    z-index          : 499;
+    display          : flex;
 }
 
 #navbar {
-    background-image: url('../img/news-bg-paper-rack.jpg');
-    min-width       : 100%;
-    width           : 100%;
-    padding-left    : 0;
-    padding-right   : 0;
-    padding-bottom  : 10px;
-    font-size       : 22pt;
-    font-family     : 'Flamenco', cursive;
-    background-size : 100% auto;
-    min-height      : 75px;
+    background-image : url('../img/news-bg-paper-rack.jpg');
+    min-width        : 100%;
+    width            : 100%;
+    padding-left     : 0;
+    padding-right    : 0;
+    padding-bottom   : 10px;
+    font-size        : 22pt;
+    font-family      : 'Flamenco', cursive;
+    background-size  : 100% auto;
+    min-height       : 75px;
 }
 
 #nav-collapse {
-    margin-top   : auto;
-    margin-left: 0;
-    margin-right: 0;
-    padding-right: 16px;
-    padding-left : 16px;
-    flex-wrap    : nowrap;
-    white-space  : nowrap;
+    margin-top    : auto;
+    margin-left   : 0;
+    margin-right  : 0;
+    padding-right : 16px;
+    padding-left  : 16px;
+    flex-wrap     : nowrap;
+    white-space   : nowrap;
 }
 
 .navbar-toggler {
-    margin: .75rem;
+    margin : 0.75rem;
 }
 
 .nav-item,
 .navbar-brand {
-    color     : var(--main-light);
-    transition: 0.4s;
+    color      : var(--main-light);
+    transition : 0.4s;
 }
 
 .nav-link:hover,
 .nav-link:focus {
-    color     : var(--main-link-hover);
-    transition: 0.5s;
+    transition : 0.5s;
+    color      : var(--main-link-color);
+}
+
+.nav>.nav-link:hover,
+.nav>.nav-link:focus {
+    color: var(--main-link-hover);
+}
+
+.dropdown-toggle,
+.dropdown {
+    display    : block;
+    margin     : auto;
+    box-sizing : border-box;
 }
 
 .dropdown-item {
-    width: 100%;
-    text-align: center;
-    text-justify: center;
-    background-color: rgba(212, 212, 212, 0.7);
-    color: var(--off-black);
-    height: auto;
-    font-size: 1rem;
+    text-align       : center;
+    text-justify     : center;
+    background-color :  var(--main-darkest);
+    height           : auto;
+    font-size        : 1rem;
+}
+
+.dropdown-menu {
+    text-align       : center;
+    background-color : transparent;
+    font-size        : 0.75em;
+    padding-bottom   : 0;
+    border-radius    : 5pt;
+    transition       : 0.5s;
+}
+
+.dropdown-menu .dropdown-item {
+    border          : 1pt solid transparent;
+    border-collapse : collaspe;
+}
+
+.dropdown-menu .dropdown-item:nth-of-type(2) {
+    border-bottom : 1pt solid var(--main-link-color);
+    border-top    : 1pt solid var(--main-link-color);
+}
+
+.dropdown-menu .dropdown-item:last-of-type {
+    border-bottom-left-radius  : 5pt;
+    border-bottom-right-radius : 5pt;
 }
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-    color: var(--main-gold);
-    background-color: var(--off-black);
-    transition: 0.4s;
-    border-left: 1pt solid var(--main-link-color);
-    border-right: var(--main-link-color);
-}
-
-.dropdown-menu {
-    width: inherit;
-    text-align: center;
-    background-color: transparent;
-    font-size: 0.75rem;
-}
-
-.dropdown-menu .dropdown-item:first-of-type {
-    border-bottom: 1pt solid var(--main-link-color);
-}
-
-.dropdown-menu .dropdown-item:last-of-type {
-    border-top: 1pt solid var(--main-link-color);
+    background-color : rgb(7, 21, 29);
+    transition       : 0.4s;
+    border           : 1pt solid var(--main-link-color);
+    border-collapse  : collapse;
 }
 
 .dropdown-item a,
 .dropdown-menu {
-    background-color: transparent;
-    color: var(--main-link-color);
+    background-color : transparent;
+    color            : var(--main-light);
 }
 
-@media (min-width: 1200px) {
+@media (min-width : 1200px) {
 
     #logo-xl {
-        display : inline;
-        position: absolute;
-        z-index : 500;
-        left    : calc(50% - 200px);
-        top     : 0;
+        display  : inline;
+        position : absolute;
+        z-index  : 500;
+        left     : calc(50% - 200px);
+        top      : 0;
     }
 
     #logo-lg,
     #logo-md {
-        display: none;
+        display : none;
     }
 
     #navbar {
-        height    : 250px;
-        min-height: 250px;
-        font-size : 22pt;
+        height     : 250px;
+        min-height : 250px;
+        font-size  : 22pt;
     }
 
     #logo-container {
-        height       : 250px;
-        padding-left : 0;
-        padding-right: 0;
+        height        : 250px;
+        padding-left  : 0;
+        padding-right : 0;
     }
 
     #nav-left,
@@ -313,15 +333,19 @@ td, tr {
         flex-wrap : nowrap;
     }
 
+    .dropdown-menu {
+        margin-left : 1em;
+    }
+
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
 
     #logo-xl {
-        display    : inline;
-        position   : absolute;
-        z-index    : 500;
-        left       : calc(50% - 200px);
+        display  : inline;
+        position : absolute;
+        z-index  : 500;
+        left     : calc(50% - 200px);
     }
 
     #logo-lg,
@@ -367,6 +391,10 @@ td, tr {
         margin     : auto;
     }
 
+    li.dropdown-item a.nav-link {
+        font-size : 12pt;
+    }
+
     #nav-collapse {
         display   : inline-flex;
         flex-wrap : nowrap;
@@ -376,14 +404,14 @@ td, tr {
 @media (min-width: 768px) and (max-width: 991px) {
 
     .dropdown-menu {
-        width: 198px;
+        width : 198px;
     }
 
     #logo-lg {
-        display    : inline;
-        position   : absolute;
-        z-index    : 500;
-        left       : calc(50% - 165px);
+        display  : inline;
+        position : absolute;
+        z-index  : 500;
+        left     : calc(50% - 165px);
     }
 
     #logo-xl,
@@ -437,7 +465,6 @@ td, tr {
 
 @media (min-width: 992px) {
     .dropdown-menu {
-        width: 173.75px;
+        width : 173.75px;
     }
 }
-

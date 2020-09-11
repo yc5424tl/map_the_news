@@ -1,4 +1,5 @@
 import os
+import requests
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mtn_django.settings")
@@ -10,3 +11,5 @@ if __name__ == "__main__":
     verify_base_cat()
     verify_base_src()
     sift()
+
+    response = requests.get('http://map-the-news.herokuapp.com')

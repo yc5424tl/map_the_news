@@ -43,16 +43,6 @@
                 <div class="collapse navbar-collapse" id="nav-collapse">
                     <nav class="nav" id="nav-left">
                         <a class="nav-link" href="{% url 'index' %}">HOME</a>
-                        <a class="nav-link" href="{% url 'new_query' %}">MAP</a>
-                        <a class="nav-link" href="{% url 'view_public_posts' %}">FORUM</a>
-                    </nav>
-                    <nav class="nav dropdown" id="nav-right">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SOURCES <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_category' %}">By Category</a></li>
-                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_country' %}">By Country</a></li>
-                            <li class="dropdown-item"><a class="nav-link" href="{% url 'view_sources_by_language' %}">By Language</a></li>
-                        </ul>
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'view_user' user.pk %}">PROFILE</a>
                             <a class="nav-link" href="{% url 'logout' %}">LOGOUT</a>
@@ -61,10 +51,22 @@
                             <a class="nav-link" href="{% url 'register_user' %}">REGISTER</a>
                         {% endif %}
                     </nav>
+                    <nav class="nav" id="nav-right">
+                        <a class="nav-link" href="{% url 'new_query' %}">MAP</a>
+                        <a class="nav-link" href="{% url 'view_public_posts' %}">FORUM</a>
+                        <div class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SOURCES <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item"><a class="nav-link" href="{% url 'category_list' %}">By Category</a></li>
+                                <li class="dropdown-item"><a class="nav-link" href="{% url 'country_list' %}">By Country</a></li>
+                                <li class="dropdown-item"><a class="nav-link" href="{% url 'language_list' %}">By Language</a></li>
+                            </ul>
+                        </div>
+                    </nav>
                 </div>
             </nav>
             {% if messages %}
-                <div class="row" id="messages-container">
+                <div class="row no-gutters" id="messages-container">
                     <div class="col-3"></div>
                     <div class="col text-center">
                         <ul class="messages">
@@ -81,10 +83,10 @@
                 {% endblock %}
             </div>
             <footer class="footer">
-                <div class="row container" id="footer-div">
-                    <span class="col-xs-12 col-sm-auto text-muted ml-auto"> Jacob Boline 2018 </span>
-                    <a href="https://github.com/yc5424tl/map_the_news" class="col-xs-12 col-sm-auto"> this.github </a>
-                    <span class="col-xs-12 col-sm-auto text-muted mr-auto"> Powered By <a href="https://www.newsapi.org">NewsAPI </a></span>
+                <div class="row no-gutters container" id="footer-div">
+                    <span class="col-xs-12 col-sm-4 text-muted ml-auto"> Jacob Boline 2018 </span>
+                    <a href="https://github.com/yc5424tl/map_the_news" class="col-xs-12 col-sm-4"> this.github </a>
+                    <span class="col-xs-12 col-sm-4 text-muted mr-auto"> Powered By <a href="https://www.newsapi.org">NewsAPI </a></span>
                 </div>
             </footer>
         </div>
