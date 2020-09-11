@@ -179,8 +179,6 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                 new_src.languages.add(language)
                 new_src.categories.add(cat)
         else:
-            # if cat not in src.categories.all():
-            #     src.categories.add(cat)
             src.categories.add(cat)
             src.languages.add(language)
             if src.publishing_country is not country:
@@ -209,6 +207,7 @@ def build_top_src_data(src_data):
         language = get_or_create_language(src['language'])
         country = get_or_create_country(src['country'])
         if source is None:
+
             if language and country:
                 new_src = Source.objects.create(
                     name=src["name"],
@@ -221,12 +220,11 @@ def build_top_src_data(src_data):
                 new_src.categories.add(cat)
                 new_src.languages.add(language)
         else:
-            # if cat not in src.categories.all():
-            #     src.categories.add(cat)
             source.categories.add(cat)
             source.languages.add(language)
             if src.publishing_country is not country:
                 src.readership_countries.add(country)
+
     return True
 
 
