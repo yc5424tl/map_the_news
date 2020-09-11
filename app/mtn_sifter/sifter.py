@@ -52,14 +52,9 @@ def verify_base_src():
                         new_src = Source.objects.create(
                             name=src["name"],
                             publishing_country=country,
-                            # country=src["country"],
-                            # language=src["language"],
                             url=src["url"],
                         )
-                    # new_src.categories.add(cat)
-                    # new_src.save()
-                    new_src.categories.add(cat)
-                    # new_src.publishing_country = country
+                    new_src.categories.add(cat)            
                     new_src.languages.add(language)
                 return True
         except FileNotFoundError:
@@ -82,7 +77,6 @@ def get_or_create_language(alpha2_code):
     except LookupError:
         display_name = alpha2_code
         alphanum_name = alpha2_code
-
     try:
         language, created = Language.objects.get_or_create(
             alpha2_code=alpha2_code,
@@ -95,7 +89,6 @@ def get_or_create_language(alpha2_code):
     except Language.MultipleObjectsReturned as e:
         log.warning(f'get_or_create retrieved multiple results: {e}')
         language = False
-
     return language
 
 
@@ -119,7 +112,6 @@ def get_or_create_country(alpha2_code):
     except LookupError:
         display_name = country_full_name
         alphanum_name = alpha2_code
-
     try:
         country, created = Country.objects.get_or_create(
             alpha2_code=alpha2_code,
@@ -132,7 +124,6 @@ def get_or_create_country(alpha2_code):
     except Country.MultipleObjectsReturned as e:
         log.warning(f'get_or_create retrieved multiple results: {e}')
         country = False
-
     return country
 
 
@@ -173,16 +164,10 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                 new_src = Source.objects.create(
                     name=article["source"]["name"],
                     publishing_country=country
-                    # country=alpha2_iso_code,
-                    # language=api_country_codes.get(alpha2_iso_code).get("language"),
                 )
-                # new_src.save()
                 new_src.languages.add(language)
                 new_src.categories.add(cat)
-
         elif type(src) is Source:
-
-
             src.categories.add(cat)
             src.languages.add(language)
             if src.publishing_country is not country:
@@ -212,25 +197,16 @@ def build_top_src_data(src_data):
         source = check_for_source(src["name"])
         language = get_or_create_language(src['language'])
         country = get_or_create_country(src['country'])
-
         if language and country:
             if source is None:
-
-
-
                 new_src = Source.objects.create(
                     name=src["name"],
-                    publishing_country=country,
-                    # country=src["country"],
-                    # language=src["language"],
+                    publishing_country=country,          
                     url=src["url"],
-                )
-                # new_src.save()
+                )    
                 new_src.categories.add(cat)
                 new_src.languages.add(language)
-            elif type(source) is Source:
-                # if cat not in src.categories.all():
-                #     src.categories.add(cat)
+            elif type(source) is Source:       
                 source.categories.add(cat)
                 source.languages.add(language)
                 if source.publishing_country is not country:
@@ -239,7 +215,6 @@ def build_top_src_data(src_data):
                 log.warning('Unexpected type returned from check_for_source()')
         else:
             log.info(f'get_or_create failed for one or more value:\n    language: {src["language"]}\n    country: {src["country"]}')
-
     return True
 
 
