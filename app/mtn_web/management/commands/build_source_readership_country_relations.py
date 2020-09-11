@@ -9,8 +9,10 @@ class Command(BaseCommand):
         count = 0
         skipped = 0
         exceptions = 0
+
         for source in Source.objects.exclude(url__isnull=True).exclude(url__exact='').extra(where=["CHAR_LENGTH(url) = 12"]):
             alpha2_code = source.url[7:9]
+            # manual updates to a source used the source.url field to store the original country and language values
             try:
                 country_object = Country.objects.get(alpha2_code=alpha2_code)
                 if country_object not in source.readership_countries.all():
@@ -21,4 +23,5 @@ class Command(BaseCommand):
             except Country.DoesNotExist:
                 exceptions += 1
                 self.stdout.write(self.style.NOTICE(f'Country.DoesNotExist on Alpha2={alpha2_code} for Source={source.name}'))
+
         self.stdout.write(self.style.SUCCESS(f'COMPLETE -- Established Source Readership Country Relations (Added: {count}  Skipped: {skipped})'))

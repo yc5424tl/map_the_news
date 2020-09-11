@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from mtn_web.models import Source, Language
+from django.db.models import Prefetch
 
 
 class Command(BaseCommand):
@@ -12,11 +13,9 @@ class Command(BaseCommand):
         for language in Language.objects.all():
             language_mapper[language.alpha2_code] = language
 
-        for source in Source.objects.all().only('language', 'languages').iterator():
-            alpha2_code = source.language
-            language_object = language_mapper[alpha2_code]
-            if language_object not in source.languages.all():
-                source.languages.add(language_object)
+        for source in Source.objects.only('language', 'languages').prefetch_related(Prefetch('languages', queryset=Language.objects.all())).iterator():
+            if language_mapper[source.language] not in source.languages.all():
+                source.languages.add(language_mapper[source.language])
                 count += 1
 
         self.stdout.write(self.style.SUCCESS(f'COMPLETE -- Established Source Language Relations ({count})'))

@@ -121,10 +121,3 @@
     </div>
 
 {% endblock %}
-            <ul class="list-group list-group-flush src-ul">
-                {% for language in languages %}
-                    <li class="list-group-item">
-                        <h3 id="{{ language.alphanum_name }}-heading" class="language-h3">
-                            <button class="btn btn-link collapsed language-header" data-toggle="collapse" data-target="#{{ language.alphanum_name }}-collapse" aria-expanded="false" aria-controls="#{{ language.alphanum_name }}-collapse">
-                                {{ language.display_name }}
-                            </button>

@@ -41,7 +41,6 @@ class ResultAdmin(admin.ModelAdmin):
         "filename",
         "filepath",
         "date_created",
-        # "choropleth"
     )
     list_editable = ("query_type", "archived", "public", "filename", "filepath")
     list_filter = ("query_type", "archived", "public", "author", "argument")

@@ -19,7 +19,7 @@
             <div class="col-xs-12 col-lg-8" id="last-post-wrapper">
 
                 <div id="view-user-banner">
-                     <div class="jumbotron">
+                    <div class="jumbotron">
                         {% if request.user.pk == member.pk %}
                             <h1>Welcome, {{ member.username }}!</h1>
                         {% else %}

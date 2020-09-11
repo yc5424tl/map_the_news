@@ -1,5 +1,29 @@
 #!/bin/bash
 
+
+#
+# TLDR:
+#
+#    1) imports ENV VARS from .env.dev
+#    2) executes docker-compose.dev.yml
+#    3) waits for PostgreSQL to be up
+#    4) updates file permissions of migration files
+#    5) loads dump file into db
+#    6) migration
+#    7) create django superuser
+#    8) collectstatic
+#    9) updates 4 incorrect field values in DB
+#
+#    RUN SCRIPTS FOR MOVING FIELDS OUT OF SOURCE MODEL INTO COUNTRY AND LANGUAGE MODELS
+#
+#    1) Transfer 'country' and 'language' values to new alpha2_code fields
+#    2) Adds alphanum_name and display_name fields for country/language on source model, deriving the values from alpha2_code values
+#    3) Create Country and Language models, populating them from the fields made in the previous step
+#    4) Previously, a Source had 1-to-1 relationship with a Language as well as a Country
+#       These scripts build the relations creating many-to-many relationships between [Sources and Languages] and [Sources and Countries as 'readership countries']
+#       A one to one relationship between [Source and Country] still exists as 'publishing_country'
+#
+
 # exec 3>&1 4>&2
 # trap 'exec 2>&4 1>&3' 0 1 2 3 RETURN
 # exec 1>log.out 2>&1
@@ -31,16 +55,6 @@ echo "DATABASE: up!"
 echo -e "...\n...\n..."
 
 docker exec -i map_the_news_web_1 bash ./mtn_web/migrations/ a+x *.py
-
-# echo "DJANGO: migrating..."
-# ./start.migrate.sh &
-# pid=$!
-# wait $pid
-# echo "......"
-# echo "DJANGO: migrated!"
-
-
-# echo -e "...\n...\n..."
 
 
 echo "DATABASE: restoring..."
