@@ -24,7 +24,7 @@ class Command(BaseCommand):
                     Substring up to first comma, i.e. "Bolivia, Plurinational State of" will return "Bolivia".
                     This is dont as the country names are used to:
                         - generate element id's in templates, and neither spaces or commas are allowed.
-                    country_full_name      - As a user-friendly alternative to being presented iso-alpha2/3 codes in templates.
+                        - As a user-friendly alternative to being presented iso-alpha2/3 codes in templates.
                     '''
                     substring = country_full_name[:comma_index]
                     source.country_display_name = substring
