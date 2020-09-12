@@ -26,9 +26,6 @@ class Command(BaseCommand):
                         - generate element id's in templates, and neither spaces or commas are allowed.
 
                         - As a user-friendly alternative to being presented iso-alpha2/3 codes in templates.
-
-                
-
                     '''
                     substring = country_full_name[:comma_index]
                     source.country_display_name = substring

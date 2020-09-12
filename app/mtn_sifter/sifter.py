@@ -181,8 +181,6 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
                 new_src.categories.add(cat)
 
         elif type(src) is Source:
-
-
             src.categories.add(cat)
             src.languages.add(language)
             if src.publishing_country is not country:
@@ -215,22 +213,14 @@ def build_top_src_data(src_data):
 
         if language and country:
             if source is None:
-
-
-
                 new_src = Source.objects.create(
                     name=src["name"],
                     publishing_country=country,
-                    # country=src["country"],
-                    # language=src["language"],
                     url=src["url"],
                 )
-                # new_src.save()
                 new_src.categories.add(cat)
                 new_src.languages.add(language)
             elif type(source) is Source:
-                # if cat not in src.categories.all():
-                #     src.categories.add(cat)
                 source.categories.add(cat)
                 source.languages.add(language)
                 if source.publishing_country is not country:
