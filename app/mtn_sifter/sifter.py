@@ -54,7 +54,7 @@ def verify_base_src():
                             publishing_country=country,
                             url=src["url"],
                         )
-                    new_src.categories.add(cat)            
+                    new_src.categories.add(cat)
                     new_src.languages.add(language)
                 return True
         except FileNotFoundError:

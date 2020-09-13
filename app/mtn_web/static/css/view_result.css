@@ -340,6 +340,10 @@ p.article-body-xl {
         margin-bottom: 1.5rem;
     }
 
+    li.article-li {
+        margin-bottom: 3rem;
+    }
+
 }
 
 #action-form-input-title {

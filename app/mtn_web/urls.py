@@ -27,9 +27,13 @@ urlpatterns = [
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
     url(r"^error/report/$", views.report_error, name="report_error"),
     url(r"^accounts/login/$", views.login_user, name="login_user"),
+    # path('categories/<int:pk>/', CategoryDetail.as_view(), name="view_category_detail"),
+    # path('countries/<int:pk>/', CountryDetail.as_view(), name="country_detail"),
+    # path('languages/<int:pk>', LanguageDetail.as_view(), name="language_detail"),
     path('categories/', CategoryList.as_view(), name="category_list"),
     path('countries/', CountryList.as_view(), name="country_list"),
     path('languages/', LanguageList.as_view(), name="language_list"),
+
 
     # url(r"^category/view/(?P<category_pk>\d+)$", view.view_category, name="view_category"),
     # url(r"^language/view/(?P<language_pk>\d+)$", views.view_language, name="view_language"),

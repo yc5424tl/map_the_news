@@ -3,6 +3,7 @@ from datetime import datetime
 import folium
 import geopandas as gp
 import numpy as np
+import branca
 import pandas as pd
 import pycountry
 from django.conf import settings
@@ -25,6 +26,36 @@ class GeoMapManager:
     def build_choropleth(
         self, argument, focus, geo_data_manager: GeoDataManager
     ) -> (folium.Map, str) or None:
+
+        # try:
+        #     world_df = gp.read_file('mtn_web/static/js/geo_data.json')
+        #     global_map = folium.Map(
+        #         location=[0, 0], tiles='OpenStreetMap', zoom_start=3
+        #     )
+        #     articles_per_country = pd.Series(geo_data_manager.result_dict)
+        #     world_df["article_count"] = world_df["id"].map(articles_per_country)
+        #     world_df.head()
+        #     world_df.plot(column="article_count")
+        #     colorscale = branca.colormap.linear.GrBuRd.scale(0, articles_per_country.values.max() + 1)
+        #     folium.GeoJson(
+        #         data=(open('mtn_web/static/js/geo_data.json', 'r').read()),
+        #         style_function=lambda x: {
+        #             'weight': 1,
+        #             'color': "#545453",
+        #             'fillColor': '#9B9B9B' if x['properties'][variable] == 0 else colorscale(x['properties'][variable])
+        #             'fillOpacity': 0.2 if x['properties'][variable] == 0 else 0.5
+        #         },
+        #         highlight_function=lambda x: {
+        #             'weight': 3,
+        #             'color': 'black',
+        #             'fillOpacity': 1
+        #         },
+        #         tooltip=folium.features.GeoJsonTooltip(
+        #             fields=[]
+        #         )
+
+        #     )
+
         try:
             world_df = gp.read_file('mtn_web/static/js/geo_data.json')
             global_map = folium.Map(
@@ -81,17 +112,9 @@ class GeoMapManager:
                 dtype=int,
             ).tolist()
         elif 160 >= articles_per_country.values.max() > 16:
-            threshold_scale = [
-                0,
-                1,
-                articles_per_country.values.max() // 8,
-                articles_per_country.values.max() // 4,
-                articles_per_country.values.max() // 2,
-                articles_per_country.values.max() + 1,
-            ]
-
-        elif articles_per_country.values.max > 160:
             threshold_scale = [0, 1, 3, 7, 15, articles_per_country.values.max() + 1]
+        elif articles_per_country.values.max > 160:
+            threshold_scale = [0, 1, 5, 13, 29, articles_per_country.values.max() + 1]
         else:
             log.error("threshold-scale not being set in choropleth by articles_per_country.max")
             threshold_scale = [0, 1, 2, 3, 4, 5]

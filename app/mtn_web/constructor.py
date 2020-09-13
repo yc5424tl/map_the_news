@@ -16,45 +16,9 @@ class Constructor:
         description = None
 
         if source:
-
-            try:
-                if api_response['description'] is not None:
-                    if self.verify_str(api_response['description']):
-                        description = self.verify_str(api_response['description'])
-                    if description == '':
-                        try:
-                            content = api_response['content'][:2500]
-                            if content is not None and content != '':
-                                description = content
-                            else:
-                                description = 'Unavailable'
-                        except UnicodeDecodeError as e:
-                            log.debug(f'UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}')
-                            description = 'Unavailable'
-                        except KeyError as e:
-                            log.debug(f'KeyError while parsing content for new article: {e}\nSource Data: {api_response}')
-                            description = 'Unavailable'
-                else:
-                    description = 'Unavailable'
-            except UnicodeDecodeError as e:
-                log.debug(f"UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}")
-                description = "Unavailable"
-
-            try:
-                title = self.verify_str(api_response["title"])
-                if title is None:
-                    title = "Unavailable"
-            except UnicodeDecodeError as e:
-                log.debug(f"UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}",)
-                title = "Unavailable"
-            try:
-                author = self.verify_str(api_response["author"])
-                if author is None:
-                    author = "Unavailable"
-            except UnicodeEncodeError as e:
-                log.debug(f"UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}")
-                author = "Unavailable"
-
+            description = self.get_article_description(api_response)
+            title = self.get_article_title(api_response)
+            author = self.get_article_author(api_response)
             article_url = api_response["url"]
             image_url = (
                 api_response["urlToImage"]
@@ -99,28 +63,27 @@ class Constructor:
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}")
             description = "Unavailable"
+        return description
 
     def get_article_author(self, api_response):
         try:
             author = self.verify_str(api_response["author"])
             if author is None:
                 author = "Unavailable"
-            return author
         except UnicodeEncodeError as e:
             log.debug(f"UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}")
             author = "Unavailable"
-            return author
+        return author
 
     def get_article_title(self, api_response):
         try:
             title = self.verify_str(api_response["title"])
             if title is None:
                 title = "Unavailable"
-            return title
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}",)
             title = "Unavailable"
-            return title
+        return title
 
     def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:
         article_list = []
@@ -155,10 +118,11 @@ class Constructor:
     def verify_source(source_name: str) -> str or False:
         if source_name:
             try:
-                return Source.objects.get(name=source_name)
+                source = Source.objects.get(name=source_name)
             except (AttributeError, Source.DoesNotExist) as e:
                 log.error(f"{e} propagating from constructor.verify_source({source_name})")
-                return False
+                source = False
         else:
             log.error(f"{source_name} retrieval failed.")
-            return False
+            source = False
+        return source
