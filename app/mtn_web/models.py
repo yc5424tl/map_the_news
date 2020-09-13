@@ -59,6 +59,10 @@ class Category(models.Model):
     def __str__(self):
         return f"Type: {type(self)} Name: {self.name}"
 
+    def get_absolute_url(self):
+
+        return f"/category/{self.name}"
+
 
 class Country(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
@@ -68,11 +72,20 @@ class Country(models.Model):
     def __str__(self):
         return f"{self.display_name} ({self.alpha2_code})"
 
+    def get_absolute_url(self):
+        return f"/country/{self.display_name.replace(' ', '')}"
+
 
 class Language(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default='--')
     alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+
+    def __str__(self):
+        return f"{self.display_name} ({self.alpha2_code})"
+
+    def get_absolute_url(self):
+        return f"/language/{self.display_name.replace(' ', '')}"
 
 
 class Source(models.Model):

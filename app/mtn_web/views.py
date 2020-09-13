@@ -581,11 +581,23 @@ def view_post(request, post_pk):
 # ============================================================================================== #
 
 
+# def view_sources_selector(request):
+
+#     categories = Category.objects.all().order_by('name').iterator()
+#     countries = Country.objects.all().order_by('display_name').iterator()
+#     languages = Language.bjects.all().order_by('display_name').iterator()
+
+#     categories_link = [{'category': category, 'url': category.get_absolute_url()} for category in categories]
+#     countries_link = [{'country': country, 'url': country.get_absolute_url()} for country in countries]
+#     languages_link = [{'language': language, 'url': language.get_absolute_url()} for language in languages]
+
+
 def view_category_sources(request):
 
     category_sources = []
 
     if request.method == 'GET':
+        log.info(Category.objects.all().order_by('name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'languages').order_by('name').select_related('languages', 'publishing_country'))).iterator().explain(verbose=True))
         categories = Category.objects.all().order_by('name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'languages').order_by('name').select_related('languages', 'publishing_country'))).iterator()
         for cat in categories:
             sources = {
@@ -610,6 +622,7 @@ def view_category_sources(request):
 def view_country_publisher_sources(request):
     country_sources = []
     if request.method == 'GET':
+        log.info(Country.objects.all().order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('categories', 'publishing_country'))).iterator().explain(verbose=True))
         countries = Country.objects.all().order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('categories', 'publishing_country'))).iterator()
         for country in countries:
             sources = {
@@ -637,6 +650,7 @@ def view_language_sources(request):
     language_sources = []
 
     if request.method == 'GET':
+        log.info(Language.objects.all().order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'categories').order_by('name').select_related('categories', 'publishing_country'))).iterator().explain(verbose=True))
         languages = Language.objects.all().order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'categories').order_by('name').select_related('categories', 'publishing_country'))).iterator()
         for language in languages:
             sources = {
@@ -937,3 +951,17 @@ class LanguageList(ListView):
     queryset = Language.objects.only('display_name', 'alphanum_name').order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('publishing_country'))).iterator()  # DON'T CHANGE - FAST
     template_name = 'cbv/language_list.html'
     context_object_name = 'languages'
+
+
+# class CategoryDetailView(DetailView):
+#     model = Category
+
+#     def get_context_data(self, **kwargs):
+#         context =  super().get_context_data(**kwargs)
+#         context[]
+
+# class CategoryDetailView(DetailView):
+#     queryset = Category.objects.get(id=category_id)
+#     pk_url_kwarg = 'category_id'
+#     template_name = 'view_category_details.html'
+#     context_object_name: 'category'

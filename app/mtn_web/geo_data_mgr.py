@@ -78,12 +78,16 @@ class GeoDataManager:
         self.result_dict[a3_code] += 1
 
     # def add_result_2(self, article: Article):
-    #     country_code = article.source_country
-    #     if country_code in self.result_map.keys():
-    #         self.result_map[country_code].add(article.pk)
+    #     alpha3 = article.source_country
+    #     alpha2 = pycountry.countries.get(alpha_3=alpha3))).alpha_2
+    #     display_name = pycountry.countries.get(alpha_2=alpha2).name
+    #     if alpha3 in self.result_map.keys():
+    #         self.result_map[alpha3]['articles'].append(article.pk)
     #     else:
-    #         self.result_map[country_code] = [article.pk]
-    # TODO implement above and use len of list to get article count per country
+    #         self.result_map[alpha3]['articles'] = [article.pk]
+    #         self.result_map[alpha3]['alpha2'] = alpha2
+    #         self.result_map[alpha3]['display_name'] = display_name
+    # TODO implement above and use len of list to get total article count and list of article pks
 
     def json_to_file(self) -> bool:
         with open(self.filename, "w") as outfile:
