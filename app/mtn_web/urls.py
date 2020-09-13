@@ -27,21 +27,15 @@ urlpatterns = [
     url(r"^choro/view/(?P<result_pk>\d+)$", views.view_choro, name="view_choro"),
     url(r"^error/report/$", views.report_error, name="report_error"),
     url(r"^accounts/login/$", views.login_user, name="login_user"),
-    # path('categories/<int:pk>/', CategoryDetail.as_view(), name="view_category_detail"),
-    # path('countries/<int:pk>/', CountryDetail.as_view(), name="country_detail"),
-    # path('languages/<int:pk>', LanguageDetail.as_view(), name="language_detail"),
+    url(r"^categories/(?P<category_pk>\d+)$", views.view_category_detail, name="view_category"),
+    url(r"^countries/(?P<country_pk>\d+)$", views.view_country_detail, name="view_country"),
+    url(r"^languages/(?P<language_pk>\d+)$", views.view_language_detail, name="view_language")
     path('categories/', CategoryList.as_view(), name="category_list"),
     path('countries/', CountryList.as_view(), name="country_list"),
     path('languages/', LanguageList.as_view(), name="language_list"),
-
-
-    # url(r"^category/view/(?P<category_pk>\d+)$", view.view_category, name="view_category"),
-    # url(r"^language/view/(?P<language_pk>\d+)$", views.view_language, name="view_language"),
-    # url(r"^country/view/(?P<country_pk>\d+)$", views.view_country, name="view_country"),
-
-    # url(r'all-categories', views.ListView.as_view(model=Category)),
-    # url(r'all-languages', views.ListView.as_view(model=Language)),
-    # url(r'all-countries', views.ListView.as_view(model=Country)),
+    # path('categories/<int:pk>/', CategoryDetail.as_view(), name="view_category_detail"),
+    # path('countries/<int:pk>/', CountryDetail.as_view(), name="country_detail"),
+    # path('languages/<int:pk>', LanguageDetail.as_view(), name="language_detail"),
     # path('login/', views.login_user(template_name="registration/login.hmtl", authentication_form=UserLoginForm), name='login')
 ]
 

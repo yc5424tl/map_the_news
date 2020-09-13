@@ -1,1 +1,2 @@
 gunicorn==20.0.4
+scout-apm==2.16.1
