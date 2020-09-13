@@ -112,6 +112,7 @@ class GeoMapManager:
                 dtype=int,
             ).tolist()
         elif 160 >= articles_per_country.values.max() > 16:
+
             threshold_scale = [0, 1, 3, 7, 15, articles_per_country.values.max() + 1]
         elif articles_per_country.values.max > 160:
             threshold_scale = [0, 1, 5, 13, 29, articles_per_country.values.max() + 1]
