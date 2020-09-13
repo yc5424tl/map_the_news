@@ -19,6 +19,7 @@ class Constructor:
             description = self.get_article_description(api_response)
             title = self.get_article_title(api_response)
             author = self.get_article_author(api_response)
+
             article_url = api_response["url"]
             image_url = (
                 api_response["urlToImage"]
@@ -70,10 +71,13 @@ class Constructor:
             author = self.verify_str(api_response["author"])
             if author is None:
                 author = "Unavailable"
+            return author
         except UnicodeEncodeError as e:
             log.debug(f"UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}")
             author = "Unavailable"
+
         return author
+
 
     def get_article_title(self, api_response):
         try:
@@ -84,6 +88,7 @@ class Constructor:
             log.debug(f"UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}",)
             title = "Unavailable"
         return title
+
 
     def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:
         article_list = []
