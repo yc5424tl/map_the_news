@@ -1,0 +1,17 @@
+.card.text-center {
+    background-color: var(--off-black);
+    border-color: var(--off-black-hover);
+    color: var(--main-gold);
+}
+
+.card-body {
+    background-color: var(--off-black-hover);
+}
+
+.card-title {
+    color: var(--main-link-hover);
+}
+
+.card-text {
+    color: var(--main-light);
+}

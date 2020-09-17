@@ -929,7 +929,9 @@ def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
     return query_type
 
 
+# TODO these list views can get cleaned out
 # =================================================================================================================
+
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class CategoryList(ListView):
@@ -952,16 +954,182 @@ class LanguageList(ListView):
     template_name = 'cbv/language_list.html'
     context_object_name = 'languages'
 
+# ===========================================================================================================================================================
 
-# class CategoryDetailView(DetailView):
-#     model = Category
 
-#     def get_context_data(self, **kwargs):
-#         context =  super().get_context_data(**kwargs)
-#         context[]
+# TODO turn view_source_groups in to an a template to extend for the views below it
+@cache_page(60 * 60 * 23 + 3599)
+def view_source_groups(request):
+    if request.method == 'GET':
+        categories = Category.objects.all().order_by('name').iterator()
+        countries = Country.objects.all().order_by('display_name').iterator()
+        languages = Language.objects.all().order_by('display_name').iterator()
+        return render(
+            request,
+            'general/view_source_groups.html',
+            {'categories': categories, 'countries': countries, 'languages': languages}
+        )
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
 
-# class CategoryDetailView(DetailView):
-#     queryset = Category.objects.get(id=category_id)
-#     pk_url_kwarg = 'category_id'
-#     template_name = 'view_category_details.html'
-#     context_object_name: 'category'
+
+@cache_page(60 * 15)
+def view_category_detail(request, name):
+    category = get_object_or_404(Category, name=name)
+    if request.method == 'GET':
+        # sources = Source.objects.filter(categories__name=name).prefetch_related('countries__display_name', 'readership_countries__display_name', 'languages__display_name').select_related('publishing_country__display_name')
+        sources = Category.objects.filter(name=name).prefetch_related(Prefetch('sources', queryset=Source.objects.only('name'))).iterator()
+        return render(
+            request,
+            'general/view_category_detail.html',
+            {'category': category, 'related_sources': sources}
+        )
+
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+@cache_page(60 * 15)
+def view_country_detail(request, alphanum_name):
+    country = get_object_or_404(Country, alphanum_name=alphanum_name)
+    if request.method == 'GET':
+        publisher_sources = country.publishers.only('name').iterator()
+        readership_sources = country.markets.only('name').iterator()
+        return render(
+            request,
+            'general/view_country_detail.html',
+            {'country': country, 'publishers': publisher_sources, 'readerships': readership_sources}
+        )
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+@cache_page(60 * 15)
+def view_language_detail(request, alphanum_name):
+    language = get_object_or_404(Language, alphanum_name=alphanum_name)
+    if request.method == 'GET':
+
+        sources = language.sources.only('name')
+        related_sources = [{'name': source.name, 'url': source.get_absolute_url(), 'type': str(type(source))} for source in sources]
+
+        return render(
+            request,
+            'general/view_language_detail.html',
+            {'language': language, 'related_sources': related_sources}
+        )
+    else:
+        return HttpResponseBadRequest('Unsupported Request Method')
+
+
+def view_source_detail(request, name):
+
+    source_object = get_object_or_404(Source, name=name)
+    target_id = source_object.id
+    source_queryset = Source.objects.filter(id=target_id).prefetch_related(
+        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
+        Prefetch('languages', queryset=Language.objects.only('display_name').order_by('display_name')),
+        Prefetch('readership_countries', queryset=Country.objects.only('display_name').order_by('display_name'))
+    ).select_related('publishing_country').only('categories', 'languages', 'name', 'publishing_country', 'readership_countries')
+
+    source = [{
+        'name': source.name,
+        'categories': [category.name for category in source.categories.all()],
+        'languages': [language.display_name for language in source.languages.all()],
+        'publishing_country': source.publishing_country.display_name,
+        'readership_countries': [readership.display_name for readership in source.readership_countries.all()]
+    } for source in source_queryset]
+
+    return render(
+        request,
+        'general/view_source_detail.html',
+        {'source': source}
+    )
+
+
+# TODO fully implement the views below, incorporating the view_category/language/country/source views from above where possible, and replacing the remainder. 
+def view_category_sources(request, name):
+
+    category = get_object_or_404(Category, name=name)
+
+    sources_queryset = category.sources.order_by('name').prefetch_related(
+        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
+        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
+        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
+    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
+
+    sources = [{
+        'name': source.name,
+        'categories': [category.name for category in source.categories.all()],
+        'languages': [language.display_name for language in source.languages.all()],
+        'publishing_country': source.publishing_country.display_name,
+        'readership_countries': [readership.display_name for readership in source.readership_countries.all()]
+    } for source in sources_queryset]
+
+    return render(
+        request,
+        'general/view_category_sources.html',
+        {'category': category, 'sources': sources'}
+    )
+
+
+def view_country_sources(request, alphanum_name):
+
+    country = get_object_or_404(Country, alphanum_name=alphanum_name)
+
+    sources_queryset = country.sources.order_by('name').prefetch_related(
+        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
+        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
+        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
+    ).select_related('publishing_countries').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
+
+    sources = [{
+        'name': source.name,
+        'categories': [category.name for category in source.categories.all()],
+        'languages': [language.display_name for language in source.languages.all()],
+        'publishing_country': source.publishing_country.display_name,
+        'readership_countries': [readership.display_name for readership in source.readership_countries.all()]
+    } for source in sources_queryset]
+
+    return render(
+        request,
+        'general/view_country_sources.html',
+        {'country': country, 'sources': sources}
+    )
+
+
+def view_language_sources(request, alphanum_name):
+
+    language = get_object_or_404(Language, alphanum_name=alphanum_name)
+
+    sources_queryset = language.sources.order_by('name').prefetch_related(
+        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
+        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name'),order_by('display_name')),
+        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name'))
+    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
+
+    sources = [{
+        'name': source.name,
+        'categories': [category.name for category in source.categories.all()],
+        'languages': [language.display_name for language in source.languages.all()],
+        'publishing_country': source.publishing_country.display_name,
+        'readership_countries': [readership.display_name for readership in source.readership_countries.all()]
+    } for source in sources_queryset]
+
+    return render(
+        request,
+        'general/view_language_sources.html',
+        {'language': language, 'sources': sources}
+    )
+
+
+def view_sources_root(request):
+
+    category_list = Category.objects.values_list('name', flat=True).order_by('name')
+    country_list = Country.objects.values_list('display_name', flat=True).order_by('display_name')
+    language_list = Language.objects.values_list('display_name', flat=True).order_by('display_name')
+
+    return render(
+        request,
+        'general/view_sources_root.html',
+        {'category_list': category_list, 'country_list': country_list, 'language_list': language_list}
+    )

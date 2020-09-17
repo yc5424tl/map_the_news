@@ -1,0 +1,34 @@
+{% extends 'general/root.html' %}
+{% load static %}
+
+{% block title %}
+    {{ language.display_name }} Details - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_source_group_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="title">News Sources with content in {{ language.display_name }}</h1>
+    <hr>
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+        <div class="col-xs-12 col-md-10">
+            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                {% for source in related_sources %}
+                    <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
+                        <p class="src-name">
+                            <a class="src-link" href="{{ source.url }}"> {{ source.name }}</a>
+                            <span>Type: {{ source.type }}</span>
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-auto"></div>
+    </div>
+
+{% endblock %}

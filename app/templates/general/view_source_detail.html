@@ -1,0 +1,38 @@
+{% extends 'general/root.html' %}
+{% load static %}
+
+{% block title %}
+    {{ source.name }} Details - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_source_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    {% for source in source %}
+        <div class="card text-center">
+            <h1 class="card-header">{{ source.name }} Details</h1>
+            <div class="card-body">
+                <h3 class="card-title col-12">Publishing Country</h3>
+                <p class="card-text col-12">{{ source.publishing_country.display_name }}</p>
+                {% if source.readership_countries.all %}
+                    <h3 class="card-title col-12">Readership Countries</h3>
+                    {% for country in source.readership_countries.all %}
+                        <p class="card-text col-auto"> {{ country.display_name }} </p>
+                    {% endfor %}
+                {% endif %}
+                <h3 class="card-title col-12">Categories</h3>
+                {% for category in source.categories.all %}
+                    <p class="card-text col-auto"> {{ category.name|capfirst }} </p>
+                {% endfor %}
+                <h3 class="card-title col-12">Languages</h3>
+                {% for language in source.languages.all %}
+                    <p class="card-text col-auto"> {{ language.display_name }} </p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+{% endblock %}

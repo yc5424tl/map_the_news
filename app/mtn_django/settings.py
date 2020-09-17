@@ -48,6 +48,10 @@ INSTALLED_APPS = [
 if DEPLOYMENT == 'DEV':
     INSTALLED_APPS.insert(0, 'whitenoise.runserver_nostatic')
 
+if 'ON_HEROKU' in os.environ:
+    INSTALLED_APPS.insert(0, 'scout_apm.django')
+
+
 AUTH_USER_MODEL = 'mtn_web.User'
 
 MIDDLEWARE = [
@@ -65,7 +69,6 @@ if USE_WHITENOISE:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'mtn_django.urls'
-
 
 TEMPLATES = [
     {
@@ -188,9 +191,13 @@ LOGOUT_REDIRECT_URL = "index"
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.getenv('GEOS_LIBRARY_PATH')
 
-# if 'ON_HEROKU' in os.environ:
-#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-#     django_heroku.settings(locals())
+
+if 'ON_HEROKU' in os.environ:
+    SCOUT_MONITOR = os.environ.get('SCOUT_MONITOR')
+    SCOUT_KEY = os.environ.get('SCOUT_KEY')
+    SCOUT_NAME = 'Map the News'
+    # DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+    # django_heroku.settings(locals())
 
 # LOGGING = {
 #     'loggers': {

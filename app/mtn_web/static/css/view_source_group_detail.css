@@ -1,0 +1,69 @@
+h1.title {
+    text-align: center;
+    align-content: center;
+    color: var(--main-link-hover);
+    margin-top: 60px;
+}
+
+h3 {
+    color: var(--main-gold);
+    text-align: center;
+    align-content: center;
+}
+
+ul.list-group.list-group-flush.src-list.row.no-gutters.flex-container {
+    flex-direction: row;
+    flex-wrap     : wrap;
+    padding-bottom: 60px;
+    margin-right: 0;
+    margin-bottom: 60px;
+    background-color: var(--off-black);
+}
+
+li.list-group-item.src-li {
+    background-color: var(--off-black);
+    flex-grow: 1;
+    text-align: center;
+    align-content: center;
+    padding: 0;
+}
+
+p.src-name {
+    background-color: var(--off-black);
+}
+
+p.src-name:hover,
+p.src-name:focus {
+    background-color: var(--mid-dark-gray);
+    transition: 0.4s;
+}
+
+p.src-name:hover,
+p.src-name:focus {
+    border-radius: 5pt;
+    background-color: var(--off-black-hover);
+}
+
+a.src-link {
+    color: var(--main-link-color);
+    text-align: center;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    display: block;
+    padding: 1rem 0;
+}
+
+a.src-link:hover,
+a.src-link:focus {
+    color: var(--main-link-hover);
+    transition: 0.4s;
+    border-radius: 5pt;
+    background-color: var(--off-black-hover);
+}
+
+a.src-link:visited {
+    color: var(--aux-accent-6);
+}
