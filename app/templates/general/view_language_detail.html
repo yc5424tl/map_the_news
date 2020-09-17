@@ -18,11 +18,10 @@
         <div class="col-xs-0 col-md-1"></div>
         <div class="col-xs-12 col-md-10">
             <ul class="list-group list-group-flush src-list row no-gutters flex-container">
-                {% for source in related_sources %}
+                {% for source in sources %}
                     <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
                         <p class="src-name">
                             <a class="src-link" href="{{ source.url }}"> {{ source.name }}</a>
-                            <span>Type: {{ source.type }}</span>
                         </p>
                     </li>
                 {% endfor %}

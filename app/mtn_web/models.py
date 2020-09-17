@@ -7,8 +7,6 @@ from django.db.models import JSONField  # DO NOT import from 'django.contrib.pos
 # from django.contrib.sites.models import Site
 
 
-
-
 class QueryTypeChoice(Enum):
     HDL = "Headlines"
     ALL = "All"
