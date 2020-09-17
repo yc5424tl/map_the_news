@@ -581,6 +581,17 @@ def view_post(request, post_pk):
 # ============================================================================================== #
 
 
+# def view_sources_selector(request):
+
+#     categories = Category.objects.all().order_by('name').iterator()
+#     countries = Country.objects.all().order_by('display_name').iterator()
+#     languages = Language.bjects.all().order_by('display_name').iterator()
+
+#     categories_link = [{'category': category, 'url': category.get_absolute_url()} for category in categories]
+#     countries_link = [{'country': country, 'url': country.get_absolute_url()} for country in countries]
+#     languages_link = [{'language': language, 'url': language.get_absolute_url()} for language in languages]
+
+
 def view_category_sources(request):
 
     category_sources = []

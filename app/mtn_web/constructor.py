@@ -77,6 +77,7 @@ class Constructor:
             author = "Unavailable"
 
         return author
+      
 
     def get_article_title(self, api_response):
         try:
