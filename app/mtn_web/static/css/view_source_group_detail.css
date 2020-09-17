@@ -67,20 +67,3 @@ a.src-link:focus {
 a.src-link:visited {
     color: var(--aux-accent-6);
 }
-
-/* p.src-text {
-    color: var(--main-link-color);
-    text-align: center;
-    align-content: center;
-    height: 100%;
-    width: 100%;
-    background-color: var(--off-black);
-}
-
-p.src-text:focus,
-p.src-text:hover {
-    color: var(--main-link-hover);
-    transition: 0.4s;
-    border-radius: 5pt;
-    background-color: var(--off-black-hover);
-} */

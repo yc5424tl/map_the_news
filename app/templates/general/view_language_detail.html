@@ -31,32 +31,4 @@
         <div class="col-auto"></div>
     </div>
 
-    {% comment %} <table>
-        <tr>
-            <th>COUNTRY</th>
-            <th>Total # Sources Publishing in {{ language.display_name }}</th>
-        </tr>
-        {% for country, count in country_count %}
-            <tr>
-                <td>{{ country }}</td>
-                <td>{{ count }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <div class="row no-gutters container">
-        <div class="col-xs-0 col-md-1 col-lg-2"></div>
-        <div class="col-xs-12 col-md-10 col-lg-8">
-            <ul class="list-group list-group-flush src-list row no-gutters">
-                {% for source in related_sources %}
-                    <li class="list-group-item col-sm-12 col-md-4">
-                        <p class="src-name"><a class="src-link" href={{ source.get_absolute_url }}>{{ source.name }}</a></p>
-                        <p class="src-publishing-country">{{ source.publishing_country.display_name }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="col-xs-0 col-md-1 col-lg-2"></div>
-    </div> {% endcomment %}
-
 {% endblock %}

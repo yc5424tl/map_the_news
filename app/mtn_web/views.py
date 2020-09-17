@@ -581,17 +581,6 @@ def view_post(request, post_pk):
 # ============================================================================================== #
 
 
-# def view_sources_selector(request):
-
-#     categories = Category.objects.all().order_by('name').iterator()
-#     countries = Country.objects.all().order_by('display_name').iterator()
-#     languages = Language.bjects.all().order_by('display_name').iterator()
-
-#     categories_link = [{'category': category, 'url': category.get_absolute_url()} for category in categories]
-#     countries_link = [{'country': country, 'url': country.get_absolute_url()} for country in countries]
-#     languages_link = [{'language': language, 'url': language.get_absolute_url()} for language in languages]
-
-
 def view_category_sources(request):
 
     category_sources = []
@@ -929,7 +918,9 @@ def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
     return query_type
 
 
+# TODO these list views can get cleaned out
 # =================================================================================================================
+
 
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')
 class CategoryList(ListView):
@@ -955,10 +946,7 @@ class LanguageList(ListView):
 # ===========================================================================================================================================================
 
 
-def view_all_sources_by_category():
-    pass
-
-
+# TODO turn view_source_groups in to an a template to extend for the views below it
 @cache_page(60 * 60 * 23 + 3599)
 def view_source_groups(request):
     if request.method == 'GET':
@@ -978,30 +966,14 @@ def view_source_groups(request):
 def view_category_detail(request, name):
     category = get_object_or_404(Category, name=name)
     if request.method == 'GET':
-        sources = Source.objects.filter(categories__name=name).prefetch_related('countries__display_name', 'readership_countries__display_name', 'languages__display_name').select_related('publishing_country__display_name')
+        # sources = Source.objects.filter(categories__name=name).prefetch_related('countries__display_name', 'readership_countries__display_name', 'languages__display_name').select_related('publishing_country__display_name')
         sources = Category.objects.filter(name=name).prefetch_related(Prefetch('sources', queryset=Source.objects.only('name'))).iterator()
-        # sources = category.sources.all().iterator()
         return render(
             request,
             'general/view_category_detail.html',
             {'category': category, 'related_sources': sources}
         )
 
-        # related_sources = category.sources.only('name', 'publishing_country', 'languages').order_by('name').prefetch_related(
-        #     Prefetch('languages', queryset=Language.objects.all().order_by('display_name')))
-        # related_sources = category.sources.only('name', 'publishing_country__display_name').order_by('name').prefetch_related(Prefetch('publishing_country', queryset=Country.objects.only('alphanum_name', 'display_name').order_by('display_name')))
-        # country_count = {}
-        # for source in related_sources:
-        #     publishing_country_display_name = source.publishing_country.display_name
-        #     if publishing_country_display_name in country_count:
-        #         country_count['publishing_country_display_name'] += 1
-        #     elif publishing_country_display_name not in country_count:
-        #         country_count['publishing_country_display_name'] = 1
-        # return render(
-        #     request,
-        #     'general/view_category_detail.html',
-        #     {'category': category, 'related_sources': related_sources, 'country_count': country_count}
-        # )
     else:
         return HttpResponseBadRequest('Unsupported Request Method')
 
@@ -1017,24 +989,6 @@ def view_country_detail(request, alphanum_name):
             'general/view_country_detail.html',
             {'country': country, 'publishers': publisher_sources, 'readerships': readership_sources}
         )
-    # if request.method == 'GET':
-    #     related_sources = country.publishers.only('name', 'languages', 'categories').order_by('name').prefetch_related(
-    #         Prefetch('languages', queryset=Language.objects.only('display_name'))).prefetch_related('categories')
-    #     category_count = {}
-    #     for source in country.publishers.all():
-    #         publishing_country_display_name = source.publishing_country.display_name
-    #         if publishing_country_display_name not in category_count.keys():
-    #             category_count[publishing_country_display_name] = {}
-    #         for category in source.categories.all():
-    #             if category.name not in category_count[publishing_country_display_name].keys():
-    #                 category_count[publishing_country_display_name][category.name] = 1
-    #             elif category.name in category_count[publishing_country_display_name].keys():
-    #                 category_count[publishing_country_display_name][category.name] += 1
-    #     return render(
-    #         request,
-    #         'general/view_country_detail.html',
-    #         {'country': country, 'related_sources': related_sources, 'category_count': category_count}
-    #     )
     else:
         return HttpResponseBadRequest('Unsupported Request Method')
 
@@ -1043,9 +997,7 @@ def view_country_detail(request, alphanum_name):
 def view_language_detail(request, alphanum_name):
     language = get_object_or_404(Language, alphanum_name=alphanum_name)
     if request.method == 'GET':
-        # sources = language.sources.only('name').values_list('name', flat=True).iterator()
-        # sources = Language.objects.prefetch_related(Prefetch('sources', queryset=Source.objects.only('name')))
-        # sources = language.sources.only('name').iterator()
+
         sources = language.sources.only('name')
         related_sources = [{'name': source.name, 'url': source.get_absolute_url(), 'type': str(type(source))} for source in sources]
 
@@ -1056,34 +1008,6 @@ def view_language_detail(request, alphanum_name):
         )
     else:
         return HttpResponseBadRequest('Unsupported Request Method')
-        '''
-        related_sources = language.sources.only('name', 'categories', 'publishing_country').order_by('name').prefetch_related('categories', 'publishing_country')
-        publisher_count = {}
-        category_count = {}
-        for source in language.sources.all():
-            publishing_country = source.publishing_country.display_name
-            if publishing_country in publisher_count:
-                publisher_count[publishing_country] += 1
-            elif publishing_country not in publisher_count:
-                publisher_count[publishing_country] = 1
-            for category in source.categories.all():
-                if category.name in category_count:
-                    category_count[category.name] += 1
-                elif category.name not in category_count:
-                    category_count[category.name] = 1
-        return render(
-            request,
-            'general/view_language_detail.html',
-            {
-                'language': language,
-                'related_sources': related_sources,
-                'publisher_count': publisher_count,
-                'category_count': category_count
-            }
-        )
-        '''
-    # else:
-    #     return HttpResponseBadRequest('Unsupported Request Method')
 
 
 def view_source_detail(request, name):
@@ -1111,6 +1035,7 @@ def view_source_detail(request, name):
     )
 
 
+# TODO fully implement the views below, incorporating the view_category/language/country/source views from above where possible, and replacing the remainder. 
 def view_category_sources(request, name):
 
     category = get_object_or_404(Category, name=name)
@@ -1197,77 +1122,3 @@ def view_sources_root(request):
         'general/view_sources_root.html',
         {'category_list': category_list, 'country_list': country_list, 'language_list': language_list}
     )
-
-# def view_category_detail(request, pk):
-#     log.info(f'pk={pk}')
-#     category = get_object_or_404('Category', pk=pk)
-#     log.info(f'category = {category.name}')
-#     related_sources = category.sources.only('name', 'publishing_country', 'languages').order_by('name').prefetch_related(Prefetch('languages', queryset=Language.objects.only('display_name'))).select_related('publishing_country')
-#     # related_sources = category.sources
-#     country_count = {}
-#     for source in related_sources:
-#         publishing_country = source.publishing_country.display_name
-#         if publishing_country in country_count:
-#             country_count[publishing_country] += 1
-#         elif publishing_country not in country_count:
-#             country_count[publishing_country] = 1
-#     log.info(f'category country_count = {country_count}')
-#     return render(
-#         request,
-#         'general/view_category_detail.html',
-#         {'category': category, 'related_sources': related_sources, 'country_count': country_count}
-#     )
-
-
-# def view_country_detail(request, pk):
-#     country = get_object_or_404('Country', pk=pk)
-#     related_sources = country.objects.all().prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'languages').order_by('name'))).iterator()
-#     # related_sources = country.sources.all().prefetch_related('languages').select_related('publishing_country')
-#     category_count = {}
-#     for category in Category.objects.all():
-#         for source in category.sources.all():
-#             if source.name in category_count:
-#                 category_count[source.name] += 1
-#             elif source.name not in category_count:
-#                 category_count[source.name] = 1
-#     #     category_sources = category.sources.all().prefetch_related(Prefetch('categories', queryset=Category.objects.filter('name'=category.name))).count()
-#     #     category_count[category.name] = int(category_sources)
-#     #     log.info(f'Category: {category.name} Type(category_sources): {type(category_sources)}  Category_Sources[{category.name}]: {category_sources}')
-#     return render(r
-#         request,
-#         'general/view_country_detail.html',
-#         {'country': country, 'related_sources': related_sources, 'category_count': category_count}
-#     )
-
-
-# def view_language_detail(request, pk):  # TODO move source list and language count to model methods for all detail views
-#     language = get_object_or_404('Language', pk=pk)
-#     related_sources = language.sources.only('name', 'countries').order_by('name').prefetch_related(Prefetch('countries', queryset=Country.objects.all()))
-#     # related_sources = language.sources.all()
-#     country_count = {}
-#     for source in related_sources:
-#         for country in source.countries.all():
-#             if country.display_name in country_count:
-#                 country_count[country.display_name] += 1
-#             elif country.display_name not in country_count:
-#                 country_count[country.display_name] = 1
-#             else:
-#                 log.error(f'country ({country.display_name} neither in nor not in country_count)')
-#     return render(
-#         request,
-#         'general/view_language_detail.html',
-#         {'language': language, 'related_sources': related_sources, 'sources_using_lang_per_country': country_count}
-#     )
-
-# class CategoryDetailView(DetailView):
-#     model = Category
-
-#     def get_context_data(self, **kwargs):
-#         context =  super().get_context_data(**kwargs)
-#         context[]
-
-# class CategoryDetailView(DetailView):
-#     queryset = Category.objects.get(id=category_id)
-#     pk_url_kwarg = 'category_id'
-#     template_name = 'view_category_details.html'
-#     context_object_name: 'category'
