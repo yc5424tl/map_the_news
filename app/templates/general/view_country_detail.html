@@ -12,7 +12,44 @@
 
 {% block content %}
 
-    <h1 class="title">News Sources in  {{ country.name }}</h1>
+
+    <h1 class="title">Publishing Sources in {{ country.display_name }}</h3>
+    <hr>
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+        <div class="col-xs-12 col-md-10">
+            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                {% for source in publishing_sources %}
+                    <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
+                        {% comment %} <p class="src-name"> {% endcomment %}
+                            <a class="src-link" href="{{ source.url }}">{{ source.name }}</a>
+                        {% comment %} </p> {% endcomment %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-0 col-md-1"></div>
+    </div>
+
+    <h1 class="title">Readership Sources in {{ country.display_name }}</h3>
+    <hr>
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+        <div class="col-xs-12 col-md-10">
+            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                {% for source in readership_sources%}
+                    <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
+                        {% comment %} <p class="src-name"> {% endcomment %}
+                            <a class="src-link" href="{{ source.url }}">{{ source.name }}</a>
+                        {% comment %} </p> {% endcomment %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-0 col-md-1"></div>
+    </div>
+
+    {% comment %} <h1 class="title">News Sources in  {{ country.display_name }}</h1>
     <hr>
     <div class="row no-gutters">
         <div class="col-xs-0 col-md-1"></div>
@@ -46,6 +83,6 @@
                 </ul>
             </div>
         <div class="col-xs-0 col-md-1"></div>
-    </div>
+    </div> {% endcomment %}
 
 {% endblock %}
