@@ -78,7 +78,6 @@ class Constructor:
 
         return author
 
-
     def get_article_title(self, api_response):
         try:
             title = self.verify_str(api_response["title"])
@@ -88,7 +87,6 @@ class Constructor:
             log.debug(f"UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}",)
             title = "Unavailable"
         return title
-
 
     def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:
         article_list = []

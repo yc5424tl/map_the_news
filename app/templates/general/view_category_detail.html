@@ -1,0 +1,63 @@
+{% extends 'general/root.html' %}
+{% load static %}
+
+{% block title %}
+    {{ category.name|capfirst }} Details - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_source_group_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="title">News Sources covering {{ category.name|capfirst }}</h3>
+    <hr>
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+        <div class="col-xs-12 col-md-10">
+            <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                {% for source in related_sources %}
+                    <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
+                        {% comment %} <p class="src-name"> {% endcomment %}
+                            <a class="src-link" href="{{ source.get_absolute_url }}">{{ source.name }}</a>
+                        {% comment %} </p> {% endcomment %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-0 col-md-1"></div>
+    </div>
+
+    {% comment %} <h2 class="title">{{ category.display_name }}</h2>
+    <hr>
+    <table>
+        <tr>
+            <th>COUNTRY</th>
+            <th># {{ category.name}} Sources</th>
+        </tr>
+        {% for country, count in country_count %}
+            <tr>
+                <td>{{ country }}</td>
+                <td>{{ count }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div class="row no-gutters container">
+        <div class="col-xs-0 col-md-1 col-lg-2"></div>
+        <div class="col-xs-12 col-md-10 col-lg-8">
+            <ul class="list-group list-group-flush src-list row no-gutters">
+                {% for source in related_sources %}
+                    <li class="list-group-item col-sm-12 col-md-4">
+                        <p class="src-name">{[ source.name ]}</p>
+                        <p class="src-publishing-country">{{ source.publishing_country.display_name }}</p>
+                        <p class="src-languages">{% for language in source.languages.all %} {{ language.display_name }} {% endfor %}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-0 col-md-1 col-lg-2"></div>
+    </div> {% endcomment %}
+
+{% endblock %}.

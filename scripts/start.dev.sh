@@ -108,8 +108,25 @@ echo -e "...\n...\n..."
 
 # specific to current dump file, source has already been updated
 echo "Applying corrections to fields..."
-echo "update mtn_web_source set language = 'ur' where language = 'ud';update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
-echo "update mtn_web_source set country = 'uy' where country = 'ur';update mtn_web_source set country = 'cn' where country = 'zh';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
+echo "update mtn_web_source set language = 'ur' where language = 'ud';
+      update mtn_web_source set language = 'de' where language = 'ch';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
+echo "update mtn_web_source set country = 'uy' where country = 'ur';
+      update mtn_web_source set country = 'cn' where country = 'zh';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
+echo "update mtn_web_country set alphanum_name = 'Bolivia' where alphanum_name = 'BoliviaPlurinationalStateof';
+      update mtn_web_country set alphanum_name = 'SouthKorea' where alphanum_name = 'KoreaRepublicof';
+      update mtn_web_country set alphanum_name = 'Palestine' where alphanum_name = 'PalestineStateof';
+      update mtn_web_country set alphanum_name = 'Russia' where alphanum_name = 'RussianFederation';
+      update mtn_web_country set alphanum_name = 'Iran' where alphanum_name = 'IranIslamicRepublicof';
+      update mtn_web_country set alphanum_name = 'Venezuela' where alphanum_name = 'VenezuelaBolivarianRepublicof';
+      update mtn_web_country set alphanum_name = 'Moldova' where alphanum_name = 'MoldovaRepublicof';
+      update mtn_web_country set alphanum_name = 'Taiwan' where alphanum_name = 'TaiwanProvinceofChina';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
+echo "update mtn_web_language set alphanum_name = 'Greek' where alphanum_name = 'ModernGreek1453';
+      update mtn_web_language set alphanum_name = 'Malay' where alphanum_name = 'Malaymacrolanguage';" | docker exec -i map_the_news_db_1 psql -U $DB_USER -d $DB_DATABASE;
+
 
 echo -e "...\n...\n..."
 echo "Transfering alpha2 codes..."

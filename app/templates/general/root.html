@@ -54,14 +54,15 @@
                     <nav class="nav" id="nav-right">
                         <a class="nav-link" href="{% url 'new_query' %}">MAP</a>
                         <a class="nav-link" href="{% url 'view_public_posts' %}">FORUM</a>
-                        <div class="dropdown">
+                        <a class="nav-link" href="{% url 'view_source_groups' %}">SOURCES</a>
+                        {% comment %} <div class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">SOURCES <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="dropdown-item"><a class="nav-link" href="{% url 'category_list' %}">By Category</a></li>
                                 <li class="dropdown-item"><a class="nav-link" href="{% url 'country_list' %}">By Country</a></li>
                                 <li class="dropdown-item"><a class="nav-link" href="{% url 'language_list' %}">By Language</a></li>
                             </ul>
-                        </div>
+                        </div> {% endcomment %}
                     </nav>
                 </div>
             </nav>

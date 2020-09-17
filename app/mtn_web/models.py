@@ -4,6 +4,9 @@ import pycountry
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
+# from django.contrib.sites.models import Site
+
+
 
 
 class QueryTypeChoice(Enum):
@@ -61,7 +64,7 @@ class Category(models.Model):
 
     def get_absolute_url(self):
 
-        return f"/category/{self.name}"
+        return f"/categories/{self.name}"
 
 
 class Country(models.Model):
@@ -73,7 +76,7 @@ class Country(models.Model):
         return f"{self.display_name} ({self.alpha2_code})"
 
     def get_absolute_url(self):
-        return f"/country/{self.display_name.replace(' ', '')}"
+        return f"/countries/{self.alphanum_name}"
 
 
 class Language(models.Model):
@@ -85,7 +88,7 @@ class Language(models.Model):
         return f"{self.display_name} ({self.alpha2_code})"
 
     def get_absolute_url(self):
-        return f"/language/{self.display_name.replace(' ', '')}"
+        return f"/languages/{self.alphanum_name}"
 
 
 class Source(models.Model):
@@ -95,8 +98,8 @@ class Source(models.Model):
 
     name = models.CharField(max_length=500, unique=True)
     languages = models.ManyToManyField(Language, related_name="sources")
-    publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name="publishers", null=True, blank=True)
-    readership_countries = models.ManyToManyField(Country, related_name="markets")
+    publishing_country = models.ForeignKey("mtn_web.Country", on_delete=models.PROTECT, related_name="publishing_sources", null=True, blank=True)
+    readership_countries = models.ManyToManyField(Country, related_name="readership_sources")
     categories = models.ManyToManyField(Category, related_name="sources")
     url = models.URLField(blank=True, default="", max_length=150)
     verified = models.BooleanField(default=False)
@@ -111,6 +114,14 @@ class Source(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+    def get_absolute_url(self):
+        return f"/sources/{self.name}/"
+
+    # def get_absolute_url(self):
+    #     path = reverse('view_source_detail', args=[self.name])
+    #     current_site = Site.objects.get_current().domain
+    #     return f'http://{current_site}{path}'
 
 
 class Article(models.Model):

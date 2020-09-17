@@ -1,4 +1,9 @@
 
+#content-div {
+    text-align: center;
+    align-content: center;
+}
+
 #login-wrapper {
     text-align      : center;
     background-color: var(--off-black);

@@ -1,0 +1,69 @@
+{% extends 'general/root.html' %}
+{% load static %}
+
+{% block title %}
+    {{ country.display_name }} Details - {{ block.super }}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/view_source_group_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="title">News Sources in  {{ country.name }}</h1>
+    <hr>
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+            <div class="col-xs-12 col-md-10">
+                <h3>Domestic Publications</h3>
+                <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                    {% for source in publishers %}
+                        <li class="list-group-item src-li col-xs-6 col-md-3 col-xl-2">
+                            <p class="src-name">
+                                <a class="src-link" href="{{ source.get_absolute_url }}"> {{ source.name }}</a>
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        <div class="col-xs-0 col-md-1"></div>
+    </div>
+
+    <div class="row no-gutters">
+        <div class="col-xs-0 col-md-1"></div>
+            <div class="col-xs-12 col-md-10">
+                <h3>Foreign Publication Readerships</h3>
+                <ul class="list-group list-group-flush src-list row no-gutters flex-container">
+                    {% for source in readerships %}
+                        <li class="list-group-item src-li col-xs-6 col-md-4 col-lg-3">
+                            <p class="src-name">
+                                <a class="src-link" href="{{ source.get_absolute_url }}"> {{ source.name }}</a>
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        <div class="col-xs-0 col-md-1"></div>
+    </div>
+
+    {% comment %} <h2 class="title">{{ country.name }}</h2>
+    <hr>
+    <div class="row no-gutters container">
+        <div class="col-xs-0 col-md-1 col-lg-2">
+        <div class="col-xs-12 col-md-10 col-lg-8">
+            <ul class="list-group list-group-flush src-list row no-gutters">
+                {% for source in related_sources %}
+                    <li class="list-group-item col-sm-12 col-md-4">
+                        <p class="src-name"><a class="src-link" href="{{ source.get_absolute_url }}">{{ source.name }}</a></p>
+                        <p class="src-categories">{% for category in source.categories.all %} {{ category.name }} {% endfor %}</p>
+                        <p class="src-languages">{% for language in source.languages.all %} {{ language.display_name }} {% endfor %}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-xs-0 col-md-1 col-lg-2">
+    </div> {% endcomment %}
+
+{% endblock %}
