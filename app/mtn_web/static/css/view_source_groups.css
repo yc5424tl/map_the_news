@@ -25,6 +25,7 @@ li.list-group-item {
 li.list-group-item:hover,
 li.list-group-item:focus {
     background-color: var(--off-black-hover);
+
 }
 
 .src-list:last-of-type {
@@ -100,7 +101,6 @@ h1.section-title {
     margin-bottom: 0;
     text-decoration: 1pt var(--main-light) underline;
 }
-
 
 button.btn.btn-link.sort-btn {
     font-size: 18pt;
