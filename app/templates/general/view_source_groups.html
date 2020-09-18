@@ -13,21 +13,79 @@
 
 {% block content %}
 
-    <div class="section-wrapper">
-        <h2 class="section-title">View Sources by Country</h2>
-        <ul class="row no-gutters list-group list-group-flush src-list flex-container">
-            {% for country in countries %}
-                <li class="list-group-item src-li col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <a class="source-group-link" href="{{ country.get_absolute_url }}">
-                        {{ country.display_name  }} ({{ country.alpha2_code }})
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="accordion" id="source-groups-accordion">
+        <div class="card">
+            <div class="card-header" id="country-card-header">
+                <h1 class="mb-0 section-title">
+                    <button class="btn btn-link sort-btn" type="button" data-toggle="collapse" data-target="#country-collapse" aria-expanded="false" aria-controls="country-colapse">
+                        View Sources By Country
+                    </button>
+                </h1>
+            </div>
+            <div id="country-collapse" class="collapse collapsed" aria-labelledby="country-card-header" data-parent="#source-groups-accordion">
+                <div class="card-body section-wrapper">
+                    <ul class="row no-gutters list-group list-group-flush src-list flex-container">
+                        {% for country in countries %}
+                            {% comment %} <li class="list-group-item src-li col-sm-6 col-md-4 col-lg-3 col-xl-2"> {% endcomment %}
+                            <li class="list-group-item src-li col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2  py-1">
+                                <a class="source-group-link" href="{{ country.get_absolute_url }}">
+                                    {{ country.display_name  }} (<span class="a2_code">{{ country.alpha2_code }}</span>)
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="language-card-header">
+                <h1 class="mb-0 section-title">
+                    <button class="btn btn-link sort-btn" type="button" data-toggle="collapse" data-target="#language-collapse" aria-expanded="false" aria-controls="language-colapse">
+                        View Sources By Language
+                    </button>
+                </h1>
+            </div>
+            <div id="language-collapse" class="collapse collapsed" aria-labelledby="language-card-header" data-parent="#source-groups-accordion">
+                <div class="card-body section-wrapper">
+                    <ul class="row no-gutters list-group list-group-flush src-list flex-container">
+                        {% for language in languages %}
+                            <li class="list-group-item src-li col-sm-6 col-md-4 col-lg-3 py-1">
+                                <a class="source-group-link" href="{{ language.get_absolute_url }}">
+                                    {{ language.display_name }} ({{ language.alpha2_code }})
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="category-card-header">
+                <h1 class="mb-0 section-title">
+                    <button class="btn btn-link sort-btn" type="button" data-toggle="collapse" data-target="#category-collapse" aria-expanded="false" aria-controls="category-collapse">
+                        View Sources By Category
+                    </button>
+                </h1>
+            </div>
+            <div id="category-collapse" class="collapse collapsed" aria-labelledby="category-card-header" data-parent="#source-groups-accordion">
+                <div class="card-body section-wrapper">
+                    <ul class="row no-gutters list-group list-group-flush src-list flex-container">
+                        {% for category in categories %}
+                            <li class="list-group-item src-li col-sm-6 col-md-3 py-1">
+                                <a class="source-group-link" href="{{ category.get_absolute_url }}">
+                                    {{ category.name|capfirst }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <hr>
-
+{% comment %}
     <div class="section-wrapper">
         <h2 class="section-title">View Sources by Language</h2>
         <ul class="row no-gutters list-group list-group-flush src-list flex-container">
@@ -39,10 +97,10 @@
                 </li>
             {% endfor %}
         </ul>
-    </div>
+    </div> {% endcomment %}
 
-    <hr>
-
+    {% comment %} <hr> {% endcomment %}
+{% comment %} 
     <div class="section-wrapper">
         <h2 class="section-title">View Sources by Category</h2>
         <ul class="row no-gutters list-group list-group-flush src-list flex-container">
@@ -54,6 +112,6 @@
                 </li>
             {% endfor %}
         </ul>
-    </div>
+    </div> {% endcomment %}
 
 {% endblock %}
