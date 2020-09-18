@@ -127,12 +127,12 @@ def login_user(request: requests.request) -> render or redirect:
         messages.error(
             request, "Incorrect Password and/or Username", extra_tags="error"
         )
-        return render(request, "general/login_user.html", {"form": form})
+        return render(request, "registration/login_user.html", {"form": form})
 
     elif request.method == "GET":
         form = AuthenticationForm()
         # form = UserLoginForm()
-        return render(request, "general/login_user.html", {"form": form})
+        return render(request, "registration/login_user.html", {"form": form})
 
     else:  # request.method != 'GET or 'POST'
         return HttpResponseBadRequest('Unsupported Request Method')
@@ -947,7 +947,7 @@ class LanguageList(ListView):
 
 
 # TODO turn view_source_groups in to an a template to extend for the views below it
-@cache_page(60 * 60 * 23 + 3599)
+# @cache_page(60 * 60 * 23 + 3599)
 def view_source_groups(request):
     if request.method == 'GET':
         categories = Category.objects.all().order_by('name').iterator()
@@ -962,7 +962,7 @@ def view_source_groups(request):
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def view_category_detail(request, name):
     category = get_object_or_404(Category, name=name)
     if request.method == 'GET':
@@ -979,12 +979,12 @@ def view_category_detail(request, name):
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def view_country_detail(request, alphanum_name):
     country = get_object_or_404(Country, alphanum_name=alphanum_name)
     if request.method == 'GET':
-        publisher_sources = country.publishing_sources.only('name').iterator()
-        readership_sources = country.readership_sources.only('name').iterator()
+        publisher_sources = country.publishing_sources.only('name')
+        readership_sources = country.readership_sources.only('name')
         return render(
             request,
             'general/view_country_detail.html',
@@ -994,7 +994,7 @@ def view_country_detail(request, alphanum_name):
         return HttpResponseBadRequest('Unsupported Request Method')
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def view_language_detail(request, alphanum_name):
     language = get_object_or_404(Language, alphanum_name=alphanum_name)
     if request.method == 'GET':
@@ -1067,11 +1067,11 @@ def view_country_sources(request, alphanum_name):
 
     country = get_object_or_404(Country, alphanum_name=alphanum_name)
 
-    readership_sources_queryset = country.readership_countries.order_by('name').prefetch_related(
+    readership_sources_queryset = country.readership_sources.order_by('name').prefetch_related(
         Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
         Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
         Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_countries').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
+    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
 
     readership_sources = [{
         'name': source.name,
@@ -1082,11 +1082,11 @@ def view_country_sources(request, alphanum_name):
         'url': source.get_absolute_url()
     } for source in readership_sources_queryset]
 
-    publishing_sources_queryset = country.readership_countries.order_by('name').prefetch_related(
+    publishing_sources_queryset = country.publishing_sources.order_by('name').prefetch_related(
         Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
         Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
         Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_countries').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
+    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
 
     publishing_sources = [{
         'name': source.name,
@@ -1100,7 +1100,7 @@ def view_country_sources(request, alphanum_name):
     return render(
         request,
         'general/view_country_detail.html',
-        {'country': country, 'reaership_sources': sources, 'publishing_sources': publishing_sources}
+        {'country': country, 'reaership_sources': readership_sources, 'publishing_sources': publishing_sources}
     )
 
 
