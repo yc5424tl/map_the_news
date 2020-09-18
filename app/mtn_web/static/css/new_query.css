@@ -76,7 +76,7 @@
 }
 
 #new-query-form > input[select] {
-    width     : 100%;
+    width     : 90%;
     color     : var(--off-black);
     text-align: center;
 }
@@ -84,6 +84,7 @@
 #new-query-form input {
     margin-left     : auto;
     width           : 90%;
+    max-width       : 90%;
     background-color: var(--mid-dark-gray);
     color           : var(--main-light);
 }
