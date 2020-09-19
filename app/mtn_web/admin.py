@@ -76,32 +76,16 @@ class SourceAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "name",
-        "country",
-        "language",
-        "country_alpha2_code",
-        "country_display_name",
-        "country_alphanum_name",
-        "language_alpha2_code",
-        "language_display_name",
-        "language_alphanum_name",
         "publishing_country",
         "url",
         "verified"
     )
     list_editable = (
-        "country",
-        "language",
         "url",
         "verified",
-        "country_alpha2_code",
-        "country_display_name",
-        "country_alphanum_name",
-        "language_alpha2_code",
-        "language_display_name",
-        "language_alphanum_name",
         "publishing_country",
     )
-    list_filter = ("country", "language", "verified", )
+    list_filter = ("verified")
     list_display_links = ["name"]
 
 
