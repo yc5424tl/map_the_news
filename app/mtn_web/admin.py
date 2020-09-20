@@ -80,12 +80,19 @@ class SourceAdmin(admin.ModelAdmin):
         "url",
         "verified"
     )
+
+    list_select_related = (
+        "publishing country",
+    )
+
     list_editable = (
         "url",
         "verified",
-        "publishing_country",
+        "publishing_country"
     )
+
     list_filter = ("verified")
+
     list_display_links = ["name"]
 
 
