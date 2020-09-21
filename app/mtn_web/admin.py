@@ -82,7 +82,7 @@ class SourceAdmin(admin.ModelAdmin):
     )
 
     list_select_related = (
-        "publishing country",
+        "publishing_country",
     )
 
     list_editable = (
