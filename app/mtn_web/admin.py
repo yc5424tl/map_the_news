@@ -91,7 +91,7 @@ class SourceAdmin(admin.ModelAdmin):
         "publishing_country"
     )
 
-    list_filter = ("verified")
+    list_filter = ("verified", )
 
     list_display_links = ["name"]
 
