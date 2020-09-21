@@ -73,6 +73,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Source)
 class SourceAdmin(admin.ModelAdmin):
+    ordering = ["name"]
     list_display = (
         "id",
         "name",
@@ -94,6 +95,12 @@ class SourceAdmin(admin.ModelAdmin):
     list_filter = ("verified", )
 
     list_display_links = ["name"]
+
+    filter horizontal = (
+        "readership countries", 
+        "languages", 
+        "categories"
+    )
 
 
 @admin.register(Category)
