@@ -12,6 +12,11 @@ from django import forms
 admin.site.register(User, UserAdmin)
 
 
+class ReadershipCoutriesInline(admin.StackedInline)
+    model = Country
+    extra = 1
+    max_num = 1
+
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = (
@@ -102,6 +107,8 @@ class SourceAdmin(admin.ModelAdmin):
         "categories"
     )
 
+    inlines = ("ReadershipCoutriesInline", )
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -112,6 +119,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")
+
 
 
 @admin.register(Language)
