@@ -1,4 +1,4 @@
-# flake8: noqa
+a# flake8: noqa
 
 
 # News Categories used by NewsAPI -- used by sifter (along with a country code) to reverse a source's country of origin, as well as type of news.
@@ -121,7 +121,7 @@ country_codes = {
     "vn": {"name": "Vietnam", "language": "vi"},
 }
 
-# list of countries/codes not accepted by NewsAPI and also have not been identified as the country for any sifted source yet (not extensive)
+# list of countries/codes not accepted by NewsAPI and also have not been identified as the country for any sifted source yet (not exhaustive)
 NOT_ENTERED_AT_ALL = {
     "ad": "Andorra",
     "af": "Afghanistan",
