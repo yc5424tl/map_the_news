@@ -3,8 +3,7 @@
 ##########################
 # BUILDER (of the Wheel) #
 ##########################
-
-FROM ubuntu:eoan-20200410 as BUILDER
+FROM ubuntu:bionic as BUILDER
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /usr/src/app
@@ -23,7 +22,7 @@ RUN apt-get update && \
             libgdal20 \
             libpq-dev \
             musl-dev \
-            python3.7-dev \
+            python3-dev \
             python3-gdal \
             python3-pip \
             python3-rtree
@@ -48,7 +47,7 @@ RUN python3 -m pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheel
 
 #!/bin/bash
 
-FROM ubuntu:eoan-20200410
+FROM ubuntu:bionic
 SHELL ["/bin/bash", "-c"]
 
 RUN mkdir -p /home/app
@@ -76,7 +75,7 @@ RUN apt-get update && \
             musl-dev \
             nano \
             netcat \
-            python3.7-dev \
+            python3-dev \
             python3-gdal \
             python3-pip \
             python3-rtree
@@ -87,12 +86,12 @@ COPY --from=BUILDER /usr/src/app/requirements /requirements
 
 RUN apt-get update && \
     apt-get install -y \
-            python3.7-dev \
+            python3-dev \
             python3-pip
 
 RUN python3 -m pip install wheel
 RUN python3 -m pip install --no-cache /wheels/*
-RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.4.2
+RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4
 
 COPY ./entrypoint.dev.sh ${APP_HOME}
 

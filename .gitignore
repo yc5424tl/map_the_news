@@ -14,3 +14,6 @@
 log.out
 country_queryset.txt
 country_queryset_2.txt
+.idea
+app/staticfiles
+app/Choropleth*
