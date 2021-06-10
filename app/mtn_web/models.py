@@ -77,6 +77,7 @@ class Country(models.Model):
         return f"/countries/{self.alphanum_name}"
 
 
+
 class Language(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default='--')

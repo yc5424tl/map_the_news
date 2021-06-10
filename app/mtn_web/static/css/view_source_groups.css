@@ -43,6 +43,7 @@ li.list-group-item:focus {
 }
 
 .card {
+    position: initial;
     text-align: center;
     align-content: center;
     background-color: var(--off-black);
@@ -54,6 +55,7 @@ li.list-group-item:focus {
 .card:last-of-type {
     /* padding-bottom: 60px; */
     bottom: 120px;
+    margin-bottom: 3rem;
 }
 
 .btn.btn-link {
@@ -71,7 +73,7 @@ li.list-group-item:focus {
 }
 
 .btn.btn-link[aria-expanded='true'] {
-    background-color: var(--main-accent-1); 
+    background-color: var(--main-accent-1);
     color: var(--off-black);
 }
 

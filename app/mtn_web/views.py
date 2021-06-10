@@ -281,7 +281,7 @@ def view_result(request: requests.request, result_pk: int) -> render:
 
 @login_required()
 def view_public_posts(request: requests.request) -> render:
-    posts = Post.objects.order_by("-id").all()
+    posts = Post.objects.filter(public=True).order_by("-id").all()
     paginator = Paginator(posts, 10)
     page = request.GET.get("page")
     try:

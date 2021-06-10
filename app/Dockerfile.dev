@@ -48,7 +48,9 @@ RUN python3 -m pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheel
 
 #!/bin/bash
 
-FROM ubuntu:eoan-20200410
+# FROM ubuntu:eoan-20200410
+FROM ubuntu:bionic-20210512
+FROM 18.04
 SHELL ["/bin/bash", "-c"]
 
 RUN mkdir -p /home/app

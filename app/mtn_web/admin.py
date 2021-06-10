@@ -106,8 +106,12 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")
 
+    @admin.display(ordering='display_name')
+
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")
+
+    @admin.display(ordering='display_name')

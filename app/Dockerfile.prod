@@ -1,6 +1,7 @@
 #!/bin/bash
 
-FROM ubuntu:eoan-20200410
+# FROM ubuntu:eoan-20200410
+FROM ubuntu:bionic-20210512
 SHELL ["/bin/bash", "-c"]
 WORKDIR /usr/src/app
 
