@@ -16,7 +16,7 @@ RUN apt-get update && \
             python3 \
             python3-dev
 
-RUN python3.7 ./requirements/make_req_file.py
+RUN python3 ./requirements/make_req_file.py
 
 RUN mv ./requirements/requirements.txt .
 
