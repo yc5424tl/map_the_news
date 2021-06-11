@@ -31,6 +31,7 @@ RUN apt-get install -y \
             python3-gdal \
             python3-pip \
             python3-rtree && \
+    python3 -m pip install pyproj==3.0.1 && \
     pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4 && \
     pip3 install -r requirements.txt
 
