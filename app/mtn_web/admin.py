@@ -12,10 +12,11 @@ from django import forms
 admin.site.register(User, UserAdmin)
 
 
-class ReadershipCoutriesInline(admin.StackedInline)
+class ReadershipCountriesInline(admin.StackedInline):
     model = Country
     extra = 1
     max_num = 1
+
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
@@ -101,13 +102,13 @@ class SourceAdmin(admin.ModelAdmin):
 
     list_display_links = ["name"]
 
-    filter horizontal = (
-        "readership countries", 
-        "languages", 
+    filter_horizontal = (
+        "readership countries",
+        "languages",
         "categories"
     )
 
-    inlines = ("ReadershipCoutriesInline", )
+    inlines = ("ReadershipCountriesInline", )
 
 
 @admin.register(Category)
@@ -119,7 +120,6 @@ class CategoryAdmin(admin.ModelAdmin):
 class CountryAdmin(admin.ModelAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")
-
 
 
 @admin.register(Language)

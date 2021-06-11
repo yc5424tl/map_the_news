@@ -1,4 +1,4 @@
-a# flake8: noqa
+# flake8: noqa
 
 
 # News Categories used by NewsAPI -- used by sifter (along with a country code) to reverse a source's country of origin, as well as type of news.
@@ -75,7 +75,7 @@ api_country_codes = {
 # Not used in this module, contains countries of sifted sources initially returned under one of the 54 countries above, manually updated via django admin
 country_codes = {
     "ao": {"name": "Angola", "language": "pt"},
-    "az": {"name": "Azerbaijan", "language": "az"}, # some russian, some english
+    "az": {"name": "Azerbaijan", "language": "az"},  # some russian, some english
     "bo": {"name": "Bolivia", "language": "es"},
     "ba": {"name": "Bosnia and Herzegovina", "language": "bs"},
     "by": {"name": "Belarus", "language": "ru"},

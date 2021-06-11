@@ -89,6 +89,8 @@ RUN apt-get update && \
             python3-dev \
             python3-pip
 
+RUN python3 -m pip install pyproj==3.0.1 --no-binary pyproj==3.0.1
+
 RUN python3 -m pip install wheel
 RUN python3 -m pip install --no-cache /wheels/*
 RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4
