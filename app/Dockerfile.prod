@@ -4,6 +4,8 @@ FROM ubuntu:focal
 SHELL ["/bin/bash", "-c"]
 WORKDIR /usr/src/app
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Chicago
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
