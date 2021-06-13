@@ -1,4 +1,4 @@
 python-dotenv==0.14.0
-django-debug-toolbar==2.2
+django-debug-toolbar==2.2.1
 black==19.10b0
 style==1.1.6
