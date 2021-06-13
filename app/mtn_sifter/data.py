@@ -72,10 +72,12 @@ api_country_codes = {
     "ve": {"name": "Venezuela", "language": "es"},
 }
 
-# Not used in this module, contains countries of sifted sources initially returned under one of the 54 countries above, manually updated via django admin
+# contains countries of sifted sources initially returned under one of the 54 countries above, manually updated via django admin
 country_codes = {
+    "dz": {"name": "Algeria", "language": "ar"},
     "ao": {"name": "Angola", "language": "pt"},
     "az": {"name": "Azerbaijan", "language": "az"},  # some russian, some english
+    "bh": {"name": "Bahrain", "language": "ar"},
     "bo": {"name": "Bolivia", "language": "es"},
     "ba": {"name": "Bosnia and Herzegovina", "language": "bs"},
     "by": {"name": "Belarus", "language": "ru"},
@@ -91,10 +93,15 @@ country_codes = {
     "fi": {"name": "Finland", "language": "fi"},
     "pf": {"name": "French Polynesia", "language": "fr"},
     "is": {"name": "Iceland", "language": "is"},
+    "iq": {"name": "Iraq", "language": "ar"},
+    "ir": {"name": "Iran", "language": "fa"},
     "il": {"name": "Israel", "language": "he"},  # 'he' + 'en'     < ICELAND >
     "je": {"name": "Jersey", "language": "en"},
+    "jo": {"name": "Jordan", "language": "ar"},
     "kz": {"name": "Kazakhstan", "language": "kk"},
     "kw": {"name": "Kuwait", "language": "ar"},
+    "lb": {"name": "Lebanon", "language": "ar"},
+    "ly": {"name": "Libya", "language": "ar"},
     "li": {"name": "Liechtenstein", "language": "de"},
     "lt": {"name": "Lithuania", "language": "lt"},
     "lu": {"name": "Luxembourg", "language": "de"},
@@ -110,15 +117,18 @@ country_codes = {
     "py": {"name": "Paraguay", "language": "es"},
     "pe": {"name": "Peru", "language": "es"},
     "pr": {"name": "Puerto Rico", "language": "es"},
+    "qa": {"name": "Qatar", "language": "ar"},
     "re": {"name": "Reunion", "language": "fr"},
     "sn": {"name": "Senegal", "language": "fr"},
     "es": {"name": "Spain", "language": "es"},
     "ch": {"name": "Switzerland", "language": "de"},  # 'de' @74%, other official: fr @ 21, it @ 4, and romansh @ 1) # ONLY THE 2 LETTER CODE IS IN FOR THESE
+    "sy": {"name": "Syria", "language": "ar"},
     "to": {"name": "Tonga", "language": "en"}, # Some publication only in Tongan (to) as well as many printed both to/en
     "tn": {"name": "Tunisia", "language": "ar"},
     "ug": {"name": "Uganda", "language": "en"}, # 43 languages used in country, en popular in media
     "uy": {"name": "Uruguay", "language": "es"},
     "vn": {"name": "Vietnam", "language": "vi"},
+    "ye": {"name": "Yemen", "language": "ar"},
 }
 
 # list of countries/codes not accepted by NewsAPI and also have not been identified as the country for any sifted source yet (not exhaustive)

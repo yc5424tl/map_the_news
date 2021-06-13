@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'mtn_web.apps.MtnWebConfig',
     'mtn_sifter.apps.MtnSifterConfig',
     'storages',
+    'simple_history',
 ]
 
 if DEPLOYMENT == 'DEV':
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.admindocs.middleware.XViewMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 if USE_WHITENOISE:
@@ -99,6 +101,7 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
 DATABASES['default'].update(db_from_env)

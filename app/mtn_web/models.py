@@ -3,6 +3,8 @@ from typing import NoReturn
 import pycountry
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from simple_history import register
+from simple_history.models import HistoricalRecords
 from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 # from django.contrib.sites.models import Site
 
@@ -39,6 +41,7 @@ class Result(models.Model):
     article_count = models.IntegerField(default=0)
     article_data_len = models.IntegerField(default=0)
     articles_per_country = JSONField(max_length=20000, null=True, blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         details = (
@@ -56,9 +59,13 @@ class Result(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
-        return f"Type: {type(self)} Name: {self.name}"
+        return self.name.capitalize()
 
     def get_absolute_url(self):
 
@@ -69,6 +76,10 @@ class Country(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
     alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['display_name']
 
     def __str__(self):
         return f"{self.display_name} ({self.alpha2_code})"
@@ -81,6 +92,10 @@ class Language(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
     display_name = models.CharField(max_length=100, blank=False, null=False, default='--')
     alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    history = HistoricalRecords()
+
+    class Meta:
+        ordering = ['display_name']
 
     def __str__(self):
         return f"{self.display_name} ({self.alpha2_code})"
@@ -109,6 +124,8 @@ class Source(models.Model):
     language_alpha2_code = models.CharField(max_length=10, blank=False, null=False, default="alpha2code")
     language_display_name = models.CharField(max_length=100, blank=False, null=False, default="display_name_placeholder")
     language_alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="alphanum_name_placeholder")
+
+    history = HistoricalRecords()
 
     def __str__(self) -> str:
         return f"{self.name}"
@@ -141,6 +158,7 @@ class Article(models.Model):
         related_query_name="article",
     )
     title = models.CharField(max_length=300)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.title}, {self.author}, {self.date_published}, {self.source.name}"
@@ -160,6 +178,7 @@ class Post(models.Model):
     date_last_edit = models.DateTimeField(auto_now_add=True)
     result = models.OneToOneField(Result, on_delete=models.PROTECT)
     public = models.BooleanField(default=False)
+    history = HistoricalRecords()
 
     def get_choro_map(self) -> str or NoReturn:
         result_pk = self.result.pk
@@ -178,6 +197,7 @@ class Comment(models.Model):
     author = models.ForeignKey(
         "mtn_web.User", on_delete=models.PROTECT, related_name="comments"
     )
+    history = HistoricalRecords()
 
     def __str__(self) -> str:
         return f'Comment from {self.author.first_name} {self.author.last_name} on {self.date_published} to post "{self.post.title}", made {self.date_published}'
@@ -186,6 +206,8 @@ class Comment(models.Model):
 class User(AbstractUser):
     pass
 
+
+register(User)
 
 # ======================================================================================#
 # enum help from

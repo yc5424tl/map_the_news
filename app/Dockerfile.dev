@@ -3,11 +3,13 @@
 ##########################
 # BUILDER (of the Wheel) #
 ##########################
-FROM ubuntu:bionic as BUILDER
+FROM ubuntu:focal as BUILDER
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /usr/src/app
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Chicago
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEPLOYMENT DEV
@@ -19,7 +21,8 @@ RUN apt-get update && \
             gdal-bin \
             gdal-data \
             libgdal-dev \
-            libgdal20 \
+            # libgdal20 \
+            libgdal26 \
             libpq-dev \
             musl-dev \
             python3-dev \
@@ -47,12 +50,13 @@ RUN python3 -m pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheel
 
 #!/bin/bash
 
-FROM ubuntu:bionic
+FROM ubuntu:focal
 SHELL ["/bin/bash", "-c"]
 
 RUN mkdir -p /home/app
 
-
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Chicago
 ENV HOME /home/app
 ENV APP_HOME ${HOME}/web
 
@@ -70,7 +74,8 @@ RUN apt-get update && \
             gdal-bin \
             gdal-data \
             libgdal-dev \
-            libgdal20 \
+            # libgdal20 \
+            libgdal26 \
             libpq-dev \
             musl-dev \
             nano \
@@ -78,7 +83,8 @@ RUN apt-get update && \
             python3-dev \
             python3-gdal \
             python3-pip \
-            python3-rtree
+            python3-rtree \
+            python3-pyproj
 
 COPY --from=BUILDER /usr/src/app/wheels /wheels
 COPY --from=BUILDER /usr/src/app/requirements.txt .
@@ -89,11 +95,10 @@ RUN apt-get update && \
             python3-dev \
             python3-pip
 
-RUN python3 -m pip install pyproj==3.0.1 --no-binary pyproj==3.0.1
-
 RUN python3 -m pip install wheel
 RUN python3 -m pip install --no-cache /wheels/*
-RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4
+# RUN python3 -m pip install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4
+RUN python3 -m pip install --global-option=build_ext  --global-option="-I/usr/include/gdal" GDAL
 
 COPY ./entrypoint.dev.sh ${APP_HOME}
 

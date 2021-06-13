@@ -185,7 +185,7 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             if have_endpoint is False:
                 messages.info(
                     request,
-                    message="Unable to contact endpoint to complete your query.",
+                    message="Resource Unavailable",
                 )
                 return redirect("new_query", messages=messages)
 
@@ -204,10 +204,18 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             article_list = constructor.build_article_data(article_data, result)
 
             for article in article_list:
-                country_code = geo_map_mgr.map_source(
-                    source_country=article.source_country
-                )
-                gdm.add_result(country_code)
+                source = Source.objects.get(name=article.source)
+                country_codes = [source.publishing_country.alpha2_code]
+                if source.readership_countries:
+                    for country in source.readership_countries.all():
+                        country_codes.append(source.readership_countries.country.alpha2_code)
+                # country_code = geo_map_mgr.map_source(
+                #     source_country=article.source_country
+                # )
+                # gdm.add_result(country_code)
+                for alpha2_code in country_codes:
+                    alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
+                    gdm.add_result(alpha3_code)
 
             data_tup = geo_map_mgr.build_choropleth(
                 result.argument, result.query_type, gdm

@@ -42,28 +42,31 @@ class Constructor:
             return False
 
     def get_article_description(self, api_response):
+        description = "Unavailable"
         try:
             if api_response['description'] is not None:
                 if self.verify_str(api_response['description']):
                     description = self.verify_str(api_response['description'])
-                if description == '':
-                    try:
-                        content = api_response['content'][:2500]
-                        if content is not None and content != '':
-                            description = content
-                        else:
-                            description = 'Unavailable'
-                    except UnicodeDecodeError as e:
-                        log.debug(f'UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}')
-                        description = 'Unavailable'
-                    except KeyError as e:
-                        log.debug(f'KeyError while parsing content for new article: {e}\nSource Data: {api_response}')
-                        description = 'Unavailable'
-            else:
-                description = 'Unavailable'
+                    if description == '':
+                        try:
+                            content = api_response['content'][:2500]
+                            if content is not None and content != '':
+                                description = content
+                            # else:
+                            #     description = 'Unavailable'
+                        except UnicodeDecodeError as e:
+                            log.debug(f'UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}')
+                            # description = 'Unavailable'
+                        except KeyError as e:
+                            log.debug(f'KeyError while parsing content for new article: {e}\nSource Data: {api_response}')
+                            # description = 'Unavailable'
+            #         else:
+            #             description = "Unavailable"
+            # else:
+            #     description = 'Unavailable'
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}")
-            description = "Unavailable"
+            # description = "Unavailable"
         return description
 
     def get_article_author(self, api_response):

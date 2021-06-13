@@ -172,6 +172,8 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
             src.languages.add(language)
             if src.publishing_country is not country:
                 src.readership_countries.add(country)
+                if language not in src.languages:
+                    src.languages.add(language)
         else:
             log.error(f'{type(src)} passed when expecting {type(Source)} or type{None} ')
     return
