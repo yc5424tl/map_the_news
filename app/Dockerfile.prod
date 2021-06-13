@@ -27,13 +27,13 @@ RUN apt-get install -y \
             gdal-bin \
             gdal-data \
             libgdal-dev \
-            libgdal20 \
+            libgdal26 \
             python3-gdal \
             python3-pip \
             python3-rtree && \
     python3 -m pip install pyproj && \
     # pip3 install --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==2.2.4 && \
-    python3 -m pip install --global-option=build_ext  --global-option="-I/usr/include/gdal" GDAL==3.3.0 && \
+    python3 -m pip install --global-option=build_ext  --global-option="-I/usr/include/gdal" GDAL && \
     python3 -m pip install -r requirements.txt
 COPY . .
 
