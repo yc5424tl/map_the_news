@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from django.urls import path, re_path
-from app.mtn_web import views
-from app.mtn_web.forms import UserLoginForm
-from app.mtn_web.models import Category, Language, Country, Source
-from app.mtn_web.views import CountryList, LanguageList, CategoryList
+from mtn_web import views
+from mtn_web.forms import UserLoginForm
+from mtn_web.models import Category, Language, Country, Source
+from mtn_web.views import CountryList, LanguageList, CategoryList
 
 urlpatterns = [
     url(r"^$",                                   views.index,                 name="index"),
