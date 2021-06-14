@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 
-from app.mtn_web.models import Article, Category, Comment, Country, Language, Post, Result, Source, User
+from mtn_web.models import Article, Category, Comment, Country, Language, Post, Result, Source, User
 
 admin.site.register(User, UserAdmin)
 
