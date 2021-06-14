@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 
-from app.mtn_web.models import Post, Comment, Result
+from mtn_web.models import Post, Comment, Result
 
 
 class CustomUserCreationForm(UserCreationForm):
