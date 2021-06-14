@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 from dateutil.parser import parse
-from app.mtn_web.models import Article, Result, Source
-from app.mtn_django.logger import log
+from mtn_web.models import Article, Result, Source
+from mtn_django.logger import log
 
 api_key = os.getenv("MTN_WEB_API_KEY")
 
