@@ -1,11 +1,12 @@
 from enum import Enum
 from typing import NoReturn
+
 import pycountry
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 from simple_history import register
 from simple_history.models import HistoricalRecords
-from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 
 
 class QueryTypeChoice(Enum):
@@ -27,14 +28,8 @@ class Result(models.Model):
     date_range_start = models.DateField(default=None, null=True, blank=True)
     filename = models.TextField(max_length=700, blank=True, null=True)
     filepath = models.TextField(max_length=1000, blank=True, null=True)
-    query_type = models.CharField(
-        max_length=50,
-        choices=[(tag, tag.value) for tag in QueryTypeChoice],
-        default=QueryTypeChoice.ALL
-    )
-    author = models.ForeignKey(
-        "mtn_web.User", on_delete=models.PROTECT, related_name="results"
-    )
+    query_type = models.CharField(max_length=50, choices=[(tag, tag.value) for tag in QueryTypeChoice], default=QueryTypeChoice.ALL)
+    author = models.ForeignKey("mtn_web.User", on_delete=models.PROTECT, related_name="results")
     archived = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     article_count = models.IntegerField(default=0)
@@ -61,7 +56,7 @@ class Category(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name.capitalize()
@@ -72,13 +67,13 @@ class Category(models.Model):
 
 
 class Country(models.Model):
-    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default="--")
     display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
-    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="--")
     history = HistoricalRecords()
 
     class Meta:
-        ordering = ['display_name']
+        ordering = ["display_name"]
 
     def __str__(self):
         return f"{self.display_name} ({self.alpha2_code})"
@@ -88,13 +83,13 @@ class Country(models.Model):
 
 
 class Language(models.Model):
-    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default='--')
-    display_name = models.CharField(max_length=100, blank=False, null=False, default='--')
-    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default='--')
+    alpha2_code = models.CharField(max_length=10, null=False, blank=False, default="--")
+    display_name = models.CharField(max_length=100, blank=False, null=False, default="--")
+    alphanum_name = models.CharField(max_length=100, blank=False, null=False, default="--")
     history = HistoricalRecords()
 
     class Meta:
-        ordering = ['display_name']
+        ordering = ["display_name"]
 
     def __str__(self):
         return f"{self.display_name} ({self.alpha2_code})"
@@ -139,18 +134,8 @@ class Article(models.Model):
     date_published = models.DateTimeField(default=None, null=True, blank=True)
     description = models.CharField(max_length=2500)
     image_url = models.URLField(max_length=1000, default=None, blank=True, null=True)
-    result = models.ForeignKey(
-        Result,
-        on_delete=models.CASCADE,
-        related_name="articles",
-        related_query_name="article",
-    )
-    source = models.ForeignKey(
-        Source,
-        on_delete=models.PROTECT,
-        related_name="articles",
-        related_query_name="article",
-    )
+    result = models.ForeignKey(Result, on_delete=models.CASCADE, related_name="articles", related_query_name="article",)
+    source = models.ForeignKey(Source, on_delete=models.PROTECT, related_name="articles", related_query_name="article",)
     title = models.CharField(max_length=300)
     history = HistoricalRecords()
 
@@ -166,9 +151,7 @@ class Post(models.Model):
     title = models.CharField(max_length=300, default="", null=True, blank=True)
     body = models.CharField(max_length=50000, default="", null=True, blank=True)
     date_published = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(
-        "mtn_web.User", on_delete=models.PROTECT, related_name="posts"
-    )
+    author = models.ForeignKey("mtn_web.User", on_delete=models.PROTECT, related_name="posts")
     date_last_edit = models.DateTimeField(auto_now_add=True)
     result = models.OneToOneField(Result, on_delete=models.PROTECT)
     public = models.BooleanField(default=False)
@@ -188,9 +171,7 @@ class Comment(models.Model):
     body = models.CharField(max_length=25000)
     date_published = models.DateTimeField(auto_now_add=True)
     date_last_edit = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(
-        "mtn_web.User", on_delete=models.PROTECT, related_name="comments"
-    )
+    author = models.ForeignKey("mtn_web.User", on_delete=models.PROTECT, related_name="comments")
     history = HistoricalRecords()
 
     def __str__(self) -> str:
@@ -198,7 +179,37 @@ class Comment(models.Model):
 
 
 class User(AbstractUser):
-    pass
+    @property
+    def latest_post(self) -> Post or None:
+        try:
+            latest_post = self.posts.order_by("-id")[0]
+        except IndexError:
+            latest_post = None
+        return latest_post
+
+    @property
+    def recent_posts(self):
+        try:
+            recent_posts = self.posts.order_by("-id")[1:5]
+        except IndexError:
+            recent_posts = None
+        return recent_posts
+
+    @property
+    def recent_comments(self):
+        try:
+            recent_comments = self.comments.all()[0:5]
+        except IndexError:
+            recent_comments = None
+        return recent_comments
+
+    @property
+    def recent_results(self):
+        try:
+            recent_results = self.results.all()[1:5]
+        except IndexError:
+            recent_results = None
+        return recent_results
 
 
 register(User)

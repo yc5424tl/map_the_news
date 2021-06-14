@@ -18,18 +18,18 @@ li.list-group-item {
     display: block;
     margin: 0;
     border-width: 0;
-
-    /* padding: 10rem; */
 }
 
 li.list-group-item:hover,
 li.list-group-item:focus {
     background-color: var(--off-black-hover);
-
+    transition: 0.4s;
 }
 
-.src-list:last-of-type {
-    margin-bottom: 60px;
+li.list-group-item:hover .source-group-link,
+li.list-group-item:focus .source-group-link {
+    color: var(--main-link-hover);
+    transition: 0.4s;
 }
 
 .a2_code {
@@ -52,8 +52,7 @@ li.list-group-item:focus {
 }
 
 .card:last-of-type {
-    /* padding-bottom: 60px; */
-    bottom: 120px;
+    padding-bottom: 120px;
 }
 
 .btn.btn-link {
@@ -71,7 +70,7 @@ li.list-group-item:focus {
 }
 
 .btn.btn-link[aria-expanded='true'] {
-    background-color: var(--main-accent-1); 
+    background-color: var(--main-accent-1);
     color: var(--off-black);
 }
 
@@ -80,12 +79,6 @@ a.source-group-link {
     width: 100%;
     height: 100%;
     font-size: 12pt;
-}
-
-.source-group-link:hover,
-.source-group-link:focus {
-    color: var(--main-link-hover);
-    transition: 0.4s;
 }
 
 .source-group-link:visited {

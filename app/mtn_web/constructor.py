@@ -1,14 +1,13 @@
 import os
 from datetime import datetime
 from dateutil.parser import parse
-from mtn_web.models import Article, Result, Source
-from mtn_django.logger import log
+from app.mtn_web.models import Article, Result, Source
+from app.mtn_django.logger import log
 
 api_key = os.getenv("MTN_WEB_API_KEY")
 
 
 class Constructor:
-
     def new_article(self, api_response: dict, result: Result) -> Article or False:
 
         source = self.verify_source(api_response["source"]["name"])
@@ -21,11 +20,7 @@ class Constructor:
             author = self.get_article_author(api_response)
 
             article_url = api_response["url"]
-            image_url = (
-                api_response["urlToImage"]
-                if api_response["urlToImage"] is not None
-                else None
-            )
+            image_url = api_response["urlToImage"] if api_response["urlToImage"] is not None else None
             new_article = Article(
                 article_url=article_url,
                 author=author,
@@ -44,51 +39,38 @@ class Constructor:
     def get_article_description(self, api_response):
         description = "Unavailable"
         try:
-            if api_response['description'] is not None:
-                if self.verify_str(api_response['description']):
-                    description = self.verify_str(api_response['description'])
-                    if description == '':
+            if api_response["description"] is not None:
+                if self.verify_str(api_response["description"]):
+                    description = self.verify_str(api_response["description"])
+                    if description == "":
                         try:
-                            content = api_response['content'][:2500]
-                            if content is not None and content != '':
+                            content = api_response["content"][:2500]
+                            if content is not None and content != "":
                                 description = content
-                            # else:
-                            #     description = 'Unavailable'
                         except UnicodeDecodeError as e:
-                            log.debug(f'UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}')
-                            # description = 'Unavailable'
+                            log.debug(f"UnicodeDecodeError while parsing content for new article: {e}\nSource Data: {api_response}")
                         except KeyError as e:
-                            log.debug(f'KeyError while parsing content for new article: {e}\nSource Data: {api_response}')
-                            # description = 'Unavailable'
-            #         else:
-            #             description = "Unavailable"
-            # else:
-            #     description = 'Unavailable'
+                            log.debug(f"KeyError while parsing content for new article: {e}\nSource Data: {api_response}")
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing description for new article: {e}\nSource Data: {api_response}")
-            # description = "Unavailable"
         return description
 
     def get_article_author(self, api_response):
+        author = "Unavailable"
         try:
-            author = self.verify_str(api_response["author"])
-            if author is None:
-                author = "Unavailable"
-            return author
+            if self.verify_str(api_response["author"]) is not None:
+                author = self.verify_str(api_response["author"])
         except UnicodeEncodeError as e:
             log.debug(f"UnicodeDecodeError while parsing author for new article: {e}\nSource Data {e}")
-            author = "Unavailable"
-
         return author
 
     def get_article_title(self, api_response):
+        title = "Unavailable"
         try:
-            title = self.verify_str(api_response["title"])
-            if title is None:
-                title = "Unavailable"
+            if self.verify_str(api_response["title"]) is not None:
+                title = self.verify_str(api_response["title"])
         except UnicodeDecodeError as e:
             log.debug(f"UnicodeDecodeError while parsing title for new article: {e}\nSource Data {e}",)
-            title = "Unavailable"
         return title
 
     def build_article_data(self, article_data_list: [{}], query_result: Result) -> [Article]:

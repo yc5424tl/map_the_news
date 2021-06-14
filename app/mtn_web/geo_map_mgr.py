@@ -1,15 +1,17 @@
 import os
 from datetime import datetime
+
+import branca
 import folium
 import geopandas as gp
 import numpy as np
-import branca
 import pandas as pd
 import pycountry
+from app.mtn_django.logger import log
+from app.mtn_web.geo_data_mgr import GeoDataManager
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
-from mtn_web.geo_data_mgr import GeoDataManager
-from mtn_django.logger import log
+from folium import ColorMap as cm
 
 CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 
@@ -17,50 +19,13 @@ CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 class GeoMapManager:
     @staticmethod
     def map_source(source_country):
-        return (
-            (pycountry.countries.get(alpha_2=str(source_country).upper())).alpha_3
-            if source_country
-            else None
-        )
+        return (pycountry.countries.get(alpha_2=str(source_country).upper())).alpha_3 if source_country else None
 
-    def build_choropleth(
-        self, argument, focus, geo_data_manager: GeoDataManager
-    ) -> (folium.Map, str) or None:
-
-        # try:
-        #     world_df = gp.read_file('mtn_web/static/js/geo_data.json')
-        #     global_map = folium.Map(
-        #         location=[0, 0], tiles='OpenStreetMap', zoom_start=3
-        #     )
-        #     articles_per_country = pd.Series(geo_data_manager.result_dict)
-        #     world_df["article_count"] = world_df["id"].map(articles_per_country)
-        #     world_df.head()
-        #     world_df.plot(column="article_count")
-        #     colorscale = branca.colormap.linear.GrBuRd.scale(0, articles_per_country.values.max() + 1)
-        #     folium.GeoJson(
-        #         data=(open('mtn_web/static/js/geo_data.json', 'r').read()),
-        #         style_function=lambda x: {
-        #             'weight': 1,
-        #             'color': "#545453",
-        #             'fillColor': '#9B9B9B' if x['properties'][variable] == 0 else colorscale(x['properties'][variable])
-        #             'fillOpacity': 0.2 if x['properties'][variable] == 0 else 0.5
-        #         },
-        #         highlight_function=lambda x: {
-        #             'weight': 3,
-        #             'color': 'black',
-        #             'fillOpacity': 1
-        #         },
-        #         tooltip=folium.features.GeoJsonTooltip(
-        #             fields=[]
-        #         )
-
-        #     )
+    def build_choropleth(self, argument, focus, geo_data_manager: GeoDataManager) -> (folium.Map, str) or None:
 
         try:
-            world_df = gp.read_file('mtn_web/static/js/geo_data.json')
-            global_map = folium.Map(
-                location=[0, 0], tiles="OpenStreetMap", zoom_start=3
-            )
+            world_df = gp.read_file("mtn_web/static/js/geo_data.json")
+            global_map = folium.Map(location=[0, 0], tiles="OpenStreetMap", zoom_start=3)
             articles_per_country = pd.Series(geo_data_manager.result_dict)
             world_df["article_count"] = world_df["id"].map(articles_per_country)
             world_df.head()
@@ -72,14 +37,13 @@ class GeoMapManager:
                 data=world_df,
                 columns=["id", "article_count"],
                 key_on="feature.id",
-                fill_color="Dark2",
-                # fill_color="YlGrBu",
-                bins=[
-                    float(x) for x in threshold_scale
-                ],  # https://github.com/python-visualization/folium/issues/1130
+                fill_color="Dark2_r",
+                bins=[float(x) for x in threshold_scale],  # https://github.com/python-visualization/folium/issues/1130
                 fill_opacity=0.8,
                 line_opacity=0.2,
-                # highlight=True
+                nan_fill_color="#1a2b29",
+                nan_fill_opacity=0.7,
+                highlight=True,
             ).add_to(global_map)
             # ----------------------------------------------------------#
             #             Alternative fill_color options                #
@@ -104,13 +68,16 @@ class GeoMapManager:
 
     @staticmethod
     def get_threshold(articles_per_country: [dict]) -> [int]:
-        if articles_per_country.values.max() <= 16:
-            threshold_scale = np.linspace(
-                articles_per_country.values.min(),
-                articles_per_country.values.max() + 1,
-                6,
-                dtype=int,
-            ).tolist()
+        if articles_per_country.values.max() <= 5:
+            threshold_scale = [0, 1, 2, 3, 4, 5]
+        elif 5 < articles_per_country.values.max() <= 16:
+            # threshold_scale = np.linspace(
+            #     articles_per_country.values.min(),
+            #     articles_per_country.values.max() + 1,
+            #     6,
+            #     dtype=int,
+            # ).tolist()
+            threshold_scale = [0, 1].append(np.linspace(2, articles_per_country.values.max() + 1, 4).to_list())
         elif 160 >= articles_per_country.values.max() > 16:
 
             threshold_scale = [0, 1, 3, 7, 15, articles_per_country.values.max() + 1]

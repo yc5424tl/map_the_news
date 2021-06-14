@@ -8,8 +8,8 @@ from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from requests.exceptions import MissingSchema
 
-from mtn_django.logger import log
-from mtn_web.models import Article
+from app.mtn_django.logger import log
+from app.mtn_web.models import Article
 
 
 class GeoDataManager:
@@ -35,13 +35,13 @@ class GeoDataManager:
 
     def get_geo_data(self) -> bool:
         try:
-            if 'ON_HEROKU' in os.environ:
+            if "ON_HEROKU" in os.environ:
                 geo_data_url = staticfiles_storage.url("js/geo_data.json")
                 response = requests.get(geo_data_url)
                 self.json_data = response.json()
                 return True
             else:
-                with open('mtn_web/static/js/geo_data.json') as geo_data_json:
+                with open("mtn_web/static/js/geo_data.json") as geo_data_json:
                     self.json_data = json.load(geo_data_json)
                     if self.json_data is None:
                         raise FileNotFoundError
@@ -49,9 +49,7 @@ class GeoDataManager:
             return False
         except (FileNotFoundError, TypeError, IOError, MissingSchema):
             try:
-                self.req_data = requests.get(
-                    os.getenv('GEO_DATA_URL')
-                )
+                self.req_data = requests.get(os.getenv("GEO_DATA_URL"))
                 if self.req_data.status_code == 200:
                     self.json_data = self.req_data.json()
                     return True
@@ -68,9 +66,7 @@ class GeoDataManager:
         return True
 
     def initialize_result_dict(self) -> NoReturn:
-        self.result_dict = dict.fromkeys(
-            [k["id"] for k in self.json_data["features"]], 0
-        )
+        self.result_dict = dict.fromkeys([k["id"] for k in self.json_data["features"]], 0)
         self.result_dict["SGP"] = 0
         self.result_dict["HKG"] = 0
 

@@ -1,9 +1,10 @@
 import os
 from datetime import datetime, timedelta
+
 import requests
+from app.mtn_django.logger import log
+from app.mtn_web.models import QueryTypeChoice
 from newsapi import NewsApiClient
-from .models import QueryTypeChoice
-from mtn_django.logger import log
 
 api_key = os.environ.get("MTN_WEB_API_KEY")
 news_api = NewsApiClient(api_key=api_key)
@@ -11,12 +12,7 @@ news_api = NewsApiClient(api_key=api_key)
 
 class Query:
     def __init__(
-        self,
-        arg: str,
-        focus: QueryTypeChoice,
-        from_date: datetime = None,
-        to_date: datetime = None,
-        endpoint: str = None,
+        self, arg: str, focus: QueryTypeChoice, from_date: datetime = None, to_date: datetime = None, endpoint: str = None,
     ):
         self.arg = arg
         self.focus = focus
@@ -46,13 +42,13 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
-        log.info(f'response = \n\n{response}')
+        log.info(f"response = \n\n{response}")
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
         article_data = list(response_data)
 
         # **FREE VERSION OF NEWS_API LIMITS RESULTS TO 100 PER REQUEST (cannot use multiple requests to page results), BELOW IS FOR PAGING THROUGH MORE THAN 100 RESULTS**
-        '''
+        """
         if article_count > 100:
             pages = article_count//100
             if pages > 5:
@@ -73,28 +69,5 @@ class Query:
                     logger.log(level=logging.INFO, msg=f'KeyErrorException while getting article_data on {p}')
                     logger.log(level=logging.ERROR, msg=logger.exception(kE))
                     continue
-        '''
+        """
         return article_data, article_count
-
-    '''
-    def to_file(self, data) -> bool:
-        try:
-            with open(self.filename, "w+") as file:
-                file.write(str(data))
-            return True
-        except UnicodeEncodeError:
-            logger.exception(
-                UnicodeEncodeError,
-                "UnicodeEncodeError during writing articles.json to file (QueryManager)",
-            )
-            return False
-        except AttributeError:
-            logger.exception(
-                AttributeError,
-                "AttributeException during writing articles.json to file (QueryManager)",
-            )
-            return False
-        except TypeError:
-            logger.exception(TypeError, "TypeError while ")
-            return False
-    '''

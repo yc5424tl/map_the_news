@@ -1,8 +1,18 @@
+import logging
 from typing import NoReturn
+
 import pycountry
 import requests
+from app.mtn_web.constructor import Constructor
+from app.mtn_web.country_data import iso_codes
+from app.mtn_web.decorators import query_inspection
+from app.mtn_web.forms import CustomUserCreationForm, EditCommentForm, EditPostForm, NewCommentForm, NewPostForm, NewQueryForm, UserLoginForm
+from app.mtn_web.geo_data_mgr import GeoDataManager
+from app.mtn_web.geo_map_mgr import GeoMapManager
+from app.mtn_web.models import Article, Category, Comment, Country, Language, Post, QueryTypeChoice, Result, Source
+from app.mtn_web.query_mgr import Query
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, get_user_model
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import PermissionDenied
@@ -10,34 +20,12 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import transaction
 from django.db.models import Prefetch
 from django.http import HttpResponseBadRequest
-from django.shortcuts import render, redirect, get_object_or_404, Http404
+from django.shortcuts import Http404, get_object_or_404, redirect, render
 from django.template import RequestContext
-from mtn_web.constructor import Constructor
-from mtn_web.forms import (
-    CustomUserCreationForm,
-    NewQueryForm,
-    NewPostForm,
-    EditPostForm,
-    EditCommentForm,
-    NewCommentForm,
-    UserLoginForm,
-)
-
-from mtn_web.geo_data_mgr import GeoDataManager
-from mtn_web.geo_map_mgr import GeoMapManager
-from mtn_web.models import Result, Source, Post, Comment, Category, QueryTypeChoice, Article, Country, Language
-from mtn_web.query_mgr import Query
-
-from mtn_web.decorators import query_inspection
-
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.views.generic import DeleteView, DetailView, ListView, TemplateView
 
-from .country_data import iso_codes
-
-from django.views.generic import ListView, DetailView, TemplateView, DeleteView
-
-import logging
 log = logging.getLogger(__name__)
 
 
@@ -56,13 +44,14 @@ geo_map_mgr = GeoMapManager()
 #  ````````````````````````````````````` #
 # ====================================== #
 
+
 @transaction.atomic
 def index(request: requests.request) -> render:
     if request.method == "GET":
         form = AuthenticationForm()
         return render(request, "general/index.html", {"form": form})
     else:
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ==================================================================================================== #
@@ -76,6 +65,7 @@ def index(request: requests.request) -> render:
 #  ``````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ==================================================================================================== #
 
+
 def register_user(request: requests.request) -> render or redirect:
 
     if request.method == "POST":
@@ -87,18 +77,12 @@ def register_user(request: requests.request) -> render or redirect:
         else:
             messages.info(request, message=form.errors)
             form = CustomUserCreationForm()
-            return render(
-                request=request,
-                template_name="general/new_user.html",
-                context={"form": form}
-            )
-
+            return render(request=request, template_name="general/new_user.html", context={"form": form})
     if request.method == "GET":
         form = CustomUserCreationForm()
         return render(request, "general/new_user.html", {"form": form})
-
     else:  # request.method != 'GET' or 'POST'
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ============================================================================== #
@@ -110,6 +94,7 @@ def register_user(request: requests.request) -> render or redirect:
 #  ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║    ╚██████╔╝███████║███████╗██║  ██║  #
 #  ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝     ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝  #
 # ============================================================================== #
+
 
 def login_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
@@ -124,9 +109,7 @@ def login_user(request: requests.request) -> render or redirect:
                 return redirect("view_user", user.pk)
         form = AuthenticationForm()
         # form = UserLoginForm()
-        messages.error(
-            request, "Incorrect Password and/or Username", extra_tags="error"
-        )
+        messages.error(request, "Incorrect Password and/or Username", extra_tags="error")
         return render(request, "registration/login_user.html", {"form": form})
 
     elif request.method == "GET":
@@ -135,7 +118,7 @@ def login_user(request: requests.request) -> render or redirect:
         return render(request, "registration/login_user.html", {"form": form})
 
     else:  # request.method != 'GET or 'POST'
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ============================================================================================ #
@@ -147,6 +130,7 @@ def login_user(request: requests.request) -> render or redirect:
 #  ███████╗╚██████╔╝╚██████╔╝╚██████╔╝╚██████╔╝   ██║       ╚██████╔╝███████║███████╗██║  ██║  #
 #  ╚══════╝ ╚═════╝  ╚═════╝  ╚═════╝  ╚═════╝    ╚═╝        ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝  #
 # ============================================================================================ #
+
 
 def logout_user(request: requests.request) -> NoReturn:
     if request.user.is_authenticated:
@@ -163,6 +147,7 @@ def logout_user(request: requests.request) -> NoReturn:
 #  ╚═╝  ╚═══╝╚══════╝ ╚══╝╚══╝      ╚══▀▀═╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝    #
 # ============================================================================ #
 
+
 @login_required()
 def new_query(request: requests.request) -> render or redirect or HttpResponseBadRequest:
 
@@ -175,17 +160,13 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
 
         if gdm.verify_geo_data():
 
-            query_mgr = Query(
-                arg=request.POST.get("argument"),
-                focus=get_query_type(request.POST.get("query_type")),
-            )
+            query_mgr = Query(arg=request.POST.get("argument"), focus=get_query_type(request.POST.get("query_type")),)
 
             have_endpoint = query_mgr.get_endpoint()
 
             if have_endpoint is False:
                 messages.info(
-                    request,
-                    message="Resource Unavailable",
+                    request, message="Resource Unavailable",
                 )
                 return redirect("new_query", messages=messages)
 
@@ -193,11 +174,7 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             article_data, article_count = query_data[0], query_data[1]
 
             result = Result.objects.create(
-                query_type=query_mgr.focus,
-                argument=query_mgr.arg,
-                data=article_data,
-                author=request.user,
-                articles_per_country=gdm.result_dict
+                query_type=query_mgr.focus, argument=query_mgr.arg, data=article_data, author=request.user, articles_per_country=gdm.result_dict,
             )
             result.save()
 
@@ -213,9 +190,7 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
                     alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
                     gdm.add_result(alpha3_code)
 
-            data_tup = geo_map_mgr.build_choropleth(
-                result.argument, result.query_type, gdm
-            )
+            data_tup = geo_map_mgr.build_choropleth(result.argument, result.query_type, gdm)
 
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
@@ -235,7 +210,7 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             return redirect("index", messages=messages)
 
     else:  # if request.method != (POST or GET)
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ================================================================================== #
@@ -248,10 +223,11 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
 #    ╚═══╝  ╚═╝╚══════╝ ╚══╝╚══╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═╝    #
 # ================================================================================== #
 
+
 @login_required()
 def view_result(request: requests.request, result_pk: int) -> render:
     result = get_object_or_404(Result, pk=result_pk)
-    log.error(f'result.articles_per_country == {result.articles_per_country}')
+    log.error(f"result.articles_per_country == {result.articles_per_country}")
 
     # replacing country alpha-2 iso codes with full names for viewing in template
     country_articles = full_name_result_set(result.articles_per_country)
@@ -267,7 +243,7 @@ def view_result(request: requests.request, result_pk: int) -> render:
             "filename": result.filename,
             "article_count": result.article_count,
             "article_data_len": result.article_data_len,
-            "country_articles": country_articles
+            "country_articles": country_articles,
         },
     )
 
@@ -282,6 +258,7 @@ def view_result(request: requests.request, result_pk: int) -> render:
 #  ``╚═══╝``╚═╝╚══════╝`╚══╝╚══╝`````╚═╝``````╚═════╝`╚═════╝`╚══════╝╚═╝`╚═════╝````╚═╝``````╚═════╝`╚══════╝```╚═╝```╚══════╝  #
 #  ````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ============================================================================================================================== #
+
 
 @login_required()
 def view_public_posts(request: requests.request) -> render:
@@ -308,10 +285,11 @@ def view_public_posts(request: requests.request) -> render:
 #  ```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ========================================================================================================================= #
 
+
 @login_required()
 def delete_comment(request: requests.request, comment_pk: int) -> HttpResponseBadRequest or redirect:
-    if request.method != 'POST':
-        return HttpResponseBadRequest('Unsupported Request Method')
+    if request.method != "POST":
+        return HttpResponseBadRequest("Unsupported Request Method")
     comment = get_object_or_404(Comment, pk=comment_pk)
     post_pk = comment.post.pk
     if comment.author.pk == request.user.pk:
@@ -333,6 +311,7 @@ def delete_comment(request: requests.request, comment_pk: int) -> HttpResponseBa
 #  ```````````````````````````````````````````````````````````````````````````````````````````````````` #
 # ===================================================================================================== #
 
+
 @login_required()
 def delete_result(request, result_pk: int):
     result = get_object_or_404(Result, pk=result_pk)
@@ -352,46 +331,47 @@ def delete_result(request, result_pk: int):
 #  ```````````````````````````````````````````````````````````````````  #
 # ===================================================================== #
 
+
 @login_required()
 def view_user(request, member_pk):
     try:
         user = get_user_model().objects.get(pk=member_pk)
 
-        try:
-            last_post = user.posts.order_by("-id")[0]
-        except IndexError:
-            last_post = None
+        # try:
+        #     last_post = user.posts.order_by("-id")[0]
+        # except IndexError:
+        #     last_post = None
 
-        try:
-            recent_posts = user.posts.order_by("-id")[1:5]
-        except IndexError:
-            recent_posts = None
+        # try:
+        #     recent_posts = user.posts.order_by("-id")[1:5]
+        # except IndexError:
+        #     recent_posts = None
 
-        try:
-            recent_comments = None
-            has_comments = user.comments.all()[0]
-            if has_comments:
-                recent_comments = user.comments.all()[0:5]
-        except IndexError:
-            recent_comments = None
+        # try:
+        #     recent_comments = None
+        #     has_comments = user.comments.all()[0]
+        #     if has_comments:
+        #         recent_comments = user.comments.all()[0:5]
+        # except IndexError:
+        #     recent_comments = None
 
-        try:
-            recent_results = None
-            has_results = user.results.all()[0]
-            if has_results:
-                recent_results = user.results.all()[1:5]
-        except IndexError:
-            recent_results = None
+        # try:
+        #     recent_results = None
+        #     has_results = user.results.all()[0]
+        #     if has_results:
+        #         recent_results = user.results.all()[1:5]
+        # except IndexError:
+        #     recent_results = None
 
         return render(
             request,
             "general/view_user.html",
             {
                 "member": user,
-                "posts": recent_posts,
-                "comments": recent_comments,
-                "last_post": last_post,
-                "queries": recent_results,
+                "posts": user.recent_posts,
+                "comments": user.recent_comments,
+                "last_post": user.latest_post,
+                "queries": user.recent_results,
             },
         )
     except get_user_model().DoesNotExist:
@@ -409,6 +389,7 @@ def view_user(request, member_pk):
 #  ``````````````````````````````````````````````````````````````````  #
 # ==================================================================== #
 
+
 @login_required()
 def new_post(request):
 
@@ -416,9 +397,7 @@ def new_post(request):
         form = NewPostForm()
         result_pk = form["result_pk"].value()
         result = get_object_or_404(Result, pk=result_pk)
-        return render(
-            request, "general/new_post.html", {"form": form, "result": result, 'country_articles': result.articles_per_country}
-        )
+        return render(request, "general/new_post.html", {"form": form, "result": result, "country_articles": result.articles_per_country},)
 
     elif request.method == "POST":
         form = NewPostForm(request.POST)
@@ -436,13 +415,7 @@ def new_post(request):
                     result_pk = request.POST.get("result_pk")
                     result = Result.objects.get(pk=result_pk)
 
-                    post = Post(
-                        title=title,
-                        public=public,
-                        body=body,
-                        result=result,
-                        author=author,
-                    )
+                    post = Post(title=title, public=public, body=body, result=result, author=author,)
 
                     post.save()
                     result.archived = True
@@ -458,10 +431,10 @@ def new_post(request):
                 raise PermissionDenied
 
         else:  # if not user.is_authenticated
-            return redirect('login_user')
+            return redirect("login_user")
 
     else:  # if request.method != (POST or GET)
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ========================================================================================= #
@@ -474,6 +447,7 @@ def new_post(request):
 #  `╚═════╝`╚═╝`````╚═════╝`╚═╝``╚═╝```╚═╝```╚══════╝````╚═╝``````╚═════╝`╚══════╝```╚═╝``` #
 #  ```````````````````````````````````````````````````````````````````````````````````````` #
 # ========================================================================================= #
+
 
 @login_required()
 def update_post(request, post_pk):
@@ -491,6 +465,7 @@ def update_post(request, post_pk):
 #  ````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ========================================================================================================================== #
 
+
 @login_required()
 def update_comment(request, comment_pk):
 
@@ -498,9 +473,7 @@ def update_comment(request, comment_pk):
 
     if request.method == "GET":
         form = EditCommentForm(instance=comment)
-        return render(
-            request, "general/update_comment.html", {"form": form, "comment": comment}
-        )
+        return render(request, "general/update_comment.html", {"form": form, "comment": comment})
 
     elif request.method == "POST":
         form = EditCommentForm()
@@ -512,7 +485,7 @@ def update_comment(request, comment_pk):
         return redirect("view_comment", comment_pk=comment_pk)
 
     else:  # request.method != ('GET' or 'POST')
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ====================================================================== #
@@ -525,6 +498,7 @@ def update_comment(request, comment_pk):
 #  ``╚═══╝``╚═╝╚══════╝`╚══╝╚══╝`````╚═╝``````╚═════╝`╚══════╝```╚═╝```  #
 #  ````````````````````````````````````````````````````````````````````  #
 # ====================================================================== #
+
 
 @login_required()
 def view_post(request, post_pk):
@@ -542,34 +516,24 @@ def view_post(request, post_pk):
 
     else:
         post = get_object_or_404(Post, pk=post_pk)
-        result = post.result
-        articles = post.result.articles.all()
-
         if post.author.id == request.user.id:
-            edit_post_form = EditPostForm(
-                instance=Post  # Pre-populate form with the post's current field values
-            )
+            edit_post_form = EditPostForm(instance=Post)  # Pre-populate form with the post's current field values
             return render(
                 request,
                 "general/view_post.html",
                 {
                     "post": post,
                     "edit_post_form": edit_post_form,
-                    "result": result,
-                    "articles": articles,
-                    'country_articles': result.articles_per_country
-                }
+                    "result": post.result,
+                    "articles": post.result.articles.all(),
+                    "country_articles": post.result.articles_per_country,
+                },
             )
         else:
             return render(
                 request,
                 "general/view_post.html",
-                {
-                    "post": post,
-                    "result": result,
-                    "articles": articles,
-                    "country_articles": result.articles_per_country
-                }
+                {"post": post, "result": post.result, "articles": post.result.articles.all(), "country_articles": post.result.articles_per_country,},
             )
 
 
@@ -584,87 +548,161 @@ def view_post(request, post_pk):
 #  ````````````````````````````````````````````````````````````````````````````````````````````  #
 # ============================================================================================== #
 
-
-# def view_category_sources(request):
-
-#     category_sources = []
-
-#     if request.method == 'GET':
-#         log.info(Category.objects.all().order_by('name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'languages').order_by('name').select_related('languages', 'publishing_country'))).iterator().explain(verbose=True))
-#         categories = Category.objects.all().order_by('name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'languages').order_by('name').select_related('languages', 'publishing_country'))).iterator()
-#         for cat in categories:
-#             sources = {
-#                 'src_list': [{
-#                     'name': source.name,
-#                     'publishing_country': source.publishing_country.display_name,
-#                     'languages': [language for language in source.languages.values_list('display_name', flat=True)]
-#                 } for source in cat.sources.all().iterator()],
-#                 'name': cat.name
-#             }
-#             category_sources.append(sources)
-
-#         return render(
-#             request,
-#             'general/view_category_sources.html',
-#             {'category_sources': category_sources}
-#         )
-#     else:
-#         return HttpResponseBadRequest('Unsupported Request Method')
+# TODO turn view_source_groups in to an a template to extend for the views below it
+# @cache_page(60 * 60 * 23 + 3599)
+def view_source_groups(request):
+    if request.method == "GET":
+        categories = Category.objects.all().order_by("name").iterator()
+        countries = Country.objects.all().order_by("display_name").iterator()
+        languages = Language.objects.all().order_by("display_name").iterator()
+        return render(request, "general/view_source_groups.html", {"categories": categories, "countries": countries, "languages": languages},)
+    else:
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
-# def view_country_publisher_sources(request):
-#     country_sources = []
-#     if request.method == 'GET':
-#         log.info(Country.objects.all().order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('categories', 'publishing_country'))).iterator().explain(verbose=True))
-#         countries = Country.objects.all().order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('categories', 'publishing_country'))).iterator()
-#         for country in countries:
-#             sources = {
-#                 'src_list': [{
-#                     'name': source.name,
-#                     'categories': [category for category in source.categories.values_list('name', flat=True)]
-#                 } for source in country.sources.all().iterator()],
-#                 'display_name': country.display_name,
-#                 'alphanum_name': country.alphanum_name
-#             }
-#             country_sources.append(sources)
+def view_source_detail(request, name):
+    source_object = get_object_or_404(Source, name=name)
+    target_id = source_object.id
+    source_queryset = (
+        Source.objects.filter(id=target_id)
+        .prefetch_related(
+            Prefetch("categories", queryset=Category.objects.only("name").order_by("name")),
+            Prefetch("languages", queryset=Language.objects.only("display_name").order_by("display_name")),
+            Prefetch("readership_countries", queryset=Country.objects.only("display_name").order_by("display_name")),
+        )
+        .select_related("publishing_country")
+        .only("categories", "languages", "name", "publishing_country", "readership_countries")
+    )
 
-#         return render(
-#             request,
-#             'general/view_country_publishers.html',
-#             {'countries': country_sources}
-#         )
+    source = [
+        {
+            "name": source.name,
+            "categories": [category.name for category in source.categories.all()],
+            "languages": [language.display_name for language in source.languages.all()],
+            "publishing_country": source.publishing_country.display_name,
+            "readership_countries": [readership.display_name for readership in source.readership_countries.all()],
+        }
+        for source in source_queryset
+    ]
 
-#     else:
-#         return HttpResponseBadRequest('Unsupported Request Method')
+    return render(request, "general/view_source_detail.html", {"source": source})
 
 
-# def view_language_sources(request):
+def view_category_sources(request, name):
 
-#     language_sources = []
+    category = get_object_or_404(Category, name=name)
 
-#     if request.method == 'GET':
-#         log.info(Language.objects.all().order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'categories').order_by('name').select_related('categories', 'publishing_country'))).iterator().explain(verbose=True))
-#         languages = Language.objects.all().order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country', 'categories').order_by('name').select_related('categories', 'publishing_country'))).iterator()
-#         for language in languages:
-#             sources = {
-#                 'src_list': [{
-#                     'name': source.name,
-#                     'publishing_country': source.publishing_country.display_name,
-#                     'categories': [category for category in source.categories.values_list('display_name', flat=True)]
-#                 } for source in language.sources.all().iterator()],
-#                 'display_name': language.display_name,
-#                 'alphanum_name': language.alphanum_name
-#             }
-#             language_sources.append(sources)
+    sources_queryset = (
+        category.sources.order_by("name")
+        .prefetch_related(
+            Prefetch("languages", queryset=Language.objects.only("display_name", "alphanum_name").order_by("display_name")),
+            Prefetch("categories", queryset=Category.objects.only("name").order_by("name")),
+            Prefetch("readership_countries", queryset=Country.objects.only("display_name", "alphanum_name").order_by("display_name"),),
+        )
+        .select_related("publishing_country")
+        .only("name", "categories", "languages", "publishing_country", "readership_countries")
+    )
 
-#         return render(
-#             request,
-#             'general/view_language_sources.html',
-#             {'languages': language_sources}
-#         )
+    sources = [
+        {
+            "name": source.name,
+            "categories": [category.name for category in source.categories.all()],
+            "languages": [language.display_name for language in source.languages.all()],
+            "publishing_country": source.publishing_country.display_name,
+            "readership_countries": [readership.display_name for readership in source.readership_countries.all()],
+            "url": source.get_absolute_url(),
+        }
+        for source in sources_queryset
+    ]
 
-#     else:
-#         return HttpResponseBadRequest('Unsupported Request Method')
+    return render(request, "general/view_category_detail.html", {"category": category, "sources": sources})
+
+
+def view_country_sources(request, alphanum_name):
+
+    country = get_object_or_404(Country, alphanum_name=alphanum_name)
+
+    readership_sources_queryset = (
+        country.readership_sources.order_by("name")
+        .prefetch_related(
+            Prefetch("categories", queryset=Category.objects.only("name").order_by("name")),
+            Prefetch("languages", queryset=Language.objects.only("display_name", "alphanum_name").order_by("display_name")),
+            Prefetch("readership_countries", queryset=Country.objects.only("display_name", "alphanum_name").order_by("display_name"),),
+        )
+        .select_related("publishing_country")
+        .only("name", "categories", "languages", "publishing_country", "readership_countries")
+    )
+
+    readership_sources = [
+        {
+            "name": source.name,
+            "categories": [category.name for category in source.categories.all()],
+            "languages": [language.display_name for language in source.languages.all()],
+            "publishing_country": source.publishing_country.display_name,
+            "readership_countries": [readership.display_name for readership in source.readership_countries.all()],
+            "url": source.get_absolute_url(),
+        }
+        for source in readership_sources_queryset
+    ]
+
+    publishing_sources_queryset = (
+        country.publishing_sources.order_by("name")
+        .prefetch_related(
+            Prefetch("categories", queryset=Category.objects.only("name").order_by("name")),
+            Prefetch("languages", queryset=Language.objects.only("display_name", "alphanum_name").order_by("display_name")),
+            Prefetch("readership_countries", queryset=Country.objects.only("display_name", "alphanum_name").order_by("display_name"),),
+        )
+        .select_related("publishing_country")
+        .only("name", "categories", "languages", "publishing_country", "readership_countries")
+    )
+
+    publishing_sources = [
+        {
+            "name": source.name,
+            "categories": [category.name for category in source.categories.all()],
+            "languages": [language.display_name for language in source.languages.all()],
+            "publishing_country": source.publishing_country.display_name,
+            "readership_countries": [readership.display_name for readership in source.readership_countries.all()],
+            "url": source.get_absolute_url(),
+        }
+        for source in publishing_sources_queryset
+    ]
+
+    return render(
+        request,
+        "general/view_country_detail.html",
+        {"country": country, "readership_sources": readership_sources, "publishing_sources": publishing_sources},
+    )
+
+
+def view_language_sources(request, alphanum_name):
+
+    language = get_object_or_404(Language, alphanum_name=alphanum_name)
+
+    sources_queryset = (
+        language.sources.order_by("name")
+        .prefetch_related(
+            Prefetch("categories", queryset=Category.objects.only("name").order_by("name")),
+            Prefetch("readership_countries", queryset=Country.objects.only("display_name", "alphanum_name").order_by("display_name"),),
+            Prefetch("languages", queryset=Language.objects.only("display_name", "alphanum_name").order_by("display_name")),
+        )
+        .select_related("publishing_country")
+        .only("name", "categories", "languages", "publishing_country", "readership_countries")
+    )
+
+    sources = [
+        {
+            "name": source.name,
+            "categories": [category.name for category in source.categories.all()],
+            "languages": [language.display_name for language in source.languages.all()],
+            "publishing_country": source.publishing_country.display_name,
+            "readership_countries": [readership.display_name for readership in source.readership_countries.all()],
+            "url": source.get_absolute_url(),
+        }
+        for source in sources_queryset
+    ]
+
+    return render(request, "general/view_language_detail.html", {"language": language, "sources": sources})
 
 
 # ========================================================================================= #
@@ -682,8 +720,8 @@ def view_post(request, post_pk):
 @login_required()
 def delete_post(request):
 
-    if request.method != 'POST':
-        return HttpResponseBadRequest('Unsupported Request Method')
+    if request.method != "POST":
+        return HttpResponseBadRequest("Unsupported Request Method")
 
     pk = request.POST["post_pk"]
     post = get_object_or_404(Post, pk=pk)
@@ -695,6 +733,7 @@ def delete_post(request):
     else:
         messages.error(request, "Action Not Authorized")
         return redirect("view_post", pk=pk)
+
 
 # ==================================================================================================== #
 #                                                                                                      #
@@ -722,7 +761,7 @@ def new_comment(request, post_pk):
         c.save()
         return redirect("view_comment", c.pk)
     else:
-        return HttpResponseBadRequest('Unsupported Request Method')
+        return HttpResponseBadRequest("Unsupported Request Method")
 
 
 # ====================================================================================================== #
@@ -735,6 +774,7 @@ def new_comment(request, post_pk):
 #  ``╚═══╝``╚═╝╚══════╝`╚══╝╚══╝``````╚═════╝`╚═════╝`╚═╝`````╚═╝╚═╝`````╚═╝╚══════╝╚═╝``╚═══╝```╚═╝```  #
 #  ````````````````````````````````````````````````````````````````````````````````````````````````````  #
 # ====================================================================================================== #
+
 
 @login_required()
 def view_comment(request, comment_pk):
@@ -756,6 +796,7 @@ def view_comment(request, comment_pk):
 #  ````````````````````````````````````````````````````````````````````````````  #
 # ============================================================================== #
 
+
 def view_choro(request: requests.request, result_pk) -> render:
     result = get_object_or_404(Result, pk=result_pk)
     return render(request, "general/view_choro.html", {"result": result})
@@ -772,13 +813,9 @@ def view_choro(request: requests.request, result_pk) -> render:
 #  ``````````````````````````  #
 # ======= BAD REQUEST ======== #
 
+
 def handler400(request, exception):
-    return render(
-        request=request,
-        template_name="error/400.html",
-        context=locals(),
-        status=400
-    )
+    return render(request=request, template_name="error/400.html", context=locals(), status=400)
 
 
 # ========================#
@@ -792,13 +829,9 @@ def handler400(request, exception):
 #  `````````````````````  #
 # ===== UNAUTHORIZED ==== #
 
+
 def handler401(request, exception):
-    return render(
-        request=request,
-        template_name="error/401.html",
-        context=locals(),
-        status=401
-    )
+    return render(request=request, template_name="error/401.html", context=locals(), status=401)
 
 
 # =============================#
@@ -813,13 +846,9 @@ def handler401(request, exception):
 # ===== PERMISSION DENIED ==== #
 # call: raise PermissionDenied #
 
+
 def handler403(request, exception):
-    return render(
-        request=request,
-        template_name='error/403.html',
-        context=locals(),
-        status=403
-    )
+    return render(request=request, template_name="error/403.html", context=locals(), status=403)
 
 
 # =============================#
@@ -833,14 +862,10 @@ def handler403(request, exception):
 #  `````````````````````````   #
 # ====== PAGE NOT FOUND =======#
 
+
 def handler404(request, exception):
     context = RequestContext(request)
-    return render(
-        request=request,
-        template_name="error/404.html",
-        context=locals(),
-        status=404
-    )
+    return render(request=request, template_name="error/404.html", context=locals(), status=404)
 
 
 # ==============================#
@@ -854,12 +879,9 @@ def handler404(request, exception):
 #  ``````````````````````````   #
 # ======= SERVER ERROR =========#
 
+
 def handler500(request):
-    return render(
-        request=request,
-        template_name="error/500.html",
-        status=500
-    )
+    return render(request=request, template_name="error/500.html", status=500)
 
 
 # ==================================#
@@ -873,13 +895,9 @@ def handler500(request):
 #    `````````````````````````      #
 # ==================================#
 
+
 def report_error(request):
-    return render(
-        request=request,
-        template_name="error/report.html",
-        context=locals(),
-        status=200
-    )
+    return render(request=request, template_name="error/report.html", context=locals(), status=200)
 
 
 def lang_a2_to_name(source):
@@ -899,15 +917,15 @@ def country_a2_to_name(source):
 def full_name_result_set(result_dict: dict):
     full_name_dict = {}
     for alpha3_code in result_dict:
-        if alpha3_code == 'CS-KM':
-            country_name = 'Serbia'
+        if alpha3_code == "CS-KM":
+            country_name = "Serbia"
         else:
             country_name = pycountry.countries.get(alpha_3=alpha3_code).name
 
         if country_name is not None:
             full_name_dict[country_name] = result_dict[alpha3_code]
         else:
-            log.error(f'Error parsing country name from alpha3 code of <{alpha3_code}>')
+            log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
     return full_name_dict
 
 
@@ -920,233 +938,3 @@ def get_query_type(qm_focus: str) -> QueryTypeChoice or None:
         log.error(f"query_type not found in get_query_type for qm_focus of {qm_focus}")
         query_type = None
     return query_type
-
-
-# TODO these list views can get cleaned out
-# =================================================================================================================
-
-
-@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
-class CategoryList(ListView):
-    queryset = Category.objects.order_by('name').prefetch_related(
-        Prefetch('sources', queryset=Source.objects.only('name', 'publishing_country__display_name', 'languages__display_name').order_by('name'))).iterator()
-    template_name = 'cbv/category_list.html'
-    context_object_name = 'categories'
-
-
-@method_decorator(cache_page(60 * 60 * 24), name='dispatch')
-class CountryList(ListView):
-    queryset = Country.objects.order_by('display_name').prefetch_related(Prefetch('publishers', queryset=Source.objects.only('name', 'categories__name', 'languages__display_name').order_by('name').prefetch_related('categories__name', 'languages__display_name'))).iterator()  # DON'T CHANGE - FAST
-    template_name = 'cbv/country_list.html'
-    context_object_name = 'countries'
-
-
-@method_decorator(cache_page(60 * 60 * 23 + 3480), name='dispatch')  # 60sec * 60min *23hr + 58min
-class LanguageList(ListView):
-    queryset = Language.objects.only('display_name', 'alphanum_name').order_by('display_name').prefetch_related(Prefetch('sources', queryset=Source.objects.only('name', 'categories', 'publishing_country').order_by('name').select_related('publishing_country'))).iterator()  # DON'T CHANGE - FAST
-    template_name = 'cbv/language_list.html'
-    context_object_name = 'languages'
-
-# ===========================================================================================================================================================
-
-
-# TODO turn view_source_groups in to an a template to extend for the views below it
-# @cache_page(60 * 60 * 23 + 3599)
-def view_source_groups(request):
-    if request.method == 'GET':
-        categories = Category.objects.all().order_by('name').iterator()
-        countries = Country.objects.all().order_by('display_name').iterator()
-        languages = Language.objects.all().order_by('display_name').iterator()
-        return render(
-            request,
-            'general/view_source_groups.html',
-            {'categories': categories, 'countries': countries, 'languages': languages}
-        )
-    else:
-        return HttpResponseBadRequest('Unsupported Request Method')
-
-
-# @cache_page(60 * 15)
-def view_category_detail(request, name):
-    category = get_object_or_404(Category, name=name)
-    if request.method == 'GET':
-        # sources = Source.objects.filter(categories__name=name).prefetch_related('countries__display_name', 'readership_countries__display_name', 'languages__display_name').select_related('publishing_country__display_name')
-        # sources = Category.objects.filter(name=name).prefetch_related(Prefetch('sources', queryset=Source.objects.only('name'))).iterator()
-        sources = category.sources.all()
-        return render(
-            request,
-            'general/view_category_detail.html',
-            {'category': category, 'related_sources': sources}
-        )
-
-    else:
-        return HttpResponseBadRequest('Unsupported Request Method')
-
-
-# @cache_page(60 * 15)
-def view_country_detail(request, alphanum_name):
-    country = get_object_or_404(Country, alphanum_name=alphanum_name)
-    if request.method == 'GET':
-        publisher_sources = country.publishing_sources.only('name')
-        readership_sources = country.readership_sources.all()
-        print(f'readership_sources = {readership_sources}')
-        print(f'type(readership_sources) = {type(readership_sources)}')
-        for source in readership_sources:
-            print(f'source = {source}')
-            print(f'source.name = {source.name}')
-        return render(
-            request,
-            'general/view_country_detail.html',
-            {'country': country, 'publishers': publisher_sources, 'readerships': readership_sources}
-        )
-    else:
-        return HttpResponseBadRequest('Unsupported Request Method')
-
-
-# @cache_page(60 * 15)
-def view_language_detail(request, alphanum_name):
-    language = get_object_or_404(Language, alphanum_name=alphanum_name)
-    if request.method == 'GET':
-
-        sources = language.sources.only('name')
-        related_sources = [{'name': source.name, 'url': source.get_absolute_url(), 'type': str(type(source))} for source in sources]
-
-        return render(
-            request,
-            'general/view_language_detail.html',
-            {'language': language, 'related_sources': related_sources}
-        )
-    else:
-        return HttpResponseBadRequest('Unsupported Request Method')
-
-
-def view_source_detail(request, name):
-
-    source_object = get_object_or_404(Source, name=name)
-    target_id = source_object.id
-    source_queryset = Source.objects.filter(id=target_id).prefetch_related(
-        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
-        Prefetch('languages', queryset=Language.objects.only('display_name').order_by('display_name')),
-        Prefetch('readership_countries', queryset=Country.objects.only('display_name').order_by('display_name'))
-    ).select_related('publishing_country').only('categories', 'languages', 'name', 'publishing_country', 'readership_countries')
-
-    source = [{
-        'name': source.name,
-        'categories': [category.name for category in source.categories.all()],
-        'languages': [language.display_name for language in source.languages.all()],
-        'publishing_country': source.publishing_country.display_name,
-        'readership_countries': [readership.display_name for readership in source.readership_countries.all()]
-    } for source in source_queryset]
-
-    return render(
-        request,
-        'general/view_source_detail.html',
-        {'source': source}
-    )
-
-
-# TODO fully implement the views below, incorporating the view_category/language/country/source views from above where possible, and replacing the remainder.
-def view_category_sources(request, name):
-
-    category = get_object_or_404(Category, name=name)
-
-    sources_queryset = category.sources.order_by('name').prefetch_related(
-        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
-        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
-        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
-
-    sources = [{
-        'name': source.name,
-        'categories': [category.name for category in source.categories.all()],
-        'languages': [language.display_name for language in source.languages.all()],
-        'publishing_country': source.publishing_country.display_name,
-        'readership_countries': [readership.display_name for readership in source.readership_countries.all()],
-        'url': source.get_absolute_url()
-    } for source in sources_queryset]
-
-    return render(
-        request,
-        'general/view_category_detail.html',
-        {'category': category, 'sources': sources}
-    )
-
-
-def view_country_sources(request, alphanum_name):
-
-    country = get_object_or_404(Country, alphanum_name=alphanum_name)
-
-    readership_sources_queryset = country.readership_sources.order_by('name').prefetch_related(
-        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
-        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
-        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
-
-    readership_sources = [{
-        'name': source.name,
-        'categories': [category.name for category in source.categories.all()],
-        'languages': [language.display_name for language in source.languages.all()],
-        'publishing_country': source.publishing_country.display_name,
-        'readership_countries': [readership.display_name for readership in source.readership_countries.all()],
-        'url': source.get_absolute_url()
-    } for source in readership_sources_queryset]
-
-    publishing_sources_queryset = country.publishing_sources.order_by('name').prefetch_related(
-        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
-        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name')),
-        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
-
-    publishing_sources = [{
-        'name': source.name,
-        'categories': [category.name for category in source.categories.all()],
-        'languages': [language.display_name for language in source.languages.all()],
-        'publishing_country': source.publishing_country.display_name,
-        'readership_countries': [readership.display_name for readership in source.readership_countries.all()],
-        'url': source.get_absolute_url()
-    } for source in publishing_sources_queryset]
-
-    return render(
-        request,
-        'general/view_country_detail.html',
-        {'country': country, 'reaership_sources': readership_sources, 'publishing_sources': publishing_sources}
-    )
-
-
-def view_language_sources(request, alphanum_name):
-
-    language = get_object_or_404(Language, alphanum_name=alphanum_name)
-
-    sources_queryset = language.sources.order_by('name').prefetch_related(
-        Prefetch('categories', queryset=Category.objects.only('name').order_by('name')),
-        Prefetch('readership_countries', queryset=Country.objects.only('display_name', 'alphanum_name').order_by('display_name')),
-        Prefetch('languages', queryset=Language.objects.only('display_name', 'alphanum_name').order_by('display_name'))
-    ).select_related('publishing_country').only('name', 'categories', 'languages', 'publishing_country', 'readership_countries')
-
-    sources = [{
-        'name': source.name,
-        'categories': [category.name for category in source.categories.all()],
-        'languages': [language.display_name for language in source.languages.all()],
-        'publishing_country': source.publishing_country.display_name,
-        'readership_countries': [readership.display_name for readership in source.readership_countries.all()],
-        'url': source.get_absolute_url()
-    } for source in sources_queryset]
-
-    return render(
-        request,
-        'general/view_language_detail.html',
-        {'language': language, 'sources': sources}
-    )
-
-
-def view_sources_root(request):
-
-    category_list = Category.objects.values_list('name', flat=True).order_by('name')
-    country_list = Country.objects.values_list('display_name', flat=True).order_by('display_name')
-    language_list = Language.objects.values_list('display_name', flat=True).order_by('display_name')
-
-    return render(
-        request,
-        'general/view_sources_root.html',
-        {'category_list': category_list, 'country_list': country_list, 'language_list': language_list}
-    )
