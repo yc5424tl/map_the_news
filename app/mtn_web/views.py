@@ -3,14 +3,14 @@ from typing import NoReturn
 
 import pycountry
 import requests
-from app.mtn_web.constructor import Constructor
-from app.mtn_web.country_data import iso_codes
-from app.mtn_web.decorators import query_inspection
-from app.mtn_web.forms import CustomUserCreationForm, EditCommentForm, EditPostForm, NewCommentForm, NewPostForm, NewQueryForm, UserLoginForm
-from app.mtn_web.geo_data_mgr import GeoDataManager
-from app.mtn_web.geo_map_mgr import GeoMapManager
-from app.mtn_web.models import Article, Category, Comment, Country, Language, Post, QueryTypeChoice, Result, Source
-from app.mtn_web.query_mgr import Query
+from mtn_web.constructor import Constructor
+from mtn_web.country_data import iso_codes
+from mtn_web.decorators import query_inspection
+from mtn_web.forms import CustomUserCreationForm, EditCommentForm, EditPostForm, NewCommentForm, NewPostForm, NewQueryForm, UserLoginForm
+from mtn_web.geo_data_mgr import GeoDataManager
+from mtn_web.geo_map_mgr import GeoMapManager
+from mtn_web.models import Article, Category, Comment, Country, Language, Post, QueryTypeChoice, Result, Source
+from mtn_web.query_mgr import Query
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.decorators import login_required
