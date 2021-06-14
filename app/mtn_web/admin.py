@@ -9,17 +9,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django import forms
 
+from simple_history.admin import SimpleHistoryAdmin
+
 admin.site.register(User, UserAdmin)
 
 
-# class ReadershipCountriesInline(admin.StackedInline):
-#     model = Country
-#     extra = 1
-#     max_num = 1
-
-
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin(SimpleHistoryAdmin):
     list_display = (
         "id",
         "title",
@@ -36,7 +32,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 @admin.register(Result)
-class ResultAdmin(admin.ModelAdmin):
+class ResultAdmin(SimpleHistoryAdmin):
     list_display = (
         "id",
         "argument",
@@ -54,7 +50,7 @@ class ResultAdmin(admin.ModelAdmin):
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(SimpleHistoryAdmin):
     list_display = (
         "id",
         "title",
@@ -70,39 +66,15 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(SimpleHistoryAdmin):
     list_display = ("id", "body", "date_published", "date_last_edit", "author", "post")
     list_filter = ("author", "date_published", "date_last_edit")
     list_display_links = ("author", "post")
     list_editable = ("body",)
 
 
-# class ReadershipInline(admin.TabularInline):
-#     model = Source.readership_countries.through
-
-
 @admin.register(Source)
-class SourceAdmin(admin.ModelAdmin):
-
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "publishing_country":
-    #         kwargs["queryset"] = Country.objects.order_by('display_name')
-    #     elif db_field.name == "readership_countries":
-    #         kwargs["queryset"] = Country.objects.order_by('display_name')
-    #     elif db_field.name == "languages":
-    #         kwargs["queryset"] = Language.objects.order_by('display_name')
-    #     elif db_field.name == "categories":
-    #         kwargs["queryset"] = Category.objects.order_by('display_name')
-    #     return super(SourceAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-    # def get_field_queryset(self, db, db_field, request, **kwargs):
-    #     queryset = super().get_field_queryset(db, db_field, request)
-    #     if db_field.name == 'publishing_country' or 'readership_countries' or 'categories' or 'languages':
-    #         queryset = queryset.order_by('display_name')
-    #     return queryset
-
-    # class SourceAdmin(admin.InlineModelAdmin):
-    # ordering = ["name"]
+class SourceAdmin(SimpleHistoryAdmin):
 
     fieldsets = (
         (None, {
@@ -123,14 +95,6 @@ class SourceAdmin(admin.ModelAdmin):
         "verified"
     )
 
-    # @admin.display(ordering='publishing_country__display_name')
-    # def publishing_country_display_name(self, obj):
-    #     return obj.publishing_country.display_name
-
-    # @admin.display(ordering='readership_countries__display_name')
-    # def readership_countries_display_name(self, obj):
-    #     return obj.readership_countries.display_name
-
     list_select_related = (
         "publishing_country",
     )
@@ -150,33 +114,19 @@ class SourceAdmin(admin.ModelAdmin):
         "languages",
     )
 
-    # inlines = [ReadershipInline,]
-    # exclude = ('readership_countries', )
-
-    # inlines = (ReadershipCountriesInline,)
-
-    # def get_form(self, request, obj=None, **kwargs):
-    #         form = super(SourceAdmin, self).get_form(request, obj, **kwargs)
-    #         form.base_fields['publishing_country'].queryset = form.base_fields['publishing_country'].queryset.order_by('display_name')
-    #         form.base_fields['readership_countries'].queryset = form.base_fields['readership_countries'].queryset.order_by('display_name')
-    #         form.base_fields['categories'].queryset = form.base_fields['categories'].queryset.order_by('display_name')
-    #         form.base_fields['languages'].queryset = form.base_fields['languages'].queryset.order_by('display_name')
-    #         return form
-
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(SimpleHistoryAdmin):
     list_display = ("id", "name")
 
 
 @admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(SimpleHistoryAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")
-    # inlines = [ReadershipInline, ]
 
 
 @admin.register(Language)
-class LanguageAdmin(admin.ModelAdmin):
+class LanguageAdmin(SimpleHistoryAdmin):
     list_display = ("id", "alpha2_code", "display_name", "alphanum_name")
     list_editable = ("alpha2_code", "display_name", "alphanum_name")

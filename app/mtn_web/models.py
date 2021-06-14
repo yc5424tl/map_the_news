@@ -6,7 +6,6 @@ from django.contrib.auth.models import AbstractUser
 from simple_history import register
 from simple_history.models import HistoricalRecords
 from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
-# from django.contrib.sites.models import Site
 
 
 class QueryTypeChoice(Enum):
@@ -132,11 +131,6 @@ class Source(models.Model):
 
     def get_absolute_url(self):
         return f"/sources/{self.name}/"
-
-    # def get_absolute_url(self):
-    #     path = reverse('view_source_detail', args=[self.name])
-    #     current_site = Site.objects.get_current().domain
-    #     return f'http://{current_site}{path}'
 
 
 class Article(models.Model):

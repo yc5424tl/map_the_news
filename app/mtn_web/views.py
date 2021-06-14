@@ -208,11 +208,7 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
                 country_codes = [source.publishing_country.alpha2_code]
                 if source.readership_countries:
                     for country in source.readership_countries.all():
-                        country_codes.append(source.readership_countries.country.alpha2_code)
-                # country_code = geo_map_mgr.map_source(
-                #     source_country=article.source_country
-                # )
-                # gdm.add_result(country_code)
+                        country_codes.append(country.alpha2_code)
                 for alpha2_code in country_codes:
                     alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
                     gdm.add_result(alpha3_code)
@@ -992,7 +988,12 @@ def view_country_detail(request, alphanum_name):
     country = get_object_or_404(Country, alphanum_name=alphanum_name)
     if request.method == 'GET':
         publisher_sources = country.publishing_sources.only('name')
-        readership_sources = country.readership_sources.only('name')
+        readership_sources = country.readership_sources.all()
+        print(f'readership_sources = {readership_sources}')
+        print(f'type(readership_sources) = {type(readership_sources)}')
+        for source in readership_sources:
+            print(f'source = {source}')
+            print(f'source.name = {source.name}')
         return render(
             request,
             'general/view_country_detail.html',
