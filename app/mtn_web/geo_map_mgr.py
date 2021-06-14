@@ -7,8 +7,8 @@ import geopandas as gp
 import numpy as np
 import pandas as pd
 import pycountry
-from app.mtn_django.logger import log
-from app.mtn_web.geo_data_mgr import GeoDataManager
+from mtn_django.logger import log
+from mtn_web.geo_data_mgr import GeoDataManager
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from folium import ColorMap as cm
