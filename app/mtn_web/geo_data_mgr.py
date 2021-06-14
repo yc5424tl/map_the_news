@@ -8,8 +8,8 @@ from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from requests.exceptions import MissingSchema
 
-from app.mtn_django.logger import log
-from app.mtn_web.models import Article
+from mtn_django.logger import log
+from mtn_web.models import Article
 
 
 class GeoDataManager:
