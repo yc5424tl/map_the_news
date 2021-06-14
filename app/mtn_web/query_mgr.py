@@ -2,8 +2,8 @@ import os
 from datetime import datetime, timedelta
 
 import requests
-from app.mtn_django.logger import log
-from app.mtn_web.models import QueryTypeChoice
+from mtn_django.logger import log
+from mtn_web.models import QueryTypeChoice
 from newsapi import NewsApiClient
 
 api_key = os.environ.get("MTN_WEB_API_KEY")
