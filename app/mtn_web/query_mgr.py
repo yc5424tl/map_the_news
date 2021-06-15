@@ -42,6 +42,11 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
+        if response.json()["status"] == "error":
+            print(response.json())
+            log.error(response.json())
+            err_code = response.json()["status"]["code"]
+            return False, False
         log.info(f"response = \n\n{response}")
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
