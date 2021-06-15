@@ -25,6 +25,10 @@
     border-radius    : 5pt;
 }
 
+.view-posts-card-text.card-text {
+    color: var(--off-black);
+}
+
 .view-posts-container {
     background-color : var(--off-black);
     padding          : 1rem;
@@ -71,7 +75,7 @@
 
 .view-posts-comment-link:hover,
 .view-posts-comment-link:hover {
-    color      : var(--main-link-hover);
+    color: var(--main-darkest);
     transition : 0.4s;
 }
 
@@ -94,6 +98,14 @@
 
 .view-posts-card-subtitle-container.text-muted {
     margin-bottom : 1rem;
+}
+
+.view-posts-card-subtitle-link:link {
+    color: var(--main-darkest);
+}
+
+.view-posts-card-subtitle-link:visited {
+    color: var(--mid-dark-grey);
 }
 
 .view-posts-comment-body {

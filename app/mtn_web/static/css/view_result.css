@@ -23,14 +23,22 @@
 .accordion .card:first-of-type,
 .accordion .card:not(:first-of-type):not(:last-of-type),
 .accordion .card:last-of-type {
-    border-bottom  : 1pt solid var(--main-light);
-    border-collapse: collapse;
+    border: 2.5pt dotted var(--main-darkest);
+    border-radius: 20px;
+}
+
+.accordion .card:first-of-type:hover,
+.accordion .card:first-of-type:focus,
+.accordion .card:not(:first-of-type):not(:last-of-type):hover,
+.accordion .card:not(:first-of-type):not(:last-of-type):focus,
+.accordion .card:last-of-type:hover,
+.accordion .card:last-of-type:focus {
+    border: 2.5pt dotted rgb(3, 17, 25);
+    border-radius: 20px;
 }
 
 .card {
     background-color: var(--off-black);
-    border          : 0.5pt solid var(--main-accent-1);
-    border-collapse : collapse;
     color           : var(--main-light);
     width           : 70%;
     height          : auto;
@@ -50,19 +58,12 @@
 }
 
 .card-header {
-    border-color    : var(--main-accent-1);
-    border-collapse : collapse;
     transition      : 0.4s;
     background-color: var(--off-black);
 }
 
 .card-header:hover {
     background-color   : var(--off-black);
-    border-top-color   : var(--main-light);
-    border-right-color : var(--main-light);
-    border-left-color  : var(--main-light);
-    border-bottom-color: var(--main-light);
-    border-collapse    : collapse;
     transition         : 0.4s;
 }
 
@@ -75,35 +76,34 @@
 }
 
 .card:first-of-type {
-    margin-top: inital;
+    margin-top: initial;
 }
 
 .neon,
-.btn.btn-link.card-btn:hover {
-    text-shadow : 0 0 5px #FFF,
-                 0 0 10px #53bcec,
-                 0 0 15px #09c0ee,
-                 0 0 20px #059cc2,
-                 0 0 30px #10a6cc,
-                 0 0 40px #438cdf,
-                 0 0 55px #FFF,
-                 0 0 75px #FFF,
-                 0 0 95px #fff,
-                 2px 2px 2px rgba(62, 210, 255, 0.952);
-    transition: .4s;
+.btn.btn-link.card-btn:hover,
+.btn.btn-link.card-btn:focus {
+    text-shadow : 0 0  3px #FFF,
+                  0 0  6px #53bcec,
+                  0 0 12px #09c0ee,
+                  0 0 14px #059cc2,
+                  0 0 19px #10a6cc,
+                  0 0 25px #438cdf,
+                  0 0 29px #FFF,
+                  0 0 30px #FFF,
+                  0 0 31px #fff,
+               1px 1px 2px rgba(62, 210, 255, 0.952);
+    transition: .2s;
 }
 
 .btn.btn-link.card-btn {
-    text-shadow     : 0 0 5px rgb(0, 0, 0),
-                      0 0 10px #FFF,
-                      0 0 15px #508d9c,
-                      0 0 20px #87cccc,
-                      0 0 30px #b4ebe6,
-                      0 0 40px #d7f1f1,
-                      0 0 55px #e5eeee,
-                      0 0 75px #FFF,
-                      2px 2px 2px rgba(0,0,0,0.8);
-    transition      : 0.4s;
+    text-shadow     : 0 0  3px rgb(0, 0, 0),
+                      0 0  6px #000,
+                      0 0  7px #508d9c,
+                      0 0  9px #87cccc,
+                      0 0 14px rgb(42, 68, 84),
+                      0 0 20px rgb(39, 65, 81),
+                   1px 1px 2px rgba(0,0,0,0.8);
+    transition      : 0.2s;
     text-decoration : none;
     text-align      : center;
     font-weight     : 900;
@@ -122,9 +122,27 @@
     #horizontal-table {
         display: none;
     }
+
+    #outer-iframe {
+        display: initial;
+    }
+
+    #map-card {
+        display: none;
+    }
+
 }
 
 @media (min-width: 768px) {
+
+    #map-card {
+        margin-top: 4rem;
+        display: flex;
+    }
+
+    #outer-iframe {
+        display: none;
+    }
 
     #vertical-table {
         display: none;

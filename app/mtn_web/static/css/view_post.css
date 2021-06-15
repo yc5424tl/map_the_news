@@ -10,7 +10,6 @@
 
 #post {
     background-color : var(--off-black);
-    /* border           : 2pt solid var(--main-light); */
     border-radius    : 5pt;
     color            : var(--main-light);
     margin           : 1em;
@@ -60,9 +59,9 @@
 
 #add-comment-btn:hover,
 #add-comment-btn:focus {
-    background-color : var(--off-black);
-    border           : 2pt solid var(--main-link-hover);
-    color            : var(--main-link-hover);
+    background-color : var(--main-link-hover);
+    border           : 2pt solid var(--main-light);
+    color            : var(--main-light);
     transition       : 0.4s;
 }
 
@@ -416,6 +415,7 @@ th, tr {
     border-top-left-radius  : 0;
     border-top-right-radius : 0;
     text-align              : center;
+    padding-bottom: 120px;
 }
 
 .comment-body,

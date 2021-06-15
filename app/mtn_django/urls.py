@@ -23,26 +23,25 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
-    path('admin/password_reset/', auth_views.PasswordResetView.as_view(), name='admin_password_reset', ),
-    path('admin/password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done", ),
-    path('reset/<uid64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset-confirm', ),
-    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete', ),
-    path('', include('mtn_web.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path("admin/doc/", include("django.contrib.admindocs.urls")),
+    path("admin/", admin.site.urls),
+    path("admin/password_reset/", auth_views.PasswordResetView.as_view(), name="admin_password_reset",),
+    path("admin/password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done",),
+    path("reset/<uid64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset-confirm",),
+    path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete",),
+    path("", include("mtn_web.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-handler400 = 'mtn_web.views.handler400'
-handler401 = 'mtn_web.views.handler401'
-handler403 = 'mtn_web.views.handler403'
-handler404 = 'mtn_web.views.handler404'
-handler500 = 'mtn_web.views.handler500'
+handler400 = "mtn_web.views.handler400"
+handler401 = "mtn_web.views.handler401"
+handler403 = "mtn_web.views.handler403"
+handler404 = "mtn_web.views.handler404"
+handler500 = "mtn_web.views.handler500"
 
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+
+    urlpatterns = [path("__debug__/", include(debug_toolbar.urls)),] + urlpatterns

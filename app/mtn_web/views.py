@@ -337,32 +337,6 @@ def view_user(request, member_pk):
     try:
         user = get_user_model().objects.get(pk=member_pk)
 
-        # try:
-        #     last_post = user.posts.order_by("-id")[0]
-        # except IndexError:
-        #     last_post = None
-
-        # try:
-        #     recent_posts = user.posts.order_by("-id")[1:5]
-        # except IndexError:
-        #     recent_posts = None
-
-        # try:
-        #     recent_comments = None
-        #     has_comments = user.comments.all()[0]
-        #     if has_comments:
-        #         recent_comments = user.comments.all()[0:5]
-        # except IndexError:
-        #     recent_comments = None
-
-        # try:
-        #     recent_results = None
-        #     has_results = user.results.all()[0]
-        #     if has_results:
-        #         recent_results = user.results.all()[1:5]
-        # except IndexError:
-        #     recent_results = None
-
         return render(
             request,
             "general/view_user.html",

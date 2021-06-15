@@ -17,10 +17,15 @@
 
 {% block content %}
     <div class="row no-gutters text-center" id="content-wrapper">
-        <div class="col-12 accordion" id="accordion">
+
+        <div class="embed-responsive-16by9 col-xs-12 col-md-0" id="outer-iframe" style="min-width: 100%;">
+            {{ choro_map|safe }}
+        </div>
+
+        <div class="col-xs-0 col-md-12 accordion" id="accordion">
 
                 <!--  MAP  -->
-                <div class="card">
+                <div class="card" id="map-card">
                     <div class="card-header" id="map-header">
                         <h3 class="mb-0">
                             <button class="btn btn-link card-btn" data-toggle="collapse" data-target="#map-collapse">

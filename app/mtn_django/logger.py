@@ -41,13 +41,9 @@ LOGGING = {
     "formatters": {
         # see full list of attributes here:
         # https://docs.python.org/3/library/logging.html#logrecord-attributes
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-        },
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"},
         "simple": {"format": "%(levelname)s %(message)s"},
-        "timestampthread": {
-            "format": "%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s] [%(name)-20.20s]  %(message)s",
-        },
+        "timestampthread": {"format": "%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s] [%(name)-20.20s]  %(message)s",},
     },
     "handlers": {
         "logfile": {
@@ -60,10 +56,7 @@ LOGGING = {
             "backupCount": 3,  # keep this many extra historical files
             "formatter": "timestampthread",
         },
-        "console": {
-            "level": min_level,  # this level or higher goes to the console
-            "class": "logging.StreamHandler",
-        },
+        "console": {"level": min_level, "class": "logging.StreamHandler",},  # this level or higher goes to the console
     },
     "loggers": {
         "django": {  # configure all of Django's loggers
@@ -73,9 +66,6 @@ LOGGING = {
         },
         # root configuration – for all of our own apps
         # (feel free to do separate treatment for e.g. brokenapp vs. sth else)
-        "": {
-            "handlers": ["logfile", "console"],
-            "level": min_level,  # this level or higher goes to the console,
-        },
+        "": {"handlers": ["logfile", "console"], "level": min_level,},  # this level or higher goes to the console,
     },
 }

@@ -47,7 +47,10 @@ class Query:
         response_data = response.json()["articles"]
         article_data = list(response_data)
 
-        # **FREE VERSION OF NEWS_API LIMITS RESULTS TO 100 PER REQUEST (cannot use multiple requests to page results), BELOW IS FOR PAGING THROUGH MORE THAN 100 RESULTS**
+        # ** DO NOT UNCOMMENT CODE BELOW UNLESS YOU HAVE A PAID SUBSCRIPTION FOR NEWSAPI
+        # free version is limited to first 100 results (cannot use multiple requests to page results),
+        # you will burn up your api calls fast fast fast if using the below w/ free api
+        # BELOW IS FOR PAGING THROUGH MORE THAN 100 RESULTS**
         """
         if article_count > 100:
             pages = article_count//100
