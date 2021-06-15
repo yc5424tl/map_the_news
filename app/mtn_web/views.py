@@ -181,14 +181,28 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             article_list = constructor.build_article_data(article_data, result)
 
             for article in article_list:
-                source = Source.objects.get(name=article.source)
-                country_codes = [source.publishing_country.alpha2_code]
+                source = get_object_or_404(Source, name=article.source)
+                try:
+                    country_codes = [source.publishing_country.alpha2_code]
+                except Exception as exc:
+                    print(exc)
+                    print (source.publishing_country)
                 if source.readership_countries:
                     for country in source.readership_countries.all():
-                        country_codes.append(country.alpha2_code)
+                        try:
+                            country_codes.append(country.alpha2_code)
+                        except Exception as exc:
+                            print(exc)
+                            print(country)
                 for alpha2_code in country_codes:
-                    alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
-                    gdm.add_result(alpha3_code)
+                    print(f'a2code={alpha2_code}')
+                    try:
+                        alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
+                        print (f'a3code = {alpha3_code}')
+                        gdm.add_result(alpha3_code)
+                    except Exception as exc:
+                        print(f'a3 exception: {exc}')
+                    
 
             data_tup = geo_map_mgr.build_choropleth(result.argument, result.query_type, gdm)
 
