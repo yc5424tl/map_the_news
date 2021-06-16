@@ -17,6 +17,7 @@ CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 
 
 class GeoMapManager:
+    # TODO move map_source in to Source Model as alpha2_to_alpha3(alpha2_code: str):
     @staticmethod
     def map_source(source_country):
         return (pycountry.countries.get(alpha_2=str(source_country).upper())).alpha_3 if source_country else None

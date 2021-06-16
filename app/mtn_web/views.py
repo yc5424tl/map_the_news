@@ -79,8 +79,7 @@ def register_user(request: requests.request) -> render or redirect:
             form = CustomUserCreationForm()
             return render(request=request, template_name="general/new_user.html", context={"form": form})
     if request.method == "GET":
-        form = CustomUserCreationForm()
-        return render(request, "general/new_user.html", {"form": form})
+        return render(request, "general/new_user.html", {"form": CustomUserCreationForm})
     else:  # request.method != 'GET' or 'POST'
         return HttpResponseBadRequest("Unsupported Request Method")
 
@@ -99,22 +98,19 @@ def register_user(request: requests.request) -> render or redirect:
 def login_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
         form = AuthenticationForm(request.POST)
-        # form = UserLoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(request, username=username, password=password)
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request=request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect("view_user", user.pk)
-        form = AuthenticationForm()
-        # form = UserLoginForm()
-        messages.error(request, "Incorrect Password and/or Username", extra_tags="error")
-        return render(request, "registration/login_user.html", {"form": form})
+        else:
+            messages.error(request, "Incorrect Password and/or Username", extra_tags="error")
+            return render(request, "registration/login_user.html", {"form": AuthenticationForm})
 
     elif request.method == "GET":
         form = AuthenticationForm()
-        # form = UserLoginForm()
         return render(request, "registration/login_user.html", {"form": form})
 
     else:  # request.method != 'GET or 'POST'
@@ -185,7 +181,8 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
                 country_codes = [source.publishing_country.alpha2_code]
                 if source.readership_countries:
                     for country in source.readership_countries.all():
-                        country_codes.append(country.alpha2_code)
+                        if country != source.publishing_country:
+                            country_codes.append(country.alpha2_code)
                 for alpha2_code in country_codes:
                     alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
                     gdm.add_result(alpha3_code)
