@@ -102,7 +102,7 @@ def get_or_create_country(alpha2_code):
         else:
             '''
                 Substring up to first comma, i.e. "Bolivia, Plurinational State of" will return "Bolivia".
-                This is dont as the country names are used to:
+                This is done as the country names are used to:
                     - generate element id's in templates, and neither spaces or commas are allowed.
                     - As a user-friendly alternative to being presented iso-alpha2/3 codes in templates.
             '''
@@ -172,7 +172,7 @@ def build_country_src_data(src_data, alpha2_iso_code, src_cat):
             src.languages.add(language)
             if src.publishing_country is not country:
                 src.readership_countries.add(country)
-                if language not in src.languages:
+                if language not in src.languages.all():
                     src.languages.add(language)
         else:
             log.error(f'{type(src)} passed when expecting {type(Source)} or type{None} ')

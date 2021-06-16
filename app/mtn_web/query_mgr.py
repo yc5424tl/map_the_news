@@ -44,7 +44,7 @@ class Query:
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
-        print(response.json())
+        # print(response.json())
         if response.json()["status"] == "error":
             print(response.json())
             log.error(response.json())
