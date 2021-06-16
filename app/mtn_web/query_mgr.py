@@ -37,11 +37,19 @@ class Query:
             self.endpoint = f"https://newsapi.org/v2/top-headlines?q={self.arg}&apiKey={api_key}&pageSize=100"
         else:
             self.endpoint = None
+            print (self.endpoint)
             return False
+
         return True
 
     def execute_query(self) -> ([dict], int):
         response = requests.get(self.endpoint)
+        print(response.json())
+        if response.json()["status"] == "error":
+            print(response.json())
+            log.error(response.json())
+            err_code = response.json()["status"]["code"]
+            return False, False
         log.info(f"response = \n\n{response}")
         article_count = int(response.json()["totalResults"])
         response_data = response.json()["articles"]
