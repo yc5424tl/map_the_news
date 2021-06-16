@@ -151,6 +151,7 @@
                             <div class="card-body">
                                 {% if result.archived is False %}
                                     <form method="post" action="{% url 'new_post' %}" class="text-center save-result-form">
+                                        {% csrf_token %}
                                         <div class="input-group row no-gutters" id="action-form-header">
                                             <p id='save-result-form-title' class="input-group-text text-center col-12 mx-auto">   Save Your Result</p>
                                             <input type="text" id="action-form-input-title" class="form-control col-12" placeholder="   Add Title Here" name="title" >
