@@ -1,0 +1,28 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+    Select Values for Update
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>New Publishing Country:</p>
+        <select name="publishing_country" id="publishing">
+            {% for country in countries %}
+                <option value="{{ country.pk }}">{{ country.display_name }} ({{ country.alpha2_code }})</option>
+            {% endfor %}
+        </select>
+
+        <p>New Readership Country: </p>
+        <select name="readership_country" id="readership">
+            {% for country in countries %}
+                <option value="{{ country.pk }}">{{ country.display_name }} ({{ country.alpha2_code }})</option>
+            {% endfor %}
+        </select>
+        {% for source in sources %}
+            <p>{{ source }}</p>
+            <input type="hidden" name="_selected_action" value="{{ source.pk }}" />
+        {% endfor %}
+        <input type="hidden" name="action" value="update_readerships"/>
+        <input type="submit" name="exec" value="Update Publisher/Readerships"/>
+    </form>
+{% endblock %}

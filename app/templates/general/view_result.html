@@ -5,7 +5,7 @@
 
 
 {% block title %}
-    Query Results - {{ block.super }}
+    View Result - {{ block.super }}
 {% endblock %}
 
 
@@ -19,7 +19,8 @@
     <div class="row no-gutters text-center" id="content-wrapper">
 
         <div class="embed-responsive-16by9 col-xs-12 col-md-0" id="outer-iframe" style="min-width: 100%;">
-            {{ choro_map|safe }}
+            <!-- {{ choro_map|safe }} -->
+            {{ result.choropleth|safe }}
         </div>
 
         <div class="col-xs-0 col-md-12 accordion" id="accordion">
@@ -35,7 +36,8 @@
                     </div>
                     <div class="card-body collapse in card-collapse" id="map-collapse" data-parent="#accordion">
                         <div class="embed-responsive-16by9" id="iframe">
-                            {{ choro_map|safe }}
+                            <!-- {{ choro_map|safe }} -->
+                            {{ result.choropleth|safe }}
                         </div>
                     </div>
                 </div> <!-- END MAP -->
@@ -53,22 +55,23 @@
                         <div class="card-body row no-gutters" id="details-outer-padding">
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Query: </span>{{ result.argument }}</div>
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Date: </span>{{ result.date_created_readable }}</div>
-                            <div class="col-xs-12 col-md-4 text-center q-detail"><span>Hits: </span>{{ article_count }}</div>
+                            <!-- <div class="col-xs-12 col-md-4 text-center q-detail"><span>Hits: </span>{{ article_count }}</div> -->
+                            <div class="col-xs12 col-md-4 text-center q-detail"><span>Hits: </span>{{ result.article_count }}</div>
                             <div class="col-12 text-center" id="detail-table-wrapper">
                                 <table id="horizontal-table">
                                     <tr>
                                         <th class="th-article-count text-left">COUNTRY</th>
-                                        {% for country, value in country_articles.items %}
-                                            {% if value > 0 %}
+                                        {% for country, article_count in country_articles.items %}
+                                            {% if article_count > 0 %}
                                                 <td class="td-article-count text-center country">{{ country }}</td>
                                             {% endif %}
                                         {% endfor %}
                                     </tr>
                                     <tr>
                                         <th class="th-article-count text-left">ARTICLES</th>
-                                            {% for country, value in country_articles.items %}
-                                                {% if value > 0 %}
-                                                    <td class="td-article-count text-center value">{{ value }}</td>
+                                            {% for country, article_count in country_articles.items %}
+                                                {% if article_count > 0 %}
+                                                    <td class="td-article-count text-center value">{{ article_count }}</td>
                                                 {% endif %}
                                             {% endfor %}
                                         </th>
@@ -79,11 +82,11 @@
                                         <th class="th-article-count text-center">COUNTRY</th>
                                         <th class="th-article-count text-center">ARTICLES</th>
                                     </tr>
-                                    {% for country, value in country_articles.items %}
-                                        {% if value > 0 %}
+                                    {% for country, article_count in country_articles.items %}
+                                        {% if article_count > 0 %}
                                             <tr>
                                                 <td class="td-article-count text-left country">{{ country }}</td>
-                                                <td class="td-article-count text-center value">{{ value }}</td>
+                                                <td class="td-article-count text-center value">{{ article_count }}</td>
                                             </td>
                                         {% endif %}
                                     {% endfor %}
@@ -105,7 +108,7 @@
                     <div id="articles-collapse" class="collapse card-collapse" data-parent="#accordion">
                         <div class="card-body">
                             <ul class="list-group">
-                                {% for article in articles %}
+                                {% for article in result.articles.all %}
                                     {% if article %}
                                         <li class="article-li">
                                             <div class="row article-row no-gutters">
@@ -138,7 +141,7 @@
                 </div> <!-- END ARTICLES -->
 
                 <!-- FORM -->
-                {% if user.pk == query_author.pk%}
+                {% if user.pk == result.author.pk %}
                     <div class="card">
                         <div class="card-header" id="save-header">
                             <h3 class="mb-0">

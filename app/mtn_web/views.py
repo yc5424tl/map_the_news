@@ -78,8 +78,10 @@ def register_user(request: requests.request) -> render or redirect:
             messages.info(request, message=form.errors)
             form = CustomUserCreationForm()
             return render(request=request, template_name="general/new_user.html", context={"form": form})
+
     if request.method == "GET":
         return render(request, "general/new_user.html", {"form": CustomUserCreationForm})
+
     else:  # request.method != 'GET' or 'POST'
         return HttpResponseBadRequest("Unsupported Request Method")
 
@@ -176,35 +178,43 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
 
             article_list = constructor.build_article_data(article_data, result)
 
+            country_src_dict = {}
+
             for article in article_list:
                 source = get_object_or_404(Source, name=article.source)
                 try:
                     country_codes = [source.publishing_country.alpha2_code]
+                    if source.publishing_country.alpha2_code not in country_src_dict:
+                        country_src_dict[source.publishing_country.alpha2_code] = [(source, article),]
                 except Exception as exc:
-                    print(exc)
-                    print (source.publishing_country)
+                    log.error(msg=f'Error retrieving publishing country alpha2 code: {exc}')
                 if source.readership_countries:
                     for country in source.readership_countries.all():
                         if country != source.publishing_country:
                             try:
                                 country_codes.append(country.alpha2_code)
+                                if country.alpha2_code not in country_src_dict:
+                                    country_src_dict[country.alpha2_code] = [(source, article),]
+                                else:
+                                    country_src_dict[country.alpha2_code].append((source, article))
                             except Exception as exc:
-                                print(exc)
-                                print(country)
+                                log.error(msg=exc)
                 for alpha2_code in country_codes:
-                    print(f'a2code={alpha2_code}')
                     try:
                         alpha3_code = geo_map_mgr.map_source(source_country=alpha2_code)
-                        print (f'a3code = {alpha3_code}')
                         gdm.add_result(alpha3_code)
                     except Exception as exc:
-                        print(f'a3 exception: {exc}')
+                        log.error(msg=exc)
 
+            for alpha2_code in country_src_dict:
+                print(f'Country: {alpha2_code}\n Sources: {len(country_src_dict[alpha2_code])}\n')
 
             data_tup = geo_map_mgr.build_choropleth(result.argument, result.query_type, gdm)
 
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
+
+
 
             else:
                 global_map, filename = data_tup[0], data_tup[1]
@@ -236,27 +246,33 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
 
 
 @login_required()
-def view_result(request: requests.request, result_pk: int) -> render:
+def view_result(request: requests.request, result_pk: int) -> render:  # replacing country alpha-2 iso codes with full names for viewing in template
     result = get_object_or_404(Result, pk=result_pk)
-    log.error(f"result.articles_per_country == {result.articles_per_country}")
+    serbian_article_count = result.articles_per_country.pop('CS-KM', False) # returns False if key not present
+    country_articles = {pycountry.countries.get(alpha_3=a3_code).name:result.articles_per_country[a3_code] for a3_code in result.articles_per_country}
+    if serbian_article_count:
+        country_articles['Serbia'] = serbian_article_count
+    return render(request, "general/view_result.html", {"result": result, "country_articles": country_articles})
 
-    # replacing country alpha-2 iso codes with full names for viewing in template
-    country_articles = full_name_result_set(result.articles_per_country)
-    return render(
-        request,
-        "general/view_result.html",
-        {
-            "result": result,
-            "query_author": result.author,
-            "articles": result.articles.all(),
-            "choro_map": result.choropleth,
-            "choro_html": result.choro_html,
-            "filename": result.filename,
-            "article_count": result.article_count,
-            "article_data_len": result.article_data_len,
-            "country_articles": country_articles,
-        },
-    )
+# log.error(f"result.articles_per_country == {result.articles_per_country}")
+# country_articles = full_name_result_set(result.articles_per_country)
+# def full_name_result_set(result_dict: dict):
+#     full_name_dict = {}
+#     for alpha3_code in result_dict:
+#         if alpha3_code == "CS-KM":
+#             country_name = "Serbia"
+#         else:
+#             country_name = pycountry.countries.get(alpha_3=alpha3_code).name
+#         return country_name
+
+#         if country_name is not None:
+#             full_name_dict[country_name] = result_dict[alpha3_code]
+#         else:
+#             log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
+#     return full_name_dict
+
+
+
 
 
 # ============================================================================================================================== #
@@ -302,13 +318,12 @@ def delete_comment(request: requests.request, comment_pk: int) -> HttpResponseBa
     if request.method != "POST":
         return HttpResponseBadRequest("Unsupported Request Method")
     comment = get_object_or_404(Comment, pk=comment_pk)
-    post_pk = comment.post.pk
     if comment.author.pk == request.user.pk:
         comment.delete()
         messages.info(request, message="Comment Deleted")
     else:
         messages.info(request, message="Unauthorized")
-    return redirect("view_post", post_pk, messages=messages)
+    return redirect("view_post", comment.post_pk, messages=messages)
 
 
 # ===================================================================================================== #
@@ -347,18 +362,7 @@ def delete_result(request, result_pk: int):
 def view_user(request, member_pk):
     try:
         user = get_user_model().objects.get(pk=member_pk)
-
-        return render(
-            request,
-            "general/view_user.html",
-            {
-                "member": user,
-                "posts": user.recent_posts,
-                "comments": user.recent_comments,
-                "last_post": user.latest_post,
-                "queries": user.recent_results,
-            },
-        )
+        return render(request, "general/view_user.html", {"user": user})
     except get_user_model().DoesNotExist:
         raise Http404("User Not Found")
 
@@ -503,23 +507,9 @@ def view_post(request, post_pk):
         post = get_object_or_404(Post, pk=post_pk)
         if post.author.id == request.user.id:
             edit_post_form = EditPostForm(instance=Post)  # Pre-populate form with the post's current field values
-            return render(
-                request,
-                "general/view_post.html",
-                {
-                    "post": post,
-                    "edit_post_form": edit_post_form,
-                    "result": post.result,
-                    "articles": post.result.articles.all(),
-                    "country_articles": post.result.articles_per_country,
-                },
-            )
+            return render( request,"general/view_post.html", {"post": post, "edit_post_form": edit_post_form})
         else:
-            return render(
-                request,
-                "general/view_post.html",
-                {"post": post, "result": post.result, "articles": post.result.articles.all(), "country_articles": post.result.articles_per_country,},
-            )
+            return render(request, "general/view_post.html", {"post": post})
 
 
 # ============================================================================================== #
@@ -734,17 +724,17 @@ def delete_post(request):
 
 @login_required()
 def new_comment(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
     if request.method == "GET":
         form = NewCommentForm()
-        post = Post.objects.get(pk=post_pk)
         return render(request, "general/new_comment.html", {"post": post, "form": form})
     elif request.method == "POST":
-        c_post = Post.objects.get(pk=post_pk)
-        c_body = request.POST.get("body")
-        c_author = get_user_model().objects.get(pk=request.user.pk)
-        c = Comment.objects.create(post=c_post, body=c_body, author=c_author)
-        c.save()
-        return redirect("view_comment", c.pk)
+        # c_post = Post.objects.get(pk=post_pk)
+        comment_body = request.POST.get("body")
+        comment_author = get_user_model().objects.get(pk=request.user.pk)
+        comment = Comment.objects.create(post=post, body=comment_body, author=comment_author)
+        comment.save()
+        return redirect("view_comment", comment.pk)
     else:
         return HttpResponseBadRequest("Unsupported Request Method")
 
@@ -885,33 +875,35 @@ def report_error(request):
     return render(request=request, template_name="error/report.html", context=locals(), status=200)
 
 
-def lang_a2_to_name(source):
-    try:
-        return pycountry.languages.lookup(source.language).name
-    except LookupError:
-        return source.language
+# def lang_a2_to_name(source):
+#     try:
+#         return pycountry.languages.lookup(source.language).name
+#     except LookupError:
+#         return source.language
 
 
-def country_a2_to_name(source):
-    try:
-        return pycountry.countries.lookup(source.country).name
-    except LookupError:
-        return source.country
+# def country_a2_to_name(source):
+#     try:
+#         return pycountry.countries.lookup(source.country).name
+#     except LookupError:
+#         return source.country
 
 
-def full_name_result_set(result_dict: dict):
-    full_name_dict = {}
-    for alpha3_code in result_dict:
-        if alpha3_code == "CS-KM":
-            country_name = "Serbia"
-        else:
-            country_name = pycountry.countries.get(alpha_3=alpha3_code).name
-
-        if country_name is not None:
-            full_name_dict[country_name] = result_dict[alpha3_code]
-        else:
-            log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
-    return full_name_dict
+'''
+# def full_name_result_set(result_dict: dict):
+#     full_name_dict = {}
+#     for alpha3_code in result_dict:
+#         if alpha3_code == "CS-KM":
+#             country_name = "Serbia"
+#         else:
+#             country_name = pycountry.countries.get(alpha_3=alpha3_code).name
+#         return country_name
+#         if country_name is not None:
+#             full_name_dict[country_name] = result_dict[alpha3_code]
+#         else:
+#             log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
+#     return full_name_dict
+'''
 
 
 def get_query_type(qm_focus: str) -> QueryTypeChoice or None:

@@ -7,6 +7,10 @@ from django.db import models
 from django.db.models import JSONField  # DO NOT import from 'django.contrib.postgres.fields'
 from simple_history import register
 from simple_history.models import HistoricalRecords
+import logging
+
+
+log = logging.getLogger(__name__)
 
 
 class QueryTypeChoice(Enum):
@@ -81,6 +85,22 @@ class Country(models.Model):
     def get_absolute_url(self):
         return f"/countries/{self.alphanum_name}"
 
+    @staticmethod
+    def full_name_from_alpha3(alpha3_code):
+        if alpha3_code == 'CS-KM':
+            country_name = "Serbia"
+        else:
+            country_name = pycountry.countries.get(alpha3=alpha3_code).name
+        return country_name
+
+    @property
+    def alpha3_code(self):
+        try:
+            return (pycountry.countries.get(alpha_2=str(self.alpha2_code).upper())).alpha_3
+        except Exception as exc:
+            log.error(msg=f"Unable to convert alpha2 to alpha3 code @ {self.alpha2_code}")
+            return False
+
 
 class Language(models.Model):
     alpha2_code = models.CharField(max_length=10, null=False, blank=False, default="--")
@@ -126,6 +146,8 @@ class Source(models.Model):
 
     def get_absolute_url(self):
         return f"/sources/{self.name}/"
+
+
 
 
 class Article(models.Model):

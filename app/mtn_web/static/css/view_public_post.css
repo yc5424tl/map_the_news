@@ -48,13 +48,6 @@
     padding-bottom   : 1rem;
 }
 
-.view-posts-post-link:hover,
-.view-posts-post-link:focus {
-    color           : var(--main-link-hover);
-    transition      : 0.4s;
-    text-decoration : none;
-}
-
 #view-posts-post-list {
     border-radius : 5pt;
 }
@@ -64,19 +57,26 @@
     background-color : var(--main-link-visited);
 }
 
-.view-posts-post-link:link,
-.view-post-comment-link,
+.view-posts-comment-link,
 .view-posts-comment-link:link,
-.view-post-comment-link:visited {
+.view-posts-comment-link:visited {
     color                : var(--mid-dark-gray);
     text-decoration-line : none;
     transition           : 0.4s;
 }
 
+.view-posts-post-link:link,
 .view-posts-comment-link:hover,
 .view-posts-comment-link:hover {
     color: var(--main-darkest);
     transition : 0.4s;
+}
+
+.view-posts-post-link:hover,
+.view-posts-post-link:focus {
+    color           : var(--main-link-hover);
+    transition      : 0.4s;
+    text-decoration : none;
 }
 
 .view-posts-card-title,
@@ -100,12 +100,18 @@
     margin-bottom : 1rem;
 }
 
+.view-posts-card-subtitle-link,
 .view-posts-card-subtitle-link:link {
     color: var(--main-darkest);
 }
 
 .view-posts-card-subtitle-link:visited {
     color: var(--mid-dark-grey);
+}
+
+.view-posts-card-subtitle-link:hover,
+.view-posts-card-subtitle-link:focus {
+    color: var(--main-link-hover);
 }
 
 .view-posts-comment-body {

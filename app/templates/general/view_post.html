@@ -38,16 +38,16 @@
         </div>
         <div class="col-xl col-sm-12 bg-div">
             <div id="iframe-div">
-                {{ result.choropleth|safe }}
+                {{ post.result.choropleth|safe }}
             </div>
         </div>
-        {% if country_articles %}
+        {% if post.result.articles_per_country %}
             <div class="col-xl-2 col-sm-12 bg-div">
                 <div id="horizontal-table-div">
                     <table id="vertical-headings">
                         <tr>
                             <th>Country</th>
-                            {% for country, value in country_articles.items %}
+                            {% for country, value in post.result.articles_per_country.items %}
                                 {% if value > 0 %}
                                     <td>{{ country }}</td>
                                 {% endif %}
@@ -55,7 +55,7 @@
                         </tr>
                         <tr>
                             <th>Articles</th>
-                            {% for country, value in country_articles.items %}
+                            {% for country, value in post.result.articles_per_country.items %}
                                 {% if value > 0 %}
                                     <td>{{ value }}</td>
                                 {% endif %}
@@ -69,7 +69,7 @@
                             <th>Country</th>
                             <th>Articles</th>
                         </tr>
-                        {% for country, value in country_articles.items %}
+                        {% for country, value in post.result.articles_per_country.items %}
                             {% if value > 0 %}
                                 <tr>
                                     <td>{{ country }}</td>
@@ -88,7 +88,7 @@
                     <div class="card" id="articles-card">
                         <div class="card-header title-center"><h1>Mapped Articles</h1></div>
                         <ul class="list-group" id="articles-list">
-                            {% for article in articles %}
+                            {% for article in post.result.articles.all %}
                                 {% if article %}
                                     <li class="article-li">
                                         <div class="row article no-gutters">

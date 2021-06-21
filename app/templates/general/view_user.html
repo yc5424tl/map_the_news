@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    {{ member.username }}'s Profile - {{ block.super }}
+    {{ user.username }}'s Profile - {{ block.super }}
 {% endblock %}
 
 {% block styles %}
@@ -20,31 +20,31 @@
 
                 <div id="view-user-banner">
                     <div class="jumbotron">
-                        {% if request.user.pk == member.pk %}
-                            <h1>Welcome, {{ member.username }}!</h1>
+                        {% if request.user.pk == user.pk %}
+                            <h1>Welcome, {{ user.username }}!</h1>
                         {% else %}
-                            <h1>Viewing {{ member.username }}'s Profile</h1>
+                            <h1>Viewing {{ user.username }}'s Profile</h1>
                         {% endif %}
-                        <small>Member Since {{ member.date_joined }}</small>
+                        <small>Member Since {{ user.date_joined }}</small>
                     </div>
                 </div>
 
-                {% if last_post %}
+                {% if user.latest_post %}
                     <div id="last-post">
                         <h2>LATEST POST</h1>
                         <hr>
                         <h5>
-                            {{ last_post.title }}
-                            {{ last_post.date_published }}
+                            {{ user.latest_post.title }}
+                            {{ user.latest_post.date_published }}
                         </h5>
                         <div id="view-user-last-post-body">
-                            <blockquote>{{ last_post.body }}</blockquote>
+                            <blockquote>{{ user.last_post.body }}</blockquote>
                         </div>
                         <div class="btn-group">
                             <button class="btn btn-link" id="view-last-post-btn">
-                                <a href="{% url 'view_post' last_post.pk %}">View Full Post</a>
+                                <a href="{% url 'view_post' user.latest_post.pk %}">View Full Post</a>
                             </button>
-                            {% for comment in last_post.comments.all|slice:':1' %}
+                            {% for comment in user.latest_post.comments.all|slice:':1' %}
                                 <button class="btn btn-link view-last-comments-btn">
                                     <a href="{% url 'view_comment' comment.pk %}">View Comments</a>
                                 </button>
@@ -99,9 +99,9 @@
                 {% endif %}
 
 
-                {% if last_post %}
+                {% if user.latest_post %}
                     <div id="last-post-comments" aria-hidden="true" hidden>
-                        {% for comment in last_post.comments.all %}
+                        {% for comment in user.latest_post.comments.all %}
                             {% if comment %}
                                 <div class="last-post-comment">
                                     <h5>Comment by
@@ -139,13 +139,13 @@
             <div class="col-xs-12 col-lg-4" id="post-history-wrapper">
 
                 <div id="recent-posts">
-                    {% if request.user.pk == member.pk %}
+                    {% if request.user.pk == user.pk %}
                         <h4>MORE RECENT POSTS</h4>
                     {% else %}
-                        <h4>{{ member.username|upper }}'s RECENT POSTS</h4>
+                        <h4>{{ user.username|upper }}'s RECENT POSTS</h4>
                     {% endif %}
                     <ul class="recent-ul">
-                        {% for post in posts %}
+                        {% for post in user.recent_posts %}
                             {% if post %}
                                 <li><a href="{% url 'view_post' post.pk %}">{{ post.title }}</a></li>
                             {% endif %}
@@ -156,13 +156,13 @@
                 </div>
 
                 <div id="recent-comments">
-                    {% if request.user.pk == member.pk %}
+                    {% if request.user.pk == user.pk %}
                         <h4>YOUR RECENT COMMENTS</h4>
                     {% else %}
-                        <h4>{{ member.username|upper }}'s RECENT COMMENTS</h4>
+                        <h4>{{ user.username|upper }}'s RECENT COMMENTS</h4>
                     {% endif %}
                     <ul>
-                        {% for comment in comments %}
+                        {% for comment in user.recent_comments %}
                             {% if comment %}
                                 <li>
                                     <a href="{% url 'view_comment' comment.pk %}">{{ comment.body|truncatechars:175 }}</a>
@@ -174,12 +174,12 @@
                     </ul>
                 </div>
 
-                {% if request.user.pk == member.pk %}
+                {% if request.user.pk == user.pk %}
 
                     <div id="recent-queries">
                         <h4>YOUR RECENT SEARCHES</h4>
                         <ul>
-                            {% for result in results %}
+                            {% for result in user.recent_results %}
                                 {% if result %}
                                     <li>Search: {{ result.argument }}</li>
                                     <li>Date: {{ result.date_created }}</li>

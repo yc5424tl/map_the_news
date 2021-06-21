@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.admin import UserAdmin
 from django.db import models
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 
@@ -87,6 +89,26 @@ class SourceAdmin(SimpleHistoryAdmin):
         "readership_countries",
         "languages",
     )
+
+    actions =["update_readerships"]
+
+    @admin.action(description='Update Readership Countries and Country of Publication')
+    def update_readerships(self, request, queryset):
+
+        if 'exec' in request.POST:
+            publishing_country = Country.objects.get(pk=request.POST['publishing_country'])
+            queryset.update(publishing_country=publishing_country)
+
+            readership_country = Country.objects.get(pk=request.POST['readership_country'])
+            for source in queryset:
+                if readership_country not in source.readership_countries:
+                    source.readership_countries.add(readership_country)
+            self.message_user(request, f'Updated publishing/readership data on {queryset.count()} source(s)')
+            return HttpResponseRedirect(request.get_full_path())
+        countries = Country.objects.all()
+        return render(request, 'admin/readership_update_intermediate.html', context={"sources": queryset, "countries": countries})
+
+
 
 
 @admin.register(Category)
