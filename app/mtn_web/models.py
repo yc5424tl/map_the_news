@@ -148,8 +148,6 @@ class Source(models.Model):
         return f"/sources/{self.name}/"
 
 
-
-
 class Article(models.Model):
     article_url = models.URLField(max_length=1000)
     author = models.CharField(max_length=150)

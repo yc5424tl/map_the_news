@@ -214,8 +214,6 @@ def new_query(request: requests.request) -> render or redirect or HttpResponseBa
             if data_tup is None:
                 return redirect("index", messages="build choropleth returned None")
 
-
-
             else:
                 global_map, filename = data_tup[0], data_tup[1]
                 result.choro_html = global_map.get_root().render()
@@ -253,26 +251,6 @@ def view_result(request: requests.request, result_pk: int) -> render:  # replaci
     if serbian_article_count:
         country_articles['Serbia'] = serbian_article_count
     return render(request, "general/view_result.html", {"result": result, "country_articles": country_articles})
-
-# log.error(f"result.articles_per_country == {result.articles_per_country}")
-# country_articles = full_name_result_set(result.articles_per_country)
-# def full_name_result_set(result_dict: dict):
-#     full_name_dict = {}
-#     for alpha3_code in result_dict:
-#         if alpha3_code == "CS-KM":
-#             country_name = "Serbia"
-#         else:
-#             country_name = pycountry.countries.get(alpha_3=alpha3_code).name
-#         return country_name
-
-#         if country_name is not None:
-#             full_name_dict[country_name] = result_dict[alpha3_code]
-#         else:
-#             log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
-#     return full_name_dict
-
-
-
 
 
 # ============================================================================================================================== #
@@ -873,37 +851,6 @@ def handler500(request):
 
 def report_error(request):
     return render(request=request, template_name="error/report.html", context=locals(), status=200)
-
-
-# def lang_a2_to_name(source):
-#     try:
-#         return pycountry.languages.lookup(source.language).name
-#     except LookupError:
-#         return source.language
-
-
-# def country_a2_to_name(source):
-#     try:
-#         return pycountry.countries.lookup(source.country).name
-#     except LookupError:
-#         return source.country
-
-
-'''
-# def full_name_result_set(result_dict: dict):
-#     full_name_dict = {}
-#     for alpha3_code in result_dict:
-#         if alpha3_code == "CS-KM":
-#             country_name = "Serbia"
-#         else:
-#             country_name = pycountry.countries.get(alpha_3=alpha3_code).name
-#         return country_name
-#         if country_name is not None:
-#             full_name_dict[country_name] = result_dict[alpha3_code]
-#         else:
-#             log.error(f"Error parsing country name from alpha3 code of <{alpha3_code}>")
-#     return full_name_dict
-'''
 
 
 def get_query_type(qm_focus: str) -> QueryTypeChoice or None:

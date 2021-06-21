@@ -19,7 +19,6 @@
     <div class="row no-gutters text-center" id="content-wrapper">
 
         <div class="embed-responsive-16by9 col-xs-12 col-md-0" id="outer-iframe" style="min-width: 100%;">
-            <!-- {{ choro_map|safe }} -->
             {{ result.choropleth|safe }}
         </div>
 
@@ -36,7 +35,6 @@
                     </div>
                     <div class="card-body collapse in card-collapse" id="map-collapse" data-parent="#accordion">
                         <div class="embed-responsive-16by9" id="iframe">
-                            <!-- {{ choro_map|safe }} -->
                             {{ result.choropleth|safe }}
                         </div>
                     </div>
@@ -55,7 +53,6 @@
                         <div class="card-body row no-gutters" id="details-outer-padding">
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Query: </span>{{ result.argument }}</div>
                             <div class="col-xs-12 col-md-4 text-center q-detail"><span>Date: </span>{{ result.date_created_readable }}</div>
-                            <!-- <div class="col-xs-12 col-md-4 text-center q-detail"><span>Hits: </span>{{ article_count }}</div> -->
                             <div class="col-xs12 col-md-4 text-center q-detail"><span>Hits: </span>{{ result.article_count }}</div>
                             <div class="col-12 text-center" id="detail-table-wrapper">
                                 <table id="horizontal-table">

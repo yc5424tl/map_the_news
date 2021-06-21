@@ -94,11 +94,9 @@ class SourceAdmin(SimpleHistoryAdmin):
 
     @admin.action(description='Update Readership Countries and Country of Publication')
     def update_readerships(self, request, queryset):
-
         if 'exec' in request.POST:
             publishing_country = Country.objects.get(pk=request.POST['publishing_country'])
             queryset.update(publishing_country=publishing_country)
-
             readership_country = Country.objects.get(pk=request.POST['readership_country'])
             for source in queryset:
                 if readership_country not in source.readership_countries:
@@ -107,8 +105,6 @@ class SourceAdmin(SimpleHistoryAdmin):
             return HttpResponseRedirect(request.get_full_path())
         countries = Country.objects.all()
         return render(request, 'admin/readership_update_intermediate.html', context={"sources": queryset, "countries": countries})
-
-
 
 
 @admin.register(Category)
