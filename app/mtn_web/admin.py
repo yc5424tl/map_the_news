@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.db import models
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 
 from mtn_web.models import Article, Category, Comment, Country, Language, Post, Result, Source, User
