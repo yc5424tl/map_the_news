@@ -180,7 +180,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 ADMIN_MEDIA_PREFIX = f"{STATIC_URL}admin/"
 
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["*"]
+# CSRF_TRUSTED_ORIGINS = ["*"]
 
 LOGIN_URL = "login"
 LOGOUT_REDIRECT_URL = "index"
