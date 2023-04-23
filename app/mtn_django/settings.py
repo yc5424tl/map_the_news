@@ -29,7 +29,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 
 ALLOWED_HOSTS = ["map-the-news.herokuapp.com", "localhost", "127.0.0.1"]
-
+CSRF_TRUSTED_ORIGINS = [ 'https://map-the-news.herokuapp.com']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
