@@ -99,7 +99,8 @@ def register_user(request: requests.request) -> render or redirect:
 
 def login_user(request: requests.request) -> render or redirect:
     if request.method == "POST":
-        form = AuthenticationForm(request.POST)
+        #form = AuthenticationForm(request.POST)
+        form = UserLoginForm(request.POST)
         if form.is_valid():
             #username = request.POST['username']
             #password = request.POST['password']
@@ -112,10 +113,12 @@ def login_user(request: requests.request) -> render or redirect:
                 return redirect("view_user", user.pk)
         else:
             messages.error(request, "Incorrect Password and/or Username", extra_tags="error")
-            return render(request, "registration/login_user.html", {"form": AuthenticationForm})
+            return render(request, "registration/login_user.html", {"form": UserLoginForm})
+            #return render(request, "registration/login_user.html", {"form": AuthenticationForm})
 
     elif request.method == "GET":
-        form = AuthenticationForm()
+        #form = AuthenticationForm()
+        form = UserLoginForm()
         return render(request, "registration/login_user.html", {"form": form})
 
     else:  # request.method != 'GET or 'POST'
