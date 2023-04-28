@@ -97,9 +97,9 @@ class LogoutForm(forms.ModelForm):
 class NewUserForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = ["email", ]
+        fields = ["username", "email"]
 
 
 class UpdateUserForm(UserChangeForm):
     model = get_user_model()
-    fields = ["email", ]
+    fields = ["username", "email"]
