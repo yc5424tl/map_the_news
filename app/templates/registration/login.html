@@ -27,7 +27,13 @@
                     <p>Please login to see this page.</p>
                 {% endif %}
             {% endif %}
-
+            <h2>Log In</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button type="submit">Log In</button>
+            </form>
+            {#
             <form method="post" action="{% url 'login' %}" class="mx-auto" id="login-form">
                 {% csrf_token %}
                 <table class="text-center mx-auto" id="login-table">
@@ -43,7 +49,7 @@
                 <input type="submit" value="login">
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
-
+            #}
         {# Assumes you setup the password_reset view in your URLconf #}
         <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
             
