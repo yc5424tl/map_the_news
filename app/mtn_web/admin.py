@@ -5,12 +5,22 @@ from django.contrib.auth.admin import UserAdmin
 from django.db import models
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 from simple_history.admin import SimpleHistoryAdmin
 
+from mtn_web.forms import NewUserForm, UpdateUserForm
 from mtn_web.models import Article, Category, Comment, Country, Language, Post, Result, Source, User
 
-admin.site.register(User, UserAdmin)
+
+class CustomUserAdmin(UserAdmin):
+    add_form = NewUserForm
+    form = UpdateUserForm
+    model = User
+    list_display = ['email', 'username']
+
+admin.site.register(User, CustomUserAdmin)
 
 
 @admin.register(Article)
