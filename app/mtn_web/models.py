@@ -230,6 +230,9 @@ class User(AbstractUser):
         except IndexError:
             recent_results = None
         return recent_results
+    
+    dwf __str__(self):
+        return self.username
 
 
 register(User)
