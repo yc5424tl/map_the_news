@@ -33,7 +33,9 @@
                 {{ form.as_p}}
                 <button type="submit">Log In</button>
             </form>
-            {#
+            
+            
+            {% comment %}
             <form method="post" action="{% url 'login' %}" class="mx-auto" id="login-form">
                 {% csrf_token %}
                 <table class="text-center mx-auto" id="login-table">
@@ -49,7 +51,9 @@
                 <input type="submit" value="login">
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
-            #}
+            {% endcomment %}
+            
+            
         {# Assumes you setup the password_reset view in your URLconf #}
         <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
             
