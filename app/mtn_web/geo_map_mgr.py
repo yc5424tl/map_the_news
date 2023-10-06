@@ -13,6 +13,11 @@ from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from folium import ColorMap as cm
 
+import shapely
+import warnings
+from shapely.errors import ShapelyDeprecationWarning
+warnings.filterwarnings("ignore", category=ShapelyDeprecationWarning)
+
 CHORO_MAP_ROOT = os.path.join(settings.BASE_DIR, "Choropleth_")
 
 
